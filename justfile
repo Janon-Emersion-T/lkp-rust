@@ -1,41 +1,134 @@
-# Development server with auto-reload on file changes
+# =========================================
+# LKProfessionals Rust Development Commands
+# =========================================
+
+set shell := ["bash", "-cu"]
+
+# -----------------------------------------
+# Development Server
+# -----------------------------------------
 dev:
-    @echo "Starting development server with auto-reload..."
+    @echo "🚀 Starting LKProfessionals development environment..."
     npx concurrently --kill-others-on-fail \
         "npx @tailwindcss/cli -i ./assets/css/input.css -o ./static/css/app.css --watch" \
-        "cargo watch --no-process-group --watch src --watch templates --delay 0.5 -x run"
+        "cargo watch -w src -w templates -w assets -w Cargo.toml -w Cargo.lock -s 'cargo run'"
 
-# Watch Rust and template files, reload on change
+# -----------------------------------------
+# Rust Watch Only
+# -----------------------------------------
 watch:
-    @echo "Watching for changes in src/ and templates..."
-    cargo watch --no-process-group --watch src --watch templates --delay 0.5 -x run
+    @echo "👀 Watching Rust + templates..."
+    cargo watch -w src -w templates -w assets -w Cargo.toml -w Cargo.lock -s 'cargo run'
 
-# Build for production
+# -----------------------------------------
+# Tailwind Watch Only
+# -----------------------------------------
+css:
+    @echo "🎨 Watching Tailwind CSS..."
+    npx @tailwindcss/cli \
+        -i ./assets/css/input.css \
+        -o ./static/css/app.css \
+        --watch
+
+# -----------------------------------------
+# Production CSS Build
+# -----------------------------------------
+css-build:
+    @echo "🎨 Building production CSS..."
+    npx @tailwindcss/cli \
+        -i ./assets/css/input.css \
+        -o ./static/css/app.css \
+        --minify
+
+# -----------------------------------------
+# Development Run Without Watch
+# -----------------------------------------
+run:
+    @echo "🦀 Running application..."
+    cargo run
+
+# -----------------------------------------
+# Production Build
+# -----------------------------------------
 build:
-    @echo "Building for production..."
+    @echo "📦 Building production application..."
     cargo build --release
 
-# Install dependencies
+# -----------------------------------------
+# Install Dependencies
+# -----------------------------------------
 install:
-    @echo "Installing dependencies..."
+    @echo "📥 Installing frontend dependencies..."
     npm install
 
-# Clean build artifacts
-clean:
-    @echo "Cleaning build artifacts..."
-    cargo clean
-    rm -rf node_modules
+# -----------------------------------------
+# Cargo Check
+# -----------------------------------------
+check:
+    @echo "🔍 Checking project..."
+    cargo check
 
-# Format code
+# -----------------------------------------
+# Formatting
+# -----------------------------------------
 fmt:
-    @echo "Formatting code..."
+    @echo "✨ Formatting Rust code..."
     cargo fmt
 
-# Run tests
+# -----------------------------------------
+# Clippy Linting
+# -----------------------------------------
+lint:
+    @echo "🛡 Running Clippy..."
+    cargo clippy -- -D warnings
+
+# -----------------------------------------
+# Tests
+# -----------------------------------------
 test:
-    @echo "Running tests..."
+    @echo "🧪 Running tests..."
     cargo test
 
-# Show available recipes
+# -----------------------------------------
+# Clean Build Files
+# -----------------------------------------
+clean:
+    @echo "🧹 Cleaning build artifacts..."
+    cargo clean
+    rm -rf node_modules
+    rm -rf static/css/app.css
+
+# -----------------------------------------
+# Reset Port 3000
+# -----------------------------------------
+kill:
+    @echo "💀 Killing port 3000..."
+    sudo fuser -k 3000/tcp || true
+
+# -----------------------------------------
+# Full Restart
+# -----------------------------------------
+restart:
+    @echo "♻ Restarting development environment..."
+    just kill
+    just dev
+
+# -----------------------------------------
+# Database Migrations
+# -----------------------------------------
+migrate:
+    @echo "🗄 Running database migrations..."
+    sqlx migrate run
+
+# -----------------------------------------
+# Create Migration
+# -----------------------------------------
+migration name:
+    @echo "📝 Creating migration {{name}}..."
+    sqlx migrate add {{name}}
+
+# -----------------------------------------
+# Show Available Commands
+# -----------------------------------------
 help:
     @just --list
