@@ -1,6 +1,6 @@
 use argon2::{
-    password_hash::{PasswordHash, PasswordVerifier},
     Argon2,
+    password_hash::{PasswordHash, PasswordVerifier},
 };
 use askama::Template;
 use axum::{
@@ -46,20 +46,24 @@ pub async fn process_login(
     .await;
 
     let Ok(Some(user)) = user else {
-        return Html(LoginTemplate {
-            error: Some("Invalid email or password.".to_string()),
-        }
-        .render()
-        .unwrap())
+        return Html(
+            LoginTemplate {
+                error: Some("Invalid email or password.".to_string()),
+            }
+            .render()
+            .unwrap(),
+        )
         .into_response();
     };
 
     if !user.is_active {
-        return Html(LoginTemplate {
-            error: Some("Your account is inactive.".to_string()),
-        }
-        .render()
-        .unwrap())
+        return Html(
+            LoginTemplate {
+                error: Some("Your account is inactive.".to_string()),
+            }
+            .render()
+            .unwrap(),
+        )
         .into_response();
     }
 
@@ -75,11 +79,13 @@ pub async fn process_login(
         .is_some();
 
     if !password_ok {
-        return Html(LoginTemplate {
-            error: Some("Invalid email or password.".to_string()),
-        }
-        .render()
-        .unwrap())
+        return Html(
+            LoginTemplate {
+                error: Some("Invalid email or password.".to_string()),
+            }
+            .render()
+            .unwrap(),
+        )
         .into_response();
     }
 

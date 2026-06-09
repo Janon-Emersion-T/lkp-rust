@@ -1,10 +1,19 @@
-use axum::{Router, routing::get};
+use axum::{
+    Router,
+    routing::{get, post},
+};
 use tower_http::services::ServeDir;
 
-use crate::handlers::*;
+use crate::{
+    auth::handlers::{logout, process_login, show_login},
+    handlers::*,
+    state::AppState,
+};
 
-pub fn app_routes() -> Router {
+pub fn app_routes(state: AppState) -> Router {
     Router::new()
+        .route("/login", get(show_login).post(process_login))
+        .route("/logout", post(logout))
         /* =========================================
            PUBLIC PAGES
         ========================================= */
@@ -197,4 +206,5 @@ pub fn app_routes() -> Router {
            STATIC FILES
         ========================================= */
         .nest_service("/static", ServeDir::new("static"))
+        .with_state(state)
 }
