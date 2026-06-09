@@ -32,7 +32,7 @@ pub fn app_routes(state: AppState) -> Router {
         .route("/careers/{slug}", get(career_single))
         .route("/careers/{slug}/apply", get(career_apply))
         // Contact & Quote
-        .route("/contact", get(contact))
+        .route("/contact", get(contact).post(submit_contact_message))
         .route("/request-quote", get(request_quote))
         /* =========================================
            LEGAL PAGES
@@ -202,6 +202,9 @@ pub fn app_routes(state: AppState) -> Router {
         .route("/dashboard/settings", get(dashboard_settings))
         .route("/dashboard/users", get(dashboard_users))
         .route("/dashboard/audit-logs", get(dashboard_audit_logs))
+
+        .route("/dashboard/contact-messages/{id}", get(dashboard_contact_message_show))
+        .route("/dashboard/contact-messages/{id}/reply", post(dashboard_contact_message_reply))
         /* =========================================
            STATIC FILES
         ========================================= */

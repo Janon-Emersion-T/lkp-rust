@@ -1,9 +1,14 @@
 use askama::Template;
 use axum::{
-    extract::Path,
+    extract::{Path, State, Form},
     http::StatusCode,
-    response::{Html, IntoResponse},
+    response::{Html, IntoResponse, Redirect},
 };
+
+use serde::Deserialize;
+use uuid::Uuid;
+use chrono::{DateTime, Utc};
+use crate::state::AppState;
 
 pub fn render<T: Template>(template: T) -> impl IntoResponse {
     match template.render() {
@@ -102,6 +107,36 @@ pub struct CareerSingleTemplate {
 #[template(path = "pages/careers/apply.html")]
 pub struct CareerApplyTemplate {
     pub slug: String,
+}
+
+#[derive(Deserialize)]
+pub struct ContactMessageForm {
+    pub name: String,
+    pub email: String,
+    pub phone: Option<String>,
+    pub company: Option<String>,
+    pub subject: String,
+    pub message: String,
+}
+
+#[derive(Debug, sqlx::FromRow)]
+pub struct ContactMessage {
+    pub id: Uuid,
+    pub name: String,
+    pub email: String,
+    pub phone: Option<String>,
+    pub company: Option<String>,
+    pub subject: String,
+    pub message: String,
+    pub status: String,
+    pub admin_reply: Option<String>,
+    pub replied_at: Option<DateTime<Utc>>,
+    pub created_at: DateTime<Utc>,
+}
+
+#[derive(Deserialize)]
+pub struct ReplyForm {
+    pub admin_reply: String,
 }
 
 // Dashboard
@@ -247,6 +282,48 @@ page!(
 );
 
 // Public handlers
+pub async fn submit_contact_message(
+    State(state): State<AppState>,
+    Form(form): Form<ContactMessageForm>,
+) -> impl IntoResponse {
+    let result = sqlx::query(
+        r#"
+        INSERT INTO contact_messages
+        (name, email, phone, company, subject, message)
+        VALUES ($1, $2, $3, $4, $5, $6)
+        "#
+    )
+    .bind(form.name.trim())
+    .bind(form.email.trim().to_lowercase())
+    .bind(form.phone)
+    .bind(form.company)
+    .bind(form.subject.trim())
+    .bind(form.message.trim())
+    .execute(&state.db)
+    .await;
+
+    match result {
+        Ok(_) => Redirect::to("/contact?success=1").into_response(),
+        Err(_) => (
+            StatusCode::INTERNAL_SERVER_ERROR,
+            "Failed to submit contact message",
+        ).into_response(),
+    }
+}
+
+pub async fn dashboard_contact_message_show(
+    Path(id): Path<Uuid>,
+) -> impl IntoResponse {
+    render(DashboardContactMessagesTemplate)
+}
+
+pub async fn dashboard_contact_message_reply(
+    Path(id): Path<Uuid>,
+    Form(form): Form<ReplyForm>,
+) -> impl IntoResponse {
+    Redirect::to("/dashboard/contact-messages")
+}
+
 pub async fn home() -> impl IntoResponse {
     render(HomeTemplate)
 }
