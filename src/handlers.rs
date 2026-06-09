@@ -314,6 +314,8 @@ pub async fn submit_contact_message(
 pub async fn dashboard_contact_message_show(
     Path(id): Path<Uuid>,
 ) -> impl IntoResponse {
+    let _id = id;
+
     render(DashboardContactMessagesTemplate)
 }
 
@@ -321,6 +323,9 @@ pub async fn dashboard_contact_message_reply(
     Path(id): Path<Uuid>,
     Form(form): Form<ReplyForm>,
 ) -> impl IntoResponse {
+    let _id = id;
+    let _reply = form.admin_reply;
+
     Redirect::to("/dashboard/contact-messages")
 }
 
