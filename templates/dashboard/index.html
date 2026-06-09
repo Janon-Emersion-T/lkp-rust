@@ -1,1 +1,67 @@
-<h1>Page Ready</h1>
+{% extends "dashboard/base.html" %}
+
+{% block title %}
+Dashboard | LKProfessionals (Pvt) Ltd.
+{% endblock %}
+
+{% block content %}
+
+<div class="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+
+    <div class="rounded-2xl bg-white p-6 shadow-sm">
+        <p class="text-sm text-slate-500">
+            Total Leads
+        </p>
+
+        <h3 class="mt-3 text-3xl font-bold text-slate-900">
+            128
+        </h3>
+    </div>
+
+    <div class="rounded-2xl bg-white p-6 shadow-sm">
+        <p class="text-sm text-slate-500">
+            Active Projects
+        </p>
+
+        <h3 class="mt-3 text-3xl font-bold text-slate-900">
+            24
+        </h3>
+    </div>
+
+    <div class="rounded-2xl bg-white p-6 shadow-sm">
+        <p class="text-sm text-slate-500">
+            Newsletter Subscribers
+        </p>
+
+        <h3 class="mt-3 text-3xl font-bold text-slate-900">
+            846
+        </h3>
+    </div>
+
+    <div class="rounded-2xl bg-white p-6 shadow-sm">
+        <p class="text-sm text-slate-500">
+            Blog Posts
+        </p>
+
+        <h3 class="mt-3 text-3xl font-bold text-slate-900">
+            39
+        </h3>
+    </div>
+
+</div>
+
+<div class="mt-8 rounded-2xl bg-white p-6 shadow-sm">
+
+    <h2 class="text-xl font-bold text-slate-900">
+        Welcome to the LKProfessionals Dashboard
+    </h2>
+
+    <p class="mt-3 max-w-3xl text-sm leading-7 text-slate-600">
+        This dashboard manages portfolios, insights, SEO content,
+        lead management, industries, services, career applications,
+        and company-wide digital operations.
+    </p>
+
+</div>
+
+{% endblock %}

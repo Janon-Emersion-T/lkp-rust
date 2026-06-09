@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        {% block title %}
+            Dashboard | LKProfessionals (Pvt) Ltd.
+        {% endblock %}
+    </title>
+
+    <link rel="stylesheet" href="/static/css/app.css">
+</head>
+
+<body class="min-h-screen bg-slate-100 text-slate-900">
+
+    <div class="flex min-h-screen">
+
+        <!-- Sidebar -->
+        {% include "dashboard/partials/sidebar.html" %}
+
+        <!-- Main Area -->
+        <div class="flex flex-1 flex-col lg:pl-72">
+
+            <!-- Header -->
+            {% include "dashboard/partials/header.html" %}
+
+            <!-- Page Content -->
+            <main class="flex-1 px-4 py-6 sm:px-6 lg:px-8">
+                {% block content %}{% endblock %}
+            </main>
+
+            <!-- Footer -->
+            {% include "dashboard/partials/footer.html" %}
+
+        </div>
+
+    </div>
+
+</body>
+</html>
