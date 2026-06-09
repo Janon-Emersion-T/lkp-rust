@@ -33,12 +33,10 @@ async fn main() {
     // Session store
     let session_store = MemoryStore::default();
 
-    let session_layer = SessionManagerLayer::new(session_store)
-        .with_secure(false);
+    let session_layer = SessionManagerLayer::new(session_store).with_secure(false);
 
     // App
-    let app = app_routes(state)
-        .layer(session_layer);
+    let app = app_routes(state).layer(session_layer);
 
     // Server
     let listener = tokio::net::TcpListener::bind("127.0.0.1:3000")
@@ -47,7 +45,5 @@ async fn main() {
 
     println!("Running on http://127.0.0.1:3000");
 
-    axum::serve(listener, app)
-        .await
-        .expect("Server failed");
+    axum::serve(listener, app).await.expect("Server failed");
 }
