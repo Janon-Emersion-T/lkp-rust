@@ -1,0 +1,1 @@
+#[derive(Debug, Clone)] pub struct Media { pub id: i32, pub file_name: String, pub file_path: String, pub alt_text: Option<String>, pub caption: Option<String>, pub mime_type: String, pub size: i64, }

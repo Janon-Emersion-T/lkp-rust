@@ -1,0 +1,1 @@
+#[derive(Debug, Clone)] pub struct Redirect { pub id: i32, pub from_url: String, pub to_url: String, pub status_code: i32, }

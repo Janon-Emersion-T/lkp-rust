@@ -1,0 +1,1 @@
+use crate::models::shared::seo_fields::SeoFields; #[derive(Debug, Clone)] pub struct Industry { pub id: i32, pub title: String, pub description: String, pub content: String, pub featured: bool, pub seo: SeoFields, }
