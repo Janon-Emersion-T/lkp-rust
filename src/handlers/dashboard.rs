@@ -5,13 +5,13 @@ use super::{
     templates::{
         DashboardAuditLogsTemplate, DashboardCareerApplicationsTemplate,
         DashboardCareerCreateTemplate, DashboardCareerEditTemplate, DashboardCareersTemplate,
-        DashboardContactMessagesTemplate, DashboardFaqCreateTemplate, DashboardFaqEditTemplate,
+        DashboardFaqCreateTemplate, DashboardFaqEditTemplate,
         DashboardFaqsTemplate, DashboardIndustriesTemplate, DashboardIndustryCreateTemplate,
         DashboardIndustryEditTemplate, DashboardInsightCategoriesTemplate,
         DashboardInsightCategoryCreateTemplate, DashboardInsightCategoryEditTemplate,
         DashboardInsightCreateTemplate, DashboardInsightEditTemplate,
         DashboardInsightTagCreateTemplate, DashboardInsightTagEditTemplate,
-        DashboardInsightTagsTemplate, DashboardInsightsTemplate, DashboardLeadsTemplate,
+        DashboardInsightTagsTemplate, DashboardInsightsTemplate,
         DashboardMediaTemplate, DashboardMenusTemplate, DashboardMilestoneCreateTemplate,
         DashboardMilestoneEditTemplate, DashboardMilestonesTemplate,
         DashboardNewsletterSubscribersTemplate, DashboardPagesTemplate,
@@ -100,13 +100,7 @@ pub async fn dashboard_product_edit() -> impl IntoResponse {
     render(DashboardProductEditTemplate)
 }
 
-pub async fn dashboard_leads() -> impl IntoResponse {
-    render(DashboardLeadsTemplate)
-}
 
-pub async fn dashboard_contact_messages() -> impl IntoResponse {
-    render(DashboardContactMessagesTemplate)
-}
 
 pub async fn dashboard_quote_requests() -> impl IntoResponse {
     render(DashboardQuoteRequestsTemplate)

@@ -1,5 +1,7 @@
 use askama::Template;
 
+use crate::models::{ContactMessage, LeadStats};
+
 macro_rules! page {
     ($name:ident, $path:literal) => {
         #[derive(Template)]
@@ -16,7 +18,11 @@ page!(IndustriesTemplate, "pages/industries.html");
 page!(PortfolioTemplate, "pages/portfolio.html");
 page!(InsightsTemplate, "pages/insights.html");
 page!(CareersTemplate, "pages/careers.html");
-page!(ContactTemplate, "pages/contactus.html");
+#[derive(Template)]
+#[template(path = "pages/contactus.html")]
+pub struct ContactTemplate {
+    pub success: bool,
+}
 page!(RequestQuoteTemplate, "pages/requestquote.html");
 
 // Legal pages
@@ -155,11 +161,20 @@ page!(
 );
 page!(DashboardProductEditTemplate, "dashboard/products/edit.html");
 
-page!(DashboardLeadsTemplate, "dashboard/leads/index.html");
-page!(
-    DashboardContactMessagesTemplate,
-    "dashboard/contact-messages/index.html"
-);
+use crate::models::{ContactMessage, LeadStats};
+
+#[derive(Template)]
+#[template(path = "dashboard/leads/index.html")]
+pub struct DashboardLeadsTemplate {
+    pub leads: Vec<ContactMessage>,
+    pub stats: LeadStats,
+}
+
+#[derive(Template)]
+#[template(path = "dashboard/contact-messages/index.html")]
+pub struct DashboardContactMessagesTemplate {
+    pub messages: Vec<ContactMessage>,
+}
 page!(
     DashboardQuoteRequestsTemplate,
     "dashboard/quote-requests/index.html"

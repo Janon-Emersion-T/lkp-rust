@@ -1,6 +1,7 @@
 mod auth;
 mod db;
 mod handlers;
+mod models;
 mod routes;
 mod seeds;
 mod state;

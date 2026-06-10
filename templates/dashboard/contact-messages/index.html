@@ -1,1 +1,88 @@
-<h1>Page Ready</h1>
+{% extends "dashboard/layout.html" %}
+
+{% block content %}
+<div class="space-y-8">
+    <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+        <div>
+            <p class="text-sm font-bold uppercase tracking-[0.25em] text-cyan-600">Inbox</p>
+            <h1 class="mt-2 text-3xl font-black text-slate-950">Contact Messages</h1>
+            <p class="mt-2 text-sm text-slate-600">
+                Review contact submissions, mark them as contacted, and store internal replies.
+            </p>
+        </div>
+
+        <a href="/dashboard/leads"
+            class="rounded-2xl bg-slate-950 px-5 py-3 text-sm font-bold text-white transition hover:bg-cyan-600">
+            Leads Dashboard
+        </a>
+    </div>
+
+    <div class="grid gap-6">
+        {% for message in messages %}
+        <article class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div class="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+                <div>
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span class="rounded-full bg-cyan-50 px-3 py-1 text-xs font-black uppercase text-cyan-700">
+                            {{ message.status }}
+                        </span>
+
+                        <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-black uppercase text-slate-700">
+                            {{ message.priority }} priority
+                        </span>
+
+                        <span class="rounded-full bg-amber-50 px-3 py-1 text-xs font-black uppercase text-amber-700">
+                            Score {{ message.lead_score }}
+                        </span>
+                    </div>
+
+                    <h2 class="mt-4 text-xl font-black text-slate-950">{{ message.subject }}</h2>
+
+                    <div class="mt-2 text-sm text-slate-500">
+                        {{ message.name }} · {{ message.email }}
+                        {% if let Some(phone) = message.phone %}
+                        · {{ phone }}
+                        {% endif %}
+                    </div>
+
+                    {% if let Some(company) = message.company %}
+                    <div class="mt-1 text-sm font-semibold text-slate-600">
+                        Company: {{ company }}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <a href="/dashboard/contact-messages/{{ message.id }}"
+                    class="rounded-2xl border border-slate-200 px-4 py-3 text-sm font-bold text-slate-700 transition hover:border-cyan-300 hover:bg-cyan-50 hover:text-cyan-700">
+                    Mark Reviewed
+                </a>
+            </div>
+
+            <div class="mt-6 rounded-2xl bg-slate-50 p-5 text-sm leading-7 text-slate-700">
+                {{ message.message }}
+            </div>
+
+            <form action="/dashboard/contact-messages/{{ message.id }}/reply" method="post" class="mt-6 grid gap-3">
+                <label class="text-sm font-black text-slate-950">Internal Reply / Follow-up Note</label>
+
+                <textarea name="admin_reply" rows="3"
+                    placeholder="Example: Called client, asked for project scope, send quote tomorrow..."
+                    class="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100">{% if let Some(reply) = message.admin_reply %}{{ reply }}{% endif %}</textarea>
+
+                <div>
+                    <button class="rounded-2xl bg-cyan-500 px-5 py-3 text-sm font-black text-slate-950 transition hover:bg-cyan-400">
+                        Save Reply
+                    </button>
+                </div>
+            </form>
+        </article>
+        {% endfor %}
+
+        {% if messages.len() == 0 %}
+        <div class="rounded-3xl border border-dashed border-slate-300 bg-white p-10 text-center text-sm font-semibold text-slate-500">
+            No contact messages yet.
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

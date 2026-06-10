@@ -1,4 +1,8 @@
-use axum::{extract::Path, response::IntoResponse};
+use axum::{
+    extract::{Path, Query},
+    response::IntoResponse,
+};
+use std::collections::HashMap;
 
 use super::{
     render::render,
@@ -37,8 +41,10 @@ pub async fn careers() -> impl IntoResponse {
     render(CareersTemplate)
 }
 
-pub async fn contact() -> impl IntoResponse {
-    render(ContactTemplate)
+pub async fn contact(Query(params): Query<HashMap<String, String>>) -> impl IntoResponse {
+    let success = params.get("success").is_some_and(|value| value == "1");
+
+    render(ContactTemplate { success })
 }
 
 pub async fn request_quote() -> impl IntoResponse {
