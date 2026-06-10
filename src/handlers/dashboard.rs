@@ -5,17 +5,16 @@ use super::{
     templates::{
         DashboardAuditLogsTemplate, DashboardCareerApplicationsTemplate,
         DashboardCareerCreateTemplate, DashboardCareerEditTemplate, DashboardCareersTemplate,
-        DashboardFaqCreateTemplate, DashboardFaqEditTemplate,
-        DashboardFaqsTemplate, DashboardIndustriesTemplate, DashboardIndustryCreateTemplate,
+        DashboardFaqCreateTemplate, DashboardFaqEditTemplate, DashboardFaqsTemplate,
+        DashboardIndustriesTemplate, DashboardIndustryCreateTemplate,
         DashboardIndustryEditTemplate, DashboardInsightCategoriesTemplate,
         DashboardInsightCategoryCreateTemplate, DashboardInsightCategoryEditTemplate,
         DashboardInsightCreateTemplate, DashboardInsightEditTemplate,
         DashboardInsightTagCreateTemplate, DashboardInsightTagEditTemplate,
-        DashboardInsightTagsTemplate, DashboardInsightsTemplate,
-        DashboardMediaTemplate, DashboardMenusTemplate, DashboardMilestoneCreateTemplate,
-        DashboardMilestoneEditTemplate, DashboardMilestonesTemplate,
-        DashboardNewsletterSubscribersTemplate, DashboardPagesTemplate,
-        DashboardPortfolioCreateTemplate, DashboardPortfolioEditTemplate,
+        DashboardInsightTagsTemplate, DashboardInsightsTemplate, DashboardMediaTemplate,
+        DashboardMenusTemplate, DashboardMilestoneCreateTemplate, DashboardMilestoneEditTemplate,
+        DashboardMilestonesTemplate, DashboardNewsletterSubscribersTemplate,
+        DashboardPagesTemplate, DashboardPortfolioCreateTemplate, DashboardPortfolioEditTemplate,
         DashboardPortfoliosTemplate, DashboardProductCreateTemplate, DashboardProductEditTemplate,
         DashboardProductsTemplate, DashboardQuoteRequestsTemplate, DashboardSeoTemplate,
         DashboardServiceCreateTemplate, DashboardServiceEditTemplate, DashboardServicesTemplate,
@@ -99,8 +98,6 @@ pub async fn dashboard_product_create() -> impl IntoResponse {
 pub async fn dashboard_product_edit() -> impl IntoResponse {
     render(DashboardProductEditTemplate)
 }
-
-
 
 pub async fn dashboard_quote_requests() -> impl IntoResponse {
     render(DashboardQuoteRequestsTemplate)

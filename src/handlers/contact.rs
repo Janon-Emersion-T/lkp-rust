@@ -81,11 +81,9 @@ fn calculate_lead_score(form: &ContactMessageForm) -> i32 {
         score += 20;
     }
 
-    if form
-        .budget_range
-        .as_deref()
-        .is_some_and(|value| value.contains("500") || value.contains("1000") || value.contains("enterprise"))
-    {
+    if form.budget_range.as_deref().is_some_and(|value| {
+        value.contains("500") || value.contains("1000") || value.contains("enterprise")
+    }) {
         score += 20;
     }
 
@@ -353,7 +351,9 @@ pub async fn dashboard_contact_message_show(
     .await;
 
     match message {
-        Ok(Some(message)) => render(DashboardContactMessageShowTemplate { message }).into_response(),
+        Ok(Some(message)) => {
+            render(DashboardContactMessageShowTemplate { message }).into_response()
+        }
         Ok(None) => (StatusCode::NOT_FOUND, "Contact message not found").into_response(),
         Err(error) => {
             eprintln!("Failed to fetch contact message: {error}");
@@ -440,6 +440,46 @@ pub async fn dashboard_contact_message_quick_status(
     }
 
     Redirect::to("/dashboard/contact-messages")
+}
+
+#[derive(Debug, Deserialize)]
+pub struct ReplyForm {
+    pub admin_reply: Option<String>,
+}
+
+pub async fn dashboard_contact_message_reply(
+    State(state): State<AppState>,
+    Path(id): Path<Uuid>,
+    Form(form): Form<ReplyForm>,
+) -> impl IntoResponse {
+    let result = sqlx::query(
+        r#"
+        UPDATE contact_messages
+        SET
+            admin_reply = $1,
+            replied_at = NOW(),
+            status = CASE
+                WHEN status = 'new' THEN 'contacted'
+                ELSE status
+            END,
+            contacted_at = CASE
+                WHEN contacted_at IS NULL THEN NOW()
+                ELSE contacted_at
+            END,
+            updated_at = NOW()
+        WHERE id = $2
+        "#,
+    )
+    .bind(clean_optional(&form.admin_reply))
+    .bind(id)
+    .execute(&state.db)
+    .await;
+
+    if let Err(error) = result {
+        eprintln!("Failed to save contact message reply: {error}");
+    }
+
+    Redirect::to(&format!("/dashboard/contact-messages/{id}"))
 }
 
 pub async fn dashboard_contact_message_delete(

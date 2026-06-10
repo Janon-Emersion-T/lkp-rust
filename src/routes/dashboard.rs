@@ -6,10 +6,12 @@ use axum::{
 use crate::{
     handlers::{
         dashboard, dashboard_audit_logs, dashboard_career_applications, dashboard_career_create,
-        dashboard_career_edit, dashboard_careers, dashboard_contact_message_reply,
-        dashboard_contact_message_show, dashboard_contact_messages, dashboard_faq_create,
-        dashboard_faq_edit, dashboard_faqs, dashboard_industries, dashboard_industry_create,
-        dashboard_industry_edit, dashboard_insight_categories, dashboard_insight_category_create,
+        dashboard_career_edit, dashboard_careers, dashboard_contact_message_delete,
+        dashboard_contact_message_quick_status, dashboard_contact_message_reply,
+        dashboard_contact_message_show, dashboard_contact_message_update,
+        dashboard_contact_messages, dashboard_faq_create, dashboard_faq_edit, dashboard_faqs,
+        dashboard_industries, dashboard_industry_create, dashboard_industry_edit,
+        dashboard_insight_categories, dashboard_insight_category_create,
         dashboard_insight_category_edit, dashboard_insight_create, dashboard_insight_edit,
         dashboard_insight_tag_create, dashboard_insight_tag_edit, dashboard_insight_tags,
         dashboard_insights, dashboard_leads, dashboard_media, dashboard_menus,
@@ -127,5 +129,17 @@ pub fn dashboard_routes() -> Router<AppState> {
         .route(
             "/dashboard/contact-messages/{id}/reply",
             post(dashboard_contact_message_reply),
+        )
+        .route(
+            "/dashboard/contact-messages/{id}/update",
+            post(dashboard_contact_message_update),
+        )
+        .route(
+            "/dashboard/contact-messages/{id}/quick-status",
+            post(dashboard_contact_message_quick_status),
+        )
+        .route(
+            "/dashboard/contact-messages/{id}/delete",
+            post(dashboard_contact_message_delete),
         )
 }

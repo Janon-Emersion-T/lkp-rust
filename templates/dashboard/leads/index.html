@@ -7,7 +7,7 @@
             <p class="text-sm font-bold uppercase tracking-[0.25em] text-cyan-600">CRM</p>
             <h1 class="mt-2 text-3xl font-black text-slate-950">Leads Dashboard</h1>
             <p class="mt-2 text-sm text-slate-600">
-                Track serious opportunities captured from the LKP website contact page.
+                Track, qualify, and convert opportunities captured from the LKP website contact page.
             </p>
         </div>
 
@@ -44,13 +44,78 @@
         </div>
     </div>
 
+    <form action="/dashboard/leads" method="get"
+        class="grid gap-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm md:grid-cols-5">
+
+        <label class="grid gap-2 text-sm font-bold text-slate-700">
+            Status
+            <select name="status" class="rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100">
+                <option value="all" {% if filters.status == "all" %}selected{% endif %}>All</option>
+                <option value="new" {% if filters.status == "new" %}selected{% endif %}>New</option>
+                <option value="contacted" {% if filters.status == "contacted" %}selected{% endif %}>Contacted</option>
+                <option value="qualified" {% if filters.status == "qualified" %}selected{% endif %}>Qualified</option>
+                <option value="converted" {% if filters.status == "converted" %}selected{% endif %}>Converted</option>
+                <option value="archived" {% if filters.status == "archived" %}selected{% endif %}>Archived</option>
+                <option value="spam" {% if filters.status == "spam" %}selected{% endif %}>Spam</option>
+            </select>
+        </label>
+
+        <label class="grid gap-2 text-sm font-bold text-slate-700">
+            Priority
+            <select name="priority" class="rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100">
+                <option value="all" {% if filters.priority == "all" %}selected{% endif %}>All</option>
+                <option value="normal" {% if filters.priority == "normal" %}selected{% endif %}>Normal</option>
+                <option value="medium" {% if filters.priority == "medium" %}selected{% endif %}>Medium</option>
+                <option value="high" {% if filters.priority == "high" %}selected{% endif %}>High</option>
+            </select>
+        </label>
+
+        <label class="grid gap-2 text-sm font-bold text-slate-700">
+            Service
+            <select name="service" class="rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100">
+                <option value="all" {% if filters.service == "all" %}selected{% endif %}>All</option>
+                <option value="web_development" {% if filters.service == "web_development" %}selected{% endif %}>Web Development</option>
+                <option value="custom_software" {% if filters.service == "custom_software" %}selected{% endif %}>Custom Software</option>
+                <option value="pos_erp" {% if filters.service == "pos_erp" %}selected{% endif %}>POS / ERP</option>
+                <option value="seo" {% if filters.service == "seo" %}selected{% endif %}>SEO</option>
+                <option value="digital_marketing" {% if filters.service == "digital_marketing" %}selected{% endif %}>Digital Marketing</option>
+                <option value="hosting_domain" {% if filters.service == "hosting_domain" %}selected{% endif %}>Hosting & Domain</option>
+                <option value="it_consultation" {% if filters.service == "it_consultation" %}selected{% endif %}>IT Consultation</option>
+                <option value="ai_automation" {% if filters.service == "ai_automation" %}selected{% endif %}>AI Automation</option>
+            </select>
+        </label>
+
+        <label class="grid gap-2 text-sm font-bold text-slate-700 md:col-span-2">
+            Search
+            <div class="flex gap-3">
+                <input name="q" value="{{ filters.q }}" placeholder="Search name, email, phone, company, subject..."
+                    class="w-full rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100">
+
+                <button class="rounded-2xl bg-cyan-500 px-5 py-3 text-sm font-black text-slate-950 hover:bg-cyan-400">
+                    Filter
+                </button>
+            </div>
+        </label>
+    </form>
+
     <div class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
-        <div class="border-b border-slate-200 p-6">
-            <h2 class="text-xl font-black text-slate-950">Latest Leads</h2>
+        <div class="flex flex-col gap-3 border-b border-slate-200 p-6 md:flex-row md:items-center md:justify-between">
+            <div>
+                <h2 class="text-xl font-black text-slate-950">Qualified Lead Pipeline</h2>
+                <p class="mt-1 text-sm text-slate-500">
+                    Ordered by priority, lead score, and newest inquiry.
+                </p>
+            </div>
+
+            {% if filters.is_active() %}
+            <a href="/dashboard/leads" class="text-sm font-black text-cyan-700 hover:text-cyan-900">
+                Clear filters
+            </a>
+            {% endif %}
         </div>
 
         <div class="overflow-x-auto">
-            <table class="w-full min-w-[1000px] text-left text-sm">
+            <table class="w-full min-w-[1100px] text-left text-sm">
                 <thead class="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
                     <tr>
                         <th class="px-6 py-4">Lead</th>
@@ -60,8 +125,10 @@
                         <th class="px-6 py-4">Priority</th>
                         <th class="px-6 py-4">Score</th>
                         <th class="px-6 py-4">Status</th>
+                        <th class="px-6 py-4">Action</th>
                     </tr>
                 </thead>
+
                 <tbody class="divide-y divide-slate-100">
                     {% for lead in leads %}
                     <tr class="hover:bg-slate-50">
@@ -110,6 +177,13 @@
                                 {{ lead.status }}
                             </span>
                         </td>
+
+                        <td class="px-6 py-5">
+                            <a href="/dashboard/contact-messages/{{ lead.id }}"
+                                class="rounded-xl border border-slate-200 px-4 py-2 text-xs font-black text-slate-700 hover:border-cyan-300 hover:bg-cyan-50 hover:text-cyan-700">
+                                Open
+                            </a>
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -118,7 +192,7 @@
 
         {% if leads.len() == 0 %}
         <div class="p-10 text-center text-sm font-semibold text-slate-500">
-            No leads yet. Once the contact page starts converting, they will appear here.
+            No leads found. Either the contact page has not converted yet, or the current filters are too tight.
         </div>
         {% endif %}
     </div>

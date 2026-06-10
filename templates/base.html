@@ -1,157 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}LKProfessionals (Pvt) Ltd.{% endblock %}</title>
+
+    <title>{% block title %}LKProfessionals (Pvt) Ltd. | IT Services Company in Sri Lanka{% endblock %}</title>
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{% block meta_description %}LKProfessionals (Pvt) Ltd. provides web development, custom software, SEO, digital marketing, hosting, domain, and IT consultation services in Sri Lanka.{% endblock %}">
+    <meta name="robots" content="{% block robots %}index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1{% endblock %}">
+    <link rel="canonical" href="{% block canonical %}https://lkprofessionals.com/{% endblock %}">
+
+    <meta property="og:site_name" content="LKProfessionals (Pvt) Ltd.">
+    <meta property="og:type" content="{% block og_type %}website{% endblock %}">
+    <meta property="og:title" content="{% block og_title %}LKProfessionals (Pvt) Ltd. | IT Services Company in Sri Lanka{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Reliable IT services, web development, SEO, digital marketing, hosting, domain, and business automation solutions for Sri Lankan and international businesses.{% endblock %}">
+    <meta property="og:url" content="{% block og_url %}https://lkprofessionals.com/{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}https://lkprofessionals.com/static/images/og/lkprofessionals-og.jpg{% endblock %}">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% block twitter_title %}LKProfessionals (Pvt) Ltd. | IT Services Company in Sri Lanka{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}Web development, custom software, SEO, digital marketing, hosting, domain, and IT consultation services by LKProfessionals.{% endblock %}">
+    <meta name="twitter:image" content="{% block twitter_image %}https://lkprofessionals.com/static/images/og/lkprofessionals-og.jpg{% endblock %}">
+
     <link rel="stylesheet" href="/static/css/app.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
+
+    {% block structured_data %}{% endblock %}
+
     <style>
-        /* === Navigation Link Styles === */
-        .nav-link {
-            position: relative;
-            padding: 0.5rem 0.75rem;
-            font-size: 0.875rem;
-            font-weight: 500;
-            color: rgb(203 213 225);
-            border-radius: 0.5rem;
-            transition: all 0.2s ease;
-            text-decoration: none;
-        }
-        .nav-link:hover {
-            color: white;
-            background: rgba(255, 255, 255, 0.05);
-        }
-        .nav-link.active {
-            color: #22d3ee;
-            background: rgba(34, 211, 238, 0.1);
-        }
-        .nav-link.active::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0.75rem;
-            right: 0.75rem;
-            height: 2px;
-            border-radius: 9999px;
-            background: #22d3ee;
-        }
-
-        /* === Dropdown Item Styles === */
-        .dropdown-item {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            border-radius: 0.5rem;
-            padding: 0.625rem 0.75rem;
-            font-size: 0.875rem;
-            color: rgb(203 213 225);
-            transition: all 0.2s ease;
-            text-decoration: none;
-        }
-        .dropdown-item:hover {
-            background: rgba(255, 255, 255, 0.05);
-            color: white;
-        }
-
-        /* === Mobile Nav Link Styles === */
-        .mobile-nav-link {
-            display: block;
-            border-radius: 0.5rem;
-            padding: 0.625rem 0.75rem;
-            font-size: 0.875rem;
-            font-weight: 500;
-            color: rgb(203 213 225);
-            transition: all 0.2s ease;
-            text-decoration: none;
-        }
-        .mobile-nav-link:hover {
-            background: rgba(255, 255, 255, 0.05);
-            color: white;
-        }
-
-        /* === Mobile Menu Animation === */
-        .mobile-menu-open {
-            animation: slideDown 0.3s ease-out forwards;
-        }
-        .mobile-menu-closed {
-            animation: slideUp 0.2s ease-in forwards;
-        }
-        @keyframes slideDown {
-            from { opacity: 0; max-height: 0; }
-            to { opacity: 1; max-height: 500px; }
-        }
-        @keyframes slideUp {
-            from { opacity: 1; max-height: 500px; }
-            to { opacity: 0; max-height: 0; }
-        }
-
-        /* === Scroll effect for header === */
-        .header-scrolled {
-            background: rgba(2, 6, 23, 0.95) !important;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -4px rgba(0, 0, 0, 0.2);
-        }
-
-        /* === Page transition === */
-        main {
-            animation: fadeIn 0.5s ease-out;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        /* keep your existing style block here exactly as it is now */
     </style>
 </head>
-<body class="bg-slate-950 text-white antialiased">
-    {% include "partials/topheader.html" %}
-    {% include "partials/header.html" %}
-
-    <main>
-        {% block content %}{% endblock %}
-    </main>
-
-    {% include "partials/footer.html" %}
-    {% include "partials/backtoptop.html" %}
-    {% include "partials/copyrightfooter.html" %}
-
-    <script>
-        // Mobile menu toggle
-        const menuBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-        let menuOpen = false;
-
-        if (menuBtn && mobileMenu) {
-            menuBtn.addEventListener('click', () => {
-                menuOpen = !menuOpen;
-                const icon = menuBtn.querySelector('i');
-                if (menuOpen) {
-                    mobileMenu.classList.remove('hidden');
-                    mobileMenu.classList.remove('mobile-menu-closed');
-                    mobileMenu.classList.add('mobile-menu-open');
-                    icon.className = 'fa-solid fa-xmark text-lg';
-                } else {
-                    mobileMenu.classList.remove('mobile-menu-open');
-                    mobileMenu.classList.add('mobile-menu-closed');
-                    setTimeout(() => {
-                        mobileMenu.classList.add('hidden');
-                    }, 200);
-                    icon.className = 'fa-solid fa-bars text-lg';
-                }
-            });
-        }
-
-        // Sticky header scroll effect
-        const header = document.querySelector('header.sticky');
-        if (header) {
-            window.addEventListener('scroll', () => {
-                if (window.scrollY > 20) {
-                    header.classList.add('header-scrolled');
-                } else {
-                    header.classList.remove('header-scrolled');
-                }
-            });
-        }
-    </script>
-</body>
-</html>

@@ -1,0 +1,273 @@
+{% extends "dashboard/base.html" %}
+
+{% block title %}
+    Lead Details | LKProfessionals Dashboard
+{% endblock %}
+
+{% block content %}
+<div class="space-y-8">
+
+    <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+        <div>
+            <p class="text-sm font-bold uppercase tracking-[0.25em] text-cyan-600">CRM Lead</p>
+            <h1 class="mt-2 text-3xl font-black text-slate-950">{{ message.subject }}</h1>
+            <p class="mt-2 text-sm text-slate-600">
+                Review, qualify, follow up, convert, archive, or mark this inquiry as spam.
+            </p>
+        </div>
+
+        <a href="/dashboard/contact-messages"
+            class="rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-bold text-slate-700 transition hover:border-cyan-300 hover:bg-cyan-50 hover:text-cyan-700">
+            Back to Messages
+        </a>
+    </div>
+
+    <div class="grid gap-6 lg:grid-cols-[1fr_0.75fr]">
+
+        <section class="space-y-6">
+            <article class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+                <div class="flex flex-wrap gap-2">
+                    <span class="rounded-full bg-cyan-50 px-3 py-1 text-xs font-black uppercase text-cyan-700">
+                        {{ message.status }}
+                    </span>
+
+                    <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-black uppercase text-slate-700">
+                        {{ message.priority }} priority
+                    </span>
+
+                    <span class="rounded-full bg-amber-50 px-3 py-1 text-xs font-black uppercase text-amber-700">
+                        Score {{ message.lead_score }}
+                    </span>
+                </div>
+
+                <div class="mt-6 grid gap-5 sm:grid-cols-2">
+                    <div>
+                        <p class="text-xs font-black uppercase tracking-wide text-slate-400">Name</p>
+                        <p class="mt-1 font-bold text-slate-950">{{ message.name }}</p>
+                    </div>
+
+                    <div>
+                        <p class="text-xs font-black uppercase tracking-wide text-slate-400">Email</p>
+                        <p class="mt-1 font-bold text-slate-950">{{ message.email }}</p>
+                    </div>
+
+                    <div>
+                        <p class="text-xs font-black uppercase tracking-wide text-slate-400">Phone</p>
+                        <p class="mt-1 font-bold text-slate-950">
+                            {% if let Some(phone) = message.phone %}
+                                {{ phone }}
+                            {% else %}
+                                Not provided
+                            {% endif %}
+                        </p>
+                    </div>
+
+                    <div>
+                        <p class="text-xs font-black uppercase tracking-wide text-slate-400">Company</p>
+                        <p class="mt-1 font-bold text-slate-950">
+                            {% if let Some(company) = message.company %}
+                                {{ company }}
+                            {% else %}
+                                Not provided
+                            {% endif %}
+                        </p>
+                    </div>
+
+                    <div>
+                        <p class="text-xs font-black uppercase tracking-wide text-slate-400">Service Interest</p>
+                        <p class="mt-1 font-bold text-slate-950">
+                            {% if let Some(service) = message.service_interest %}
+                                {{ service }}
+                            {% else %}
+                                General inquiry
+                            {% endif %}
+                        </p>
+                    </div>
+
+                    <div>
+                        <p class="text-xs font-black uppercase tracking-wide text-slate-400">Budget</p>
+                        <p class="mt-1 font-bold text-slate-950">
+                            {% if let Some(budget) = message.budget_range %}
+                                {{ budget }}
+                            {% else %}
+                                Not provided
+                            {% endif %}
+                        </p>
+                    </div>
+
+                    <div>
+                        <p class="text-xs font-black uppercase tracking-wide text-slate-400">Timeline</p>
+                        <p class="mt-1 font-bold text-slate-950">
+                            {% if let Some(timeline) = message.project_timeline %}
+                                {{ timeline }}
+                            {% else %}
+                                Not provided
+                            {% endif %}
+                        </p>
+                    </div>
+
+                    <div>
+                        <p class="text-xs font-black uppercase tracking-wide text-slate-400">Source</p>
+                        <p class="mt-1 font-bold text-slate-950">{{ message.source }}</p>
+                    </div>
+                </div>
+            </article>
+
+            <article class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+                <h2 class="text-xl font-black text-slate-950">Client Message</h2>
+                <div class="mt-5 rounded-2xl bg-slate-50 p-5 text-sm leading-7 text-slate-700">
+                    {{ message.message }}
+                </div>
+            </article>
+
+            <article class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+                <h2 class="text-xl font-black text-slate-950">Lead Management</h2>
+
+                <form action="/dashboard/contact-messages/{{ message.id }}/update" method="post" class="mt-6 grid gap-5">
+                    <div class="grid gap-5 sm:grid-cols-3">
+                        <label class="grid gap-2 text-sm font-bold text-slate-700">
+                            Status
+                            <select name="status" class="rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100">
+                                <option value="new" {% if message.status == "new" %}selected{% endif %}>New</option>
+                                <option value="contacted" {% if message.status == "contacted" %}selected{% endif %}>Contacted</option>
+                                <option value="qualified" {% if message.status == "qualified" %}selected{% endif %}>Qualified</option>
+                                <option value="converted" {% if message.status == "converted" %}selected{% endif %}>Converted</option>
+                                <option value="archived" {% if message.status == "archived" %}selected{% endif %}>Archived</option>
+                                <option value="spam" {% if message.status == "spam" %}selected{% endif %}>Spam</option>
+                            </select>
+                        </label>
+
+                        <label class="grid gap-2 text-sm font-bold text-slate-700">
+                            Priority
+                            <select name="priority" class="rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100">
+                                <option value="normal" {% if message.priority == "normal" %}selected{% endif %}>Normal</option>
+                                <option value="medium" {% if message.priority == "medium" %}selected{% endif %}>Medium</option>
+                                <option value="high" {% if message.priority == "high" %}selected{% endif %}>High</option>
+                            </select>
+                        </label>
+
+                        <label class="grid gap-2 text-sm font-bold text-slate-700">
+                            Lead Score
+                            <input name="lead_score" type="number" min="0" max="100" value="{{ message.lead_score }}"
+                                class="rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100">
+                        </label>
+                    </div>
+
+                    <div class="grid gap-5 sm:grid-cols-2">
+                        <label class="grid gap-2 text-sm font-bold text-slate-700">
+                            Assigned To
+                            <input name="assigned_to" value="{% if let Some(value) = message.assigned_to %}{{ value }}{% endif %}" placeholder="Janon / Sales / Support"
+                                class="rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100">
+                        </label>
+
+                        <label class="grid gap-2 text-sm font-bold text-slate-700">
+                            Next Follow-up
+                            <input name="next_follow_up_at" type="datetime-local"
+                                class="rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100">
+                        </label>
+                    </div>
+
+                    <label class="grid gap-2 text-sm font-bold text-slate-700">
+                        Admin Reply / Client Follow-up Note
+                        <textarea name="admin_reply" rows="4" placeholder="What did we reply or plan to reply?"
+                            class="rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100">{% if let Some(value) = message.admin_reply %}{{ value }}{% endif %}</textarea>
+                    </label>
+
+                    <label class="grid gap-2 text-sm font-bold text-slate-700">
+                        Internal Note
+                        <textarea name="internal_note" rows="4" placeholder="Private note for LKP team only"
+                            class="rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100">{% if let Some(value) = message.internal_note %}{{ value }}{% endif %}</textarea>
+                    </label>
+
+                    <label class="grid gap-2 text-sm font-bold text-slate-700">
+                        Lost / Archive Reason
+                        <input name="lost_reason" value="{% if let Some(value) = message.lost_reason %}{{ value }}{% endif %}" placeholder="Budget mismatch, spam, not fit, no response..."
+                            class="rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100">
+                    </label>
+
+                    <div class="flex flex-wrap gap-3">
+                        <button class="rounded-2xl bg-cyan-500 px-5 py-3 text-sm font-black text-slate-950 transition hover:bg-cyan-400">
+                            Save Lead
+                        </button>
+                    </div>
+                </form>
+            </article>
+        </section>
+
+        <aside class="space-y-6">
+            <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+                <h2 class="text-lg font-black text-slate-950">Quick Actions</h2>
+
+                <div class="mt-5 grid gap-3">
+                    <form action="/dashboard/contact-messages/{{ message.id }}/quick-status" method="post">
+                        <input type="hidden" name="status" value="contacted">
+                        <button class="w-full rounded-2xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm font-black text-blue-700 hover:bg-blue-100">
+                            Mark Contacted
+                        </button>
+                    </form>
+
+                    <form action="/dashboard/contact-messages/{{ message.id }}/quick-status" method="post">
+                        <input type="hidden" name="status" value="qualified">
+                        <button class="w-full rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-black text-amber-700 hover:bg-amber-100">
+                            Mark Qualified
+                        </button>
+                    </form>
+
+                    <form action="/dashboard/contact-messages/{{ message.id }}/quick-status" method="post">
+                        <input type="hidden" name="status" value="converted">
+                        <button class="w-full rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-black text-emerald-700 hover:bg-emerald-100">
+                            Mark Converted
+                        </button>
+                    </form>
+
+                    <form action="/dashboard/contact-messages/{{ message.id }}/quick-status" method="post">
+                        <input type="hidden" name="status" value="spam">
+                        <button class="w-full rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-black text-rose-700 hover:bg-rose-100">
+                            Mark Spam
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+                <h2 class="text-lg font-black text-slate-950">System Details</h2>
+
+                <dl class="mt-5 space-y-4 text-sm">
+                    <div>
+                        <dt class="font-black text-slate-400">Created</dt>
+                        <dd class="mt-1 font-semibold text-slate-700">{{ message.created_at }}</dd>
+                    </div>
+
+                    <div>
+                        <dt class="font-black text-slate-400">Updated</dt>
+                        <dd class="mt-1 font-semibold text-slate-700">{{ message.updated_at }}</dd>
+                    </div>
+
+                    <div>
+                        <dt class="font-black text-slate-400">Client IP</dt>
+                        <dd class="mt-1 font-semibold text-slate-700">
+                            {% if let Some(ip) = message.client_ip %}
+                                {{ ip }}
+                            {% else %}
+                                Not captured
+                            {% endif %}
+                        </dd>
+                    </div>
+                </dl>
+            </div>
+
+            <form action="/dashboard/contact-messages/{{ message.id }}/delete" method="post"
+                onsubmit="return confirm('Delete this lead permanently? This cannot be undone.');"
+                class="rounded-3xl border border-rose-200 bg-rose-50 p-6">
+                <h2 class="text-lg font-black text-rose-800">Danger Zone</h2>
+                <p class="mt-2 text-sm leading-6 text-rose-700">
+                    Delete only spam or test messages. Good leads should be archived, not deleted.
+                </p>
+                <button class="mt-5 rounded-2xl bg-rose-600 px-5 py-3 text-sm font-black text-white hover:bg-rose-700">
+                    Delete Message
+                </button>
+            </form>
+        </aside>
+    </div>
+</div>
+{% endblock %}
