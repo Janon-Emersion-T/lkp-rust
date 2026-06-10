@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
 
@@ -27,6 +29,40 @@
     {% block structured_data %}{% endblock %}
 
     <style>
-        /* keep your existing style block here exactly as it is now */
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        .footer-glow {
+            animation: footerGlow 8s ease-in-out infinite alternate;
+        }
+
+        .footer-glow-delay {
+            animation: footerGlow 10s ease-in-out infinite alternate-reverse;
+        }
+
+        @keyframes footerGlow {
+            from {
+                transform: translate3d(0, 0, 0) scale(1);
+                opacity: 0.35;
+            }
+            to {
+                transform: translate3d(20px, -20px, 0) scale(1.12);
+                opacity: 0.65;
+            }
+        }
     </style>
 </head>
+
+<body class="bg-white text-slate-950 antialiased">
+
+    {% include "partials/header.html" %}
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    {% include "partials/footer.html" %}
+
+</body>
+</html>
