@@ -3,22 +3,25 @@
 # =========================================
 
 set shell := ["bash", "-cu"]
+set dotenv-load := true
 
 # -----------------------------------------
 # Development Server
+# Rust app handles migrations + seeds
 # -----------------------------------------
 dev:
     @echo "🚀 Starting LKProfessionals development environment..."
     npx concurrently --kill-others-on-fail \
         "npx @tailwindcss/cli -i ./assets/css/input.css -o ./static/css/app.css --watch" \
-        "cargo watch -w src -w templates -w assets -w Cargo.toml -w Cargo.lock -s 'cargo run'"
+        "cargo watch -w src -w templates -w assets -w migrations -w Cargo.toml -w Cargo.lock -w build.rs -s 'cargo run'"
 
 # -----------------------------------------
 # Rust Watch Only
+# Rust app handles migrations + seeds
 # -----------------------------------------
 watch:
     @echo "👀 Watching Rust + templates..."
-    cargo watch -w src -w templates -w assets -w Cargo.toml -w Cargo.lock -s 'cargo run'
+    cargo watch -w src -w templates -w assets -w migrations -w Cargo.toml -w Cargo.lock -w build.rs -s 'cargo run'
 
 # -----------------------------------------
 # Tailwind Watch Only
@@ -42,6 +45,7 @@ css-build:
 
 # -----------------------------------------
 # Development Run Without Watch
+# Rust app handles migrations + seeds
 # -----------------------------------------
 run:
     @echo "🦀 Running application..."
@@ -115,17 +119,40 @@ restart:
 
 # -----------------------------------------
 # Database Migrations
+# Manual utility only.
+# Normal dev should use: just dev
 # -----------------------------------------
 migrate:
     @echo "🗄 Running database migrations..."
     sqlx migrate run
 
 # -----------------------------------------
+# Migration Status
+# -----------------------------------------
+migrate-status:
+    @echo "📋 Showing migration status..."
+    sqlx migrate info
+
+# -----------------------------------------
 # Create Migration
+# Usage:
+# just migration create_contact_messages
 # -----------------------------------------
 migration name:
     @echo "📝 Creating migration {{name}}..."
     sqlx migrate add {{name}}
+
+# -----------------------------------------
+# Development Doctor
+# -----------------------------------------
+doctor:
+    @echo "🩺 Checking development tools..."
+    @command -v cargo >/dev/null || { echo "❌ cargo is missing"; exit 1; }
+    @command -v sqlx >/dev/null || { echo "❌ sqlx-cli is missing. Run: cargo install sqlx-cli --no-default-features --features postgres"; exit 1; }
+    @command -v psql >/dev/null || { echo "❌ psql is missing. Install PostgreSQL client tools."; exit 1; }
+    @command -v npm >/dev/null || { echo "❌ npm is missing"; exit 1; }
+    @command -v npx >/dev/null || { echo "❌ npx is missing"; exit 1; }
+    @echo "✅ Development environment looks ready."
 
 # -----------------------------------------
 # Show Available Commands

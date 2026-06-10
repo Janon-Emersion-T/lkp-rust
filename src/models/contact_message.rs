@@ -18,7 +18,18 @@ pub struct ContactMessage {
     pub priority: String,
     pub lead_score: i32,
     pub admin_reply: Option<String>,
+    pub internal_note: Option<String>,
+    pub assigned_to: Option<String>,
+    pub lost_reason: Option<String>,
+    pub next_follow_up_at: Option<DateTime<Utc>>,
+    pub contacted_at: Option<DateTime<Utc>>,
+    pub qualified_at: Option<DateTime<Utc>>,
+    pub converted_at: Option<DateTime<Utc>>,
+    pub archived_at: Option<DateTime<Utc>>,
+    pub spam_at: Option<DateTime<Utc>>,
     pub replied_at: Option<DateTime<Utc>>,
+    pub client_ip: Option<String>,
+    pub user_agent: Option<String>,
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
 }
@@ -30,4 +41,25 @@ pub struct LeadStats {
     pub contacted_count: i64,
     pub qualified_count: i64,
     pub converted_count: i64,
+    pub archived_count: i64,
+    pub spam_count: i64,
+    pub high_priority_count: i64,
+    pub avg_score: Option<f64>,
+}
+
+#[derive(Debug, Clone)]
+pub struct LeadFilters {
+    pub status: String,
+    pub priority: String,
+    pub service: String,
+    pub q: String,
+}
+
+impl LeadFilters {
+    pub fn is_active(&self) -> bool {
+        self.status != "all"
+            || self.priority != "all"
+            || self.service != "all"
+            || !self.q.trim().is_empty()
+    }
 }

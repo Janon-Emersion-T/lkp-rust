@@ -161,20 +161,28 @@ page!(
 );
 page!(DashboardProductEditTemplate, "dashboard/products/edit.html");
 
-use crate::models::{ContactMessage, LeadStats};
-
 #[derive(Template)]
 #[template(path = "dashboard/leads/index.html")]
 pub struct DashboardLeadsTemplate {
     pub leads: Vec<ContactMessage>,
     pub stats: LeadStats,
+    pub filters: crate::models::LeadFilters,
 }
 
 #[derive(Template)]
 #[template(path = "dashboard/contact-messages/index.html")]
 pub struct DashboardContactMessagesTemplate {
     pub messages: Vec<ContactMessage>,
+    pub stats: LeadStats,
+    pub filters: crate::models::LeadFilters,
 }
+
+#[derive(Template)]
+#[template(path = "dashboard/contact-messages/show.html")]
+pub struct DashboardContactMessageShowTemplate {
+    pub message: ContactMessage,
+}
+
 page!(
     DashboardQuoteRequestsTemplate,
     "dashboard/quote-requests/index.html"
