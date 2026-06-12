@@ -1,19 +1,103 @@
 {% extends "base.html" %}
 
-{% block title %}LKProfessionals (Pvt) Ltd. | IT Solutions{% endblock %}
+{% block title %}LKProfessionals | Web Development, Software, SEO & Digital Growth in Sri Lanka{% endblock %}
+{% block meta_description %}LKProfessionals builds websites, software, mobile apps, SEO strategies, hosting solutions, and automation systems for businesses in Sri Lanka and beyond.{% endblock %}
+{% block canonical %}https://lkprofessionals.com/{% endblock %}
+{% block og_title %}LKProfessionals | Web Development, Software, SEO & Digital Growth{% endblock %}
+{% block og_description %}Explore LKProfessionals services, case studies, industries, and insights across web development, software, SEO, automation, and business growth.{% endblock %}
+{% block og_url %}https://lkprofessionals.com/{% endblock %}
+{% block twitter_title %}LKProfessionals | Web Development, Software, SEO & Digital Growth{% endblock %}
+{% block twitter_description %}Websites, software, automation, SEO, hosting, and digital systems built for modern business growth.{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "LKProfessionals (Pvt) Ltd.",
+  "url": "https://lkprofessionals.com",
+  "logo": "https://lkprofessionals.com/static/images/logo/logo.png",
+  "description": "LKProfessionals provides web development, custom software, SEO, digital marketing, hosting, domain, automation, and IT consulting services.",
+  "sameAs": [
+    "https://www.linkedin.com/company/lkprofessionals",
+    "https://www.facebook.com/lkprofessionals",
+    "https://www.instagram.com/lkprofessionals",
+    "https://x.com/lkprofessionals"
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "LKProfessionals (Pvt) Ltd.",
+  "url": "https://lkprofessionals.com/",
+  "description": "Software development, web development, SEO, digital marketing, hosting, and automation services from Jaffna, Sri Lanka."
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "LKProfessionals (Pvt) Ltd.",
+  "url": "https://lkprofessionals.com/",
+  "image": "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80",
+  "telephone": "+94 76 123 4321",
+  "email": "info@lkprofessionals.com",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Jaffna",
+    "addressCountry": "LK"
+  },
+  "areaServed": ["Jaffna", "Sri Lanka", "International"]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Do you only work with clients in Jaffna?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. LKProfessionals is based in Jaffna, Sri Lanka, and works with businesses across the country and with international clients."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can LKProfessionals build ERP, POS, or other custom business systems?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. LKProfessionals builds custom software including ERP workflows, POS systems, portals, dashboards, booking systems, and operational business tools."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do you handle both development and SEO?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. LKProfessionals can combine web development, technical SEO, content structure, digital marketing support, hosting, and long-term optimization into one delivery plan."
+      }
+    }
+  ]
+}
+</script>
+{% endblock %}
 
 {% block content %}
 {% include "components/home/hero.html" %}
-{% include "components/home/about.html" %}
+{% include "components/home/trust.html" %}
 {% include "components/home/services.html" %}
-{% include "components/home/featured.html" %}
-{% include "components/home/industries.html" %}
-{% include "components/home/portfolios.html" %}
 {% include "components/home/whylkp.html" %}
+{% include "components/home/techstack.html" %}
+{% include "components/home/portfolios.html" %}
+{% include "components/home/industries.html" %}
 {% include "components/home/process.html" %}
 {% include "components/home/testimonial.html" %}
+{% include "components/home/local-seo.html" %}
+{% include "components/home/faq.html" %}
 {% include "components/home/insights.html" %}
-
-
-    
+{% include "components/home/final-cta.html" %}
 {% endblock %}

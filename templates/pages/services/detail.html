@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}{{ page.meta_title }}{% endblock %}
+
+{% block meta_description %}
+{{ page.meta_description }}
+{% endblock %}
+
+{% block canonical %}https://lkprofessionals.com{{ page.canonical_path }}{% endblock %}
+{% block og_title %}{{ page.meta_title }}{% endblock %}
+{% block og_description %}{{ page.meta_description }}{% endblock %}
+{% block og_url %}https://lkprofessionals.com{{ page.canonical_path }}{% endblock %}
+{% block twitter_title %}{{ page.meta_title }}{% endblock %}
+{% block twitter_description %}{{ page.meta_description }}{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": "{{ page.title }}",
+    "url": "https://lkprofessionals.com{{ page.canonical_path }}",
+    "description": "{{ page.meta_description }}",
+    "provider": {
+        "@type": "Organization",
+        "name": "LKProfessionals (Pvt) Ltd.",
+        "url": "https://lkprofessionals.com"
+    },
+    "areaServed": [
+        "Jaffna",
+        "Sri Lanka",
+        "International"
+    ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://lkprofessionals.com/"
+        },
+        {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Services",
+            "item": "https://lkprofessionals.com/services"
+        },
+        {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "{{ page.title }}",
+            "item": "https://lkprofessionals.com{{ page.canonical_path }}"
+        }
+    ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+        {% for faq in page.faqs %}
+        {
+            "@type": "Question",
+            "name": "{{ faq.question }}",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "{{ faq.answer }}"
+            }
+        }{% if !loop.last %},{% endif %}
+        {% endfor %}
+    ]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+{% include "components/services/detail-hero.html" %}
+{% include "components/services/detail-sections.html" %}
+{% include "components/services/detail-faq.html" %}
+{% include "components/services/detail-cta.html" %}
+{% endblock %}

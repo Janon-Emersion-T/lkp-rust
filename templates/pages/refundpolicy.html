@@ -1,1 +1,61 @@
-<h1>Page Ready</h1>
+{% extends "base.html" %}
+
+{% block title %}Refund Policy | LKProfessionals{% endblock %}
+{% block meta_description %}Review LKProfessionals refund policy for website projects, software development, consulting, retainers, support work, and milestone-based engagements.{% endblock %}
+{% block canonical %}https://lkprofessionals.com/refund-policy{% endblock %}
+{% block og_title %}Refund Policy | LKProfessionals{% endblock %}
+{% block og_description %}Refund terms for LKProfessionals project deposits, milestone work, support retainers, and consulting engagements.{% endblock %}
+{% block og_url %}https://lkprofessionals.com/refund-policy{% endblock %}
+
+{% block content %}
+<section class="bg-slate-950 px-6 py-24 text-white">
+  <div class="mx-auto max-w-5xl">
+    <p class="text-sm font-black uppercase tracking-[0.22em] text-cyan-300">Legal</p>
+    <h1 class="mt-6 text-4xl font-black tracking-tight md:text-6xl">Refund Policy</h1>
+    <p class="mt-6 max-w-3xl text-lg leading-8 text-slate-300">
+      Refund eligibility depends on project stage, work already completed, reserved capacity, and any
+      contract-specific terms agreed during onboarding.
+    </p>
+  </div>
+</section>
+
+<section class="bg-white px-6 py-20 text-slate-950">
+  <div class="mx-auto max-w-5xl space-y-8">
+    <article class="rounded-[2rem] border border-slate-200 p-8">
+      <h2 class="text-2xl font-black">Deposits and Advance Payments</h2>
+      <p class="mt-4 text-sm leading-7 text-slate-600">
+        Initial deposits are generally used to reserve delivery capacity, project discovery, planning, and
+        early execution. Once work has started, deposits are usually non-refundable unless otherwise stated
+        in writing.
+      </p>
+    </article>
+
+    <article class="rounded-[2rem] border border-slate-200 p-8">
+      <h2 class="text-2xl font-black">Milestone-Based Work</h2>
+      <p class="mt-4 text-sm leading-7 text-slate-600">
+        Payments made for completed milestones, approved deliverables, or time already allocated to a
+        project are not refundable. If a project is paused, any remaining unpaid work may be rescheduled
+        under a fresh delivery plan.
+      </p>
+    </article>
+
+    <article class="rounded-[2rem] border border-slate-200 p-8">
+      <h2 class="text-2xl font-black">Support and Retainers</h2>
+      <p class="mt-4 text-sm leading-7 text-slate-600">
+        Ongoing support, maintenance, or retainer arrangements may be cancellable on future billing cycles,
+        but previously used support hours, emergency interventions, and consumed resources are not
+        refundable.
+      </p>
+    </article>
+
+    <article class="rounded-[2rem] border border-slate-200 p-8">
+      <h2 class="text-2xl font-black">How to Raise a Billing Concern</h2>
+      <p class="mt-4 text-sm leading-7 text-slate-600">
+        If you believe a billing issue has occurred, contact us with the invoice reference, project name,
+        and concern summary. We review disputes in good faith and aim to resolve them quickly and
+        transparently.
+      </p>
+    </article>
+  </div>
+</section>
+{% endblock %}

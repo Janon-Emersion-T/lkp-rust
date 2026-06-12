@@ -1,200 +1,265 @@
 {% extends "dashboard/base.html" %}
 
+{% block title %}
+    Leads Pipeline | LKProfessionals Dashboard
+{% endblock %}
+
 {% block content %}
 <div class="space-y-8">
-    <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-        <div>
-            <p class="text-sm font-bold uppercase tracking-[0.25em] text-cyan-600">CRM</p>
-            <h1 class="mt-2 text-3xl font-black text-slate-950">Leads Dashboard</h1>
-            <p class="mt-2 text-sm text-slate-600">
-                Track, qualify, and convert opportunities captured from the LKP website contact page.
-            </p>
-        </div>
-
-        <a href="/dashboard/contact-messages"
-            class="rounded-2xl bg-slate-950 px-5 py-3 text-sm font-bold text-white transition hover:bg-cyan-600">
-            View Contact Messages
-        </a>
-    </div>
-
-    <div class="grid gap-5 md:grid-cols-5">
-        <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-            <p class="text-sm font-bold text-slate-500">Total</p>
-            <p class="mt-3 text-3xl font-black text-slate-950">{{ stats.total }}</p>
-        </div>
-
-        <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-            <p class="text-sm font-bold text-slate-500">New</p>
-            <p class="mt-3 text-3xl font-black text-cyan-600">{{ stats.new_count }}</p>
-        </div>
-
-        <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-            <p class="text-sm font-bold text-slate-500">Contacted</p>
-            <p class="mt-3 text-3xl font-black text-blue-600">{{ stats.contacted_count }}</p>
-        </div>
-
-        <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-            <p class="text-sm font-bold text-slate-500">Qualified</p>
-            <p class="mt-3 text-3xl font-black text-amber-600">{{ stats.qualified_count }}</p>
-        </div>
-
-        <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-            <p class="text-sm font-bold text-slate-500">Converted</p>
-            <p class="mt-3 text-3xl font-black text-emerald-600">{{ stats.converted_count }}</p>
-        </div>
-    </div>
-
-    <form action="/dashboard/leads" method="get"
-        class="grid gap-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm md:grid-cols-5">
-
-        <label class="grid gap-2 text-sm font-bold text-slate-700">
-            Status
-            <select name="status" class="rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100">
-                <option value="all" {% if filters.status == "all" %}selected{% endif %}>All</option>
-                <option value="new" {% if filters.status == "new" %}selected{% endif %}>New</option>
-                <option value="contacted" {% if filters.status == "contacted" %}selected{% endif %}>Contacted</option>
-                <option value="qualified" {% if filters.status == "qualified" %}selected{% endif %}>Qualified</option>
-                <option value="converted" {% if filters.status == "converted" %}selected{% endif %}>Converted</option>
-                <option value="archived" {% if filters.status == "archived" %}selected{% endif %}>Archived</option>
-                <option value="spam" {% if filters.status == "spam" %}selected{% endif %}>Spam</option>
-            </select>
-        </label>
-
-        <label class="grid gap-2 text-sm font-bold text-slate-700">
-            Priority
-            <select name="priority" class="rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100">
-                <option value="all" {% if filters.priority == "all" %}selected{% endif %}>All</option>
-                <option value="normal" {% if filters.priority == "normal" %}selected{% endif %}>Normal</option>
-                <option value="medium" {% if filters.priority == "medium" %}selected{% endif %}>Medium</option>
-                <option value="high" {% if filters.priority == "high" %}selected{% endif %}>High</option>
-            </select>
-        </label>
-
-        <label class="grid gap-2 text-sm font-bold text-slate-700">
-            Service
-            <select name="service" class="rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100">
-                <option value="all" {% if filters.service == "all" %}selected{% endif %}>All</option>
-                <option value="web_development" {% if filters.service == "web_development" %}selected{% endif %}>Web Development</option>
-                <option value="custom_software" {% if filters.service == "custom_software" %}selected{% endif %}>Custom Software</option>
-                <option value="pos_erp" {% if filters.service == "pos_erp" %}selected{% endif %}>POS / ERP</option>
-                <option value="seo" {% if filters.service == "seo" %}selected{% endif %}>SEO</option>
-                <option value="digital_marketing" {% if filters.service == "digital_marketing" %}selected{% endif %}>Digital Marketing</option>
-                <option value="hosting_domain" {% if filters.service == "hosting_domain" %}selected{% endif %}>Hosting & Domain</option>
-                <option value="it_consultation" {% if filters.service == "it_consultation" %}selected{% endif %}>IT Consultation</option>
-                <option value="ai_automation" {% if filters.service == "ai_automation" %}selected{% endif %}>AI Automation</option>
-            </select>
-        </label>
-
-        <label class="grid gap-2 text-sm font-bold text-slate-700 md:col-span-2">
-            Search
-            <div class="flex gap-3">
-                <input name="q" value="{{ filters.q }}" placeholder="Search name, email, phone, company, subject..."
-                    class="w-full rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100">
-
-                <button class="rounded-2xl bg-cyan-500 px-5 py-3 text-sm font-black text-slate-950 hover:bg-cyan-400">
-                    Filter
-                </button>
-            </div>
-        </label>
-    </form>
-
-    <div class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
-        <div class="flex flex-col gap-3 border-b border-slate-200 p-6 md:flex-row md:items-center md:justify-between">
+    <section class="crm-hero overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-sm">
+        <div class="grid gap-8 p-6 lg:grid-cols-[1.35fr_0.85fr] lg:p-8">
             <div>
-                <h2 class="text-xl font-black text-slate-950">Qualified Lead Pipeline</h2>
-                <p class="mt-1 text-sm text-slate-500">
-                    Ordered by priority, lead score, and newest inquiry.
+                <p class="text-sm font-black uppercase tracking-[0.28em] text-cyan-700">CRM Pipeline</p>
+                <h1 class="mt-3 max-w-3xl text-3xl font-black tracking-tight text-slate-950 md:text-4xl">
+                    Best-fit leads, fastest next actions, and full visibility from first inquiry to conversion.
+                </h1>
+                <p class="mt-4 max-w-2xl text-sm leading-7 text-slate-600 md:text-base">
+                    This view is built for qualification speed. Filter by buying intent, review score and urgency,
+                    then jump straight into the lead record or mark progress without losing your place.
+                </p>
+
+                <div class="crm-subnav mt-6">
+                    <a href="/dashboard/leads" class="crm-subnav-link crm-subnav-link-active">Leads Pipeline</a>
+                    <a href="/dashboard/contact-messages" class="crm-subnav-link">Contact Inbox</a>
+                </div>
+            </div>
+
+            <div class="grid gap-4 sm:grid-cols-2">
+                <div class="crm-hero-panel">
+                    <p class="crm-hero-label">High Priority</p>
+                    <p class="mt-3 text-3xl font-black text-slate-950">{{ stats.high_priority_count }}</p>
+                    <p class="mt-2 text-sm text-slate-500">Leads that deserve immediate attention.</p>
+                </div>
+
+                <div class="crm-hero-panel">
+                    <p class="crm-hero-label">Average Score</p>
+                    <p class="mt-3 text-3xl font-black text-slate-950">
+                        {% if let Some(avg_score) = stats.avg_score %}
+                        {{ "{:.0}"|format(avg_score) }}
+                        {% else %}
+                        0
+                        {% endif %}
+                    </p>
+                    <p class="mt-2 text-sm text-slate-500">A quick signal for overall inquiry quality.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <article class="crm-stat-card">
+            <p class="crm-stat-label">Total Leads</p>
+            <p class="crm-stat-value">{{ stats.total }}</p>
+            <p class="crm-stat-note">All captured records in the pipeline.</p>
+        </article>
+
+        <article class="crm-stat-card">
+            <p class="crm-stat-label">New + Contacted</p>
+            <p class="crm-stat-value">{{ stats.new_count + stats.contacted_count }}</p>
+            <p class="crm-stat-note">Fresh demand still moving through early follow-up.</p>
+        </article>
+
+        <article class="crm-stat-card">
+            <p class="crm-stat-label">Qualified</p>
+            <p class="crm-stat-value">{{ stats.qualified_count }}</p>
+            <p class="crm-stat-note">Strong-fit leads that are worth active pursuit.</p>
+        </article>
+
+        <article class="crm-stat-card">
+            <p class="crm-stat-label">Converted</p>
+            <p class="crm-stat-value">{{ stats.converted_count }}</p>
+            <p class="crm-stat-note">Inquiries that turned into real wins.</p>
+        </article>
+    </section>
+
+    <section class="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
+        <div class="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+            <div>
+                <p class="text-sm font-black uppercase tracking-[0.24em] text-slate-500">Smart Filters</p>
+                <h2 class="mt-2 text-2xl font-black text-slate-950">Zero in on the right opportunities</h2>
+                <p class="mt-2 text-sm text-slate-500">
+                    Search by person, company, message, or service, then trim by status and urgency.
                 </p>
             </div>
 
             {% if filters.is_active() %}
-            <a href="/dashboard/leads" class="text-sm font-black text-cyan-700 hover:text-cyan-900">
-                Clear filters
+            <a href="/dashboard/leads" class="text-sm font-black text-cyan-700 transition hover:text-cyan-900">
+                Clear all filters
             </a>
             {% endif %}
         </div>
 
-        <div class="overflow-x-auto">
-            <table class="w-full min-w-[1100px] text-left text-sm">
-                <thead class="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
-                    <tr>
-                        <th class="px-6 py-4">Lead</th>
-                        <th class="px-6 py-4">Service</th>
-                        <th class="px-6 py-4">Budget</th>
-                        <th class="px-6 py-4">Timeline</th>
-                        <th class="px-6 py-4">Priority</th>
-                        <th class="px-6 py-4">Score</th>
-                        <th class="px-6 py-4">Status</th>
-                        <th class="px-6 py-4">Action</th>
-                    </tr>
-                </thead>
+        <form action="/dashboard/leads" method="get" class="mt-6 grid gap-4 xl:grid-cols-[1.15fr_0.7fr_0.7fr_0.7fr_auto]">
+            <label class="grid gap-2 text-sm font-bold text-slate-700">
+                Search
+                <input name="q" value="{{ filters.q }}" placeholder="Name, company, email, subject, message..."
+                    class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-cyan-500 focus:bg-white focus:ring-4 focus:ring-cyan-100">
+            </label>
 
-                <tbody class="divide-y divide-slate-100">
-                    {% for lead in leads %}
-                    <tr class="hover:bg-slate-50">
-                        <td class="px-6 py-5">
-                            <div class="font-black text-slate-950">{{ lead.name }}</div>
-                            <div class="mt-1 text-slate-500">{{ lead.email }}</div>
-                            {% if let Some(phone) = lead.phone %}
-                            <div class="mt-1 text-slate-500">{{ phone }}</div>
-                            {% endif %}
-                        </td>
+            <label class="grid gap-2 text-sm font-bold text-slate-700">
+                Status
+                <select name="status" class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-cyan-500 focus:bg-white focus:ring-4 focus:ring-cyan-100">
+                    <option value="all" {% if filters.status == "all" %}selected{% endif %}>All status</option>
+                    <option value="new" {% if filters.status == "new" %}selected{% endif %}>New</option>
+                    <option value="contacted" {% if filters.status == "contacted" %}selected{% endif %}>Contacted</option>
+                    <option value="qualified" {% if filters.status == "qualified" %}selected{% endif %}>Qualified</option>
+                    <option value="converted" {% if filters.status == "converted" %}selected{% endif %}>Converted</option>
+                    <option value="archived" {% if filters.status == "archived" %}selected{% endif %}>Archived</option>
+                    <option value="spam" {% if filters.status == "spam" %}selected{% endif %}>Spam</option>
+                </select>
+            </label>
 
-                        <td class="px-6 py-5 text-slate-700">
-                            {% if let Some(service) = lead.service_interest %}
-                                {{ service }}
-                            {% else %}
-                                General
-                            {% endif %}
-                        </td>
+            <label class="grid gap-2 text-sm font-bold text-slate-700">
+                Priority
+                <select name="priority" class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-cyan-500 focus:bg-white focus:ring-4 focus:ring-cyan-100">
+                    <option value="all" {% if filters.priority == "all" %}selected{% endif %}>All priority</option>
+                    <option value="high" {% if filters.priority == "high" %}selected{% endif %}>High</option>
+                    <option value="medium" {% if filters.priority == "medium" %}selected{% endif %}>Medium</option>
+                    <option value="normal" {% if filters.priority == "normal" %}selected{% endif %}>Normal</option>
+                </select>
+            </label>
 
-                        <td class="px-6 py-5 text-slate-700">
-                            {% if let Some(budget) = lead.budget_range %}
-                                {{ budget }}
-                            {% else %}
-                                Not given
-                            {% endif %}
-                        </td>
+            <label class="grid gap-2 text-sm font-bold text-slate-700">
+                Service
+                <select name="service" class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-cyan-500 focus:bg-white focus:ring-4 focus:ring-cyan-100">
+                    <option value="all" {% if filters.service == "all" %}selected{% endif %}>All services</option>
+                    <option value="web_development" {% if filters.service == "web_development" %}selected{% endif %}>Web Development</option>
+                    <option value="custom_software" {% if filters.service == "custom_software" %}selected{% endif %}>Custom Software</option>
+                    <option value="pos_erp" {% if filters.service == "pos_erp" %}selected{% endif %}>POS / ERP</option>
+                    <option value="seo" {% if filters.service == "seo" %}selected{% endif %}>SEO</option>
+                    <option value="digital_marketing" {% if filters.service == "digital_marketing" %}selected{% endif %}>Digital Marketing</option>
+                    <option value="hosting_domain" {% if filters.service == "hosting_domain" %}selected{% endif %}>Hosting & Domain</option>
+                    <option value="it_consultation" {% if filters.service == "it_consultation" %}selected{% endif %}>IT Consultation</option>
+                    <option value="ai_automation" {% if filters.service == "ai_automation" %}selected{% endif %}>AI Automation</option>
+                </select>
+            </label>
 
-                        <td class="px-6 py-5 text-slate-700">
-                            {% if let Some(timeline) = lead.project_timeline %}
-                                {{ timeline }}
-                            {% else %}
-                                Not given
-                            {% endif %}
-                        </td>
+            <div class="flex items-end">
+                <button class="w-full rounded-2xl bg-slate-950 px-5 py-3 text-sm font-black text-white transition hover:bg-cyan-600 xl:w-auto">
+                    Apply Filters
+                </button>
+            </div>
+        </form>
+    </section>
 
-                        <td class="px-6 py-5">
-                            <span class="rounded-full bg-cyan-50 px-3 py-1 text-xs font-black uppercase text-cyan-700">
-                                {{ lead.priority }}
-                            </span>
-                        </td>
+    <section class="space-y-4">
+        <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+            <div>
+                <p class="text-sm font-black uppercase tracking-[0.24em] text-slate-500">Priority Queue</p>
+                <h2 class="mt-2 text-2xl font-black text-slate-950">Lead cards built for fast qualification</h2>
+            </div>
 
-                        <td class="px-6 py-5 font-black text-slate-950">{{ lead.lead_score }}</td>
-
-                        <td class="px-6 py-5">
-                            <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-black uppercase text-slate-700">
-                                {{ lead.status }}
-                            </span>
-                        </td>
-
-                        <td class="px-6 py-5">
-                            <a href="/dashboard/contact-messages/{{ lead.id }}"
-                                class="rounded-xl border border-slate-200 px-4 py-2 text-xs font-black text-slate-700 hover:border-cyan-300 hover:bg-cyan-50 hover:text-cyan-700">
-                                Open
-                            </a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            <a href="/dashboard/contact-messages"
+                class="inline-flex items-center rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-black text-slate-700 transition hover:border-cyan-300 hover:bg-cyan-50 hover:text-cyan-700">
+                Open Contact Inbox
+            </a>
         </div>
 
         {% if leads.len() == 0 %}
-        <div class="p-10 text-center text-sm font-semibold text-slate-500">
-            No leads found. Either the contact page has not converted yet, or the current filters are too tight.
+        <div class="rounded-[2rem] border border-dashed border-slate-300 bg-white p-12 text-center shadow-sm">
+            <p class="text-lg font-black text-slate-950">No matching leads right now</p>
+            <p class="mt-3 text-sm leading-7 text-slate-500">
+                Either the contact page has not converted yet, or the current filters are too narrow.
+            </p>
+        </div>
+        {% else %}
+        <div class="grid gap-5 2xl:grid-cols-2">
+            {% for lead in leads %}
+            <article class="crm-lead-card">
+                <div class="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+                    <div class="flex items-start gap-4">
+                        <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-slate-950 text-base font-black uppercase text-white shadow-lg shadow-slate-950/10">
+                            {{ lead.name.chars().next().unwrap_or('L') }}
+                        </div>
+
+                        <div>
+                            <div class="flex flex-wrap items-center gap-2">
+                                <h3 class="text-xl font-black text-slate-950">{{ lead.name }}</h3>
+                                <span class="inline-flex rounded-full px-3 py-1 text-[11px] font-black uppercase ring-1 {{ lead.priority_badge_class() }}">
+                                    {{ lead.priority_label() }}
+                                </span>
+                                <span class="inline-flex rounded-full px-3 py-1 text-[11px] font-black uppercase ring-1 {{ lead.status_badge_class() }}">
+                                    {{ lead.status_label() }}
+                                </span>
+                            </div>
+
+                            <p class="mt-2 text-sm font-semibold text-slate-600">{{ lead.company_label() }}</p>
+
+                            <div class="mt-3 flex flex-wrap gap-3 text-sm text-slate-500">
+                                <span>{{ lead.email }}</span>
+                                {% if let Some(phone) = lead.phone %}
+                                {% let whatsapp_url = lead.whatsapp_url() %}
+                                {% if let Some(whatsapp_url) = whatsapp_url %}
+                                <a href="{{ whatsapp_url }}" target="_blank" rel="noopener" class="font-bold text-emerald-700 transition hover:text-emerald-900">
+                                    {{ phone }}
+                                </a>
+                                {% else %}
+                                <span>{{ phone }}</span>
+                                {% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 lg:min-w-44">
+                        <p class="text-xs font-black uppercase tracking-[0.22em] text-slate-500">Lead Score</p>
+                        <div class="mt-3 flex items-end justify-between">
+                            <span class="text-3xl font-black text-slate-950">{{ lead.lead_score }}</span>
+                            <span class="pb-1 text-xs font-black uppercase tracking-[0.2em] text-slate-400">/100</span>
+                        </div>
+                        <div class="mt-3 h-2 overflow-hidden rounded-full bg-slate-200">
+                            <div class="h-full rounded-full bg-cyan-500" style="width: {{ lead.score_bar_width() }}%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6 grid gap-3 sm:grid-cols-3">
+                    <div class="crm-mini-stat">
+                        <p class="crm-mini-label">Service</p>
+                        <p class="crm-mini-value">{{ lead.service_label() }}</p>
+                    </div>
+
+                    <div class="crm-mini-stat">
+                        <p class="crm-mini-label">Budget</p>
+                        <p class="crm-mini-value">{{ lead.budget_label() }}</p>
+                    </div>
+
+                    <div class="crm-mini-stat">
+                        <p class="crm-mini-label">Timeline</p>
+                        <p class="crm-mini-value">{{ lead.timeline_label() }}</p>
+                    </div>
+                </div>
+
+                <div class="mt-6 rounded-3xl border border-slate-200 bg-white p-4">
+                    <p class="text-xs font-black uppercase tracking-[0.22em] text-slate-500">Subject</p>
+                    <p class="mt-2 font-bold text-slate-900">{{ lead.subject }}</p>
+                    <p class="mt-3 line-clamp-3 text-sm leading-7 text-slate-600">{{ lead.message }}</p>
+                </div>
+
+                <div class="mt-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                    <p class="text-xs font-bold uppercase tracking-[0.2em] text-slate-400">
+                        Captured {{ lead.created_at }}
+                    </p>
+
+                    <div class="flex flex-wrap gap-3">
+                        <form action="/dashboard/contact-messages/{{ lead.id }}/quick-status" method="post">
+                            <input type="hidden" name="status" value="contacted">
+                            <input type="hidden" name="redirect_to" value="/dashboard/leads">
+                            <button class="rounded-full border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-black text-blue-700 transition hover:bg-blue-100">
+                                Mark Contacted
+                            </button>
+                        </form>
+
+                        <a href="/dashboard/contact-messages/{{ lead.id }}"
+                            class="rounded-full bg-slate-950 px-4 py-2 text-sm font-black text-white transition hover:bg-cyan-600">
+                            Open Lead Record
+                        </a>
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
         </div>
         {% endif %}
-    </div>
+    </section>
 </div>
 {% endblock %}

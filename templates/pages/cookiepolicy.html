@@ -1,1 +1,50 @@
-<h1>Page Ready</h1>
+{% extends "base.html" %}
+
+{% block title %}Cookie Policy | LKProfessionals{% endblock %}
+{% block meta_description %}Understand how LKProfessionals uses cookies and similar technologies for analytics, performance monitoring, security, and website experience improvement.{% endblock %}
+{% block canonical %}https://lkprofessionals.com/cookie-policy{% endblock %}
+{% block og_title %}Cookie Policy | LKProfessionals{% endblock %}
+{% block og_description %}How cookies and similar technologies may be used on the LKProfessionals website.{% endblock %}
+{% block og_url %}https://lkprofessionals.com/cookie-policy{% endblock %}
+
+{% block content %}
+<section class="bg-slate-950 px-6 py-24 text-white">
+  <div class="mx-auto max-w-5xl">
+    <p class="text-sm font-black uppercase tracking-[0.22em] text-cyan-300">Legal</p>
+    <h1 class="mt-6 text-4xl font-black tracking-tight md:text-6xl">Cookie Policy</h1>
+    <p class="mt-6 max-w-3xl text-lg leading-8 text-slate-300">
+      Cookies and similar technologies help us understand site usage, support performance, and improve the
+      browsing experience for visitors exploring our services and insights.
+    </p>
+  </div>
+</section>
+
+<section class="bg-white px-6 py-20 text-slate-950">
+  <div class="mx-auto max-w-5xl grid gap-8">
+    <article class="rounded-[2rem] border border-slate-200 p-8">
+      <h2 class="text-2xl font-black">What Cookies Do</h2>
+      <p class="mt-4 text-sm leading-7 text-slate-600">
+        Cookies may help remember session preferences, understand page performance, measure marketing
+        effectiveness, and identify technical issues that affect user experience.
+      </p>
+    </article>
+
+    <article class="rounded-[2rem] border border-slate-200 p-8">
+      <h2 class="text-2xl font-black">Analytics and Performance</h2>
+      <p class="mt-4 text-sm leading-7 text-slate-600">
+        We may use aggregated analytics and traffic measurement tools to understand popular content, device
+        usage, and performance trends. These insights help us improve site structure and content quality.
+      </p>
+    </article>
+
+    <article class="rounded-[2rem] border border-slate-200 p-8">
+      <h2 class="text-2xl font-black">Managing Cookies</h2>
+      <p class="mt-4 text-sm leading-7 text-slate-600">
+        Most browsers allow you to block, delete, or control cookies through settings. Disabling certain
+        cookies may affect convenience features or analytics visibility, but core browsing should remain
+        available.
+      </p>
+    </article>
+  </div>
+</section>
+{% endblock %}

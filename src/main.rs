@@ -4,9 +4,11 @@ mod handlers;
 mod models;
 mod routes;
 mod seeds;
+mod services;
 mod state;
 
 use routes::app_routes;
+use services::newsletter::start_newsletter_worker;
 use state::AppState;
 use tower_sessions::{MemoryStore, SessionManagerLayer};
 
@@ -27,6 +29,26 @@ async fn main() {
     seeds::users::seed_default_user(&db)
         .await
         .expect("Failed to seed default user");
+
+    seeds::industries::seed_default_industries(&db)
+        .await
+        .expect("Failed to seed default industries");
+
+    if let Err(error) = seeds::careers::seed_default_careers(&db).await {
+        eprintln!("Failed to seed default careers: {error}");
+    }
+
+    if let Err(error) = seeds::insights::seed_default_insights(&db).await {
+        eprintln!("Failed to seed default insights: {error}");
+    }
+
+    if let Err(error) =
+        seeds::newsletter_subscribers::seed_default_newsletter_subscribers(&db).await
+    {
+        eprintln!("Failed to seed default newsletter subscribers: {error}");
+    }
+
+    start_newsletter_worker(db.clone()).await;
 
     // Shared app state
     let state = AppState { db };

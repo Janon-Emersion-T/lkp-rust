@@ -1,0 +1,152 @@
+<section class="crm-hero rounded-[2rem] p-6 md:p-8">
+    <div class="max-w-3xl">
+        <p class="crm-hero-label">Portfolio Editor</p>
+        <h1 class="mt-4 text-3xl font-black tracking-tight text-slate-950 md:text-5xl">
+            {% if portfolio.title.len() > 0 %}Refine case study details and SEO metadata.{% else %}Create a publish-ready case study with SEO built in.{% endif %}
+        </h1>
+        <p class="mt-4 text-sm leading-7 text-slate-600">
+            Use this form to control the public portfolio listing, the single case-study page, and the metadata search engines will see.
+        </p>
+    </div>
+</section>
+
+<form method="post" action="{{ action_url }}" class="mt-8 grid gap-8">
+    <section class="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0_20px_50px_rgba(15,23,42,0.05)]">
+        <div class="grid gap-6 lg:grid-cols-2">
+            <label class="grid gap-2 text-sm font-bold text-slate-700">
+                Project Title
+                <input name="title" required minlength="3" value="{{ portfolio.title }}" class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 outline-none ring-0 transition focus:border-cyan-500" />
+            </label>
+
+            <label class="grid gap-2 text-sm font-bold text-slate-700">
+                Slug
+                <input name="slug" value="{{ portfolio.slug }}" placeholder="auto-generated-from-title" class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 outline-none transition focus:border-cyan-500" />
+            </label>
+
+            <label class="grid gap-2 text-sm font-bold text-slate-700">
+                Client Name
+                <input name="client_name" value="{{ portfolio.client_name }}" class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 outline-none transition focus:border-cyan-500" />
+            </label>
+
+            <label class="grid gap-2 text-sm font-bold text-slate-700">
+                Industry
+                <input name="industry" value="{{ portfolio.industry }}" placeholder="Healthcare, Retail, Education..." class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 outline-none transition focus:border-cyan-500" />
+            </label>
+
+            <label class="grid gap-2 text-sm font-bold text-slate-700">
+                Service Category
+                <input name="service_category" value="{{ portfolio.service_category }}" placeholder="Software Development, Web Development..." class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 outline-none transition focus:border-cyan-500" />
+            </label>
+
+            <label class="grid gap-2 text-sm font-bold text-slate-700">
+                Sort Order
+                <input type="number" name="sort_order" value="{{ portfolio.sort_order }}" class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 outline-none transition focus:border-cyan-500" />
+            </label>
+        </div>
+
+        <div class="mt-6 grid gap-6">
+            <label class="grid gap-2 text-sm font-bold text-slate-700">
+                Excerpt
+                <textarea name="excerpt" required rows="4" class="rounded-[1.5rem] border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 outline-none transition focus:border-cyan-500">{{ portfolio.excerpt }}</textarea>
+            </label>
+
+            <label class="grid gap-2 text-sm font-bold text-slate-700">
+                Overview
+                <textarea name="overview" required rows="7" class="rounded-[1.5rem] border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 outline-none transition focus:border-cyan-500">{{ portfolio.overview }}</textarea>
+            </label>
+
+            <div class="grid gap-6 lg:grid-cols-2">
+                <label class="grid gap-2 text-sm font-bold text-slate-700">
+                    Challenge
+                    <textarea name="challenge" rows="6" class="rounded-[1.5rem] border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 outline-none transition focus:border-cyan-500">{{ portfolio.challenge }}</textarea>
+                </label>
+
+                <label class="grid gap-2 text-sm font-bold text-slate-700">
+                    Solution
+                    <textarea name="solution" rows="6" class="rounded-[1.5rem] border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 outline-none transition focus:border-cyan-500">{{ portfolio.solution }}</textarea>
+                </label>
+            </div>
+
+            <div class="grid gap-6 lg:grid-cols-2">
+                <label class="grid gap-2 text-sm font-bold text-slate-700">
+                    Results
+                    <textarea name="results" rows="6" placeholder="One result per line" class="rounded-[1.5rem] border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 outline-none transition focus:border-cyan-500">{{ portfolio.results }}</textarea>
+                </label>
+
+                <label class="grid gap-2 text-sm font-bold text-slate-700">
+                    Impact Metrics
+                    <textarea name="impact_metrics" rows="6" placeholder="One metric per line" class="rounded-[1.5rem] border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 outline-none transition focus:border-cyan-500">{{ portfolio.impact_metrics }}</textarea>
+                </label>
+            </div>
+
+            <div class="grid gap-6 lg:grid-cols-2">
+                <label class="grid gap-2 text-sm font-bold text-slate-700">
+                    Technologies
+                    <textarea name="technologies" rows="4" placeholder="Comma or line separated" class="rounded-[1.5rem] border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 outline-none transition focus:border-cyan-500">{{ portfolio.technologies }}</textarea>
+                </label>
+
+                <div class="grid gap-6">
+                    <label class="grid gap-2 text-sm font-bold text-slate-700">
+                        Cover Image URL
+                        <input name="cover_image_url" value="{{ portfolio.cover_image_url }}" class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 outline-none transition focus:border-cyan-500" />
+                    </label>
+
+                    <label class="grid gap-2 text-sm font-bold text-slate-700">
+                        Live URL
+                        <input name="live_url" value="{{ portfolio.live_url }}" class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 outline-none transition focus:border-cyan-500" />
+                    </label>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0_20px_50px_rgba(15,23,42,0.05)]">
+        <p class="text-sm font-black uppercase tracking-[0.24em] text-slate-500">SEO</p>
+        <div class="mt-6 grid gap-6 lg:grid-cols-2">
+            <label class="grid gap-2 text-sm font-bold text-slate-700">
+                Meta Title
+                <input name="meta_title" value="{{ portfolio.meta_title }}" class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 outline-none transition focus:border-cyan-500" />
+            </label>
+
+            <label class="grid gap-2 text-sm font-bold text-slate-700">
+                Canonical URL
+                <input name="canonical_url" value="{{ portfolio.canonical_url }}" class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 outline-none transition focus:border-cyan-500" />
+            </label>
+
+            <label class="grid gap-2 text-sm font-bold text-slate-700 lg:col-span-2">
+                Meta Description
+                <textarea name="meta_description" rows="4" class="rounded-[1.5rem] border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 outline-none transition focus:border-cyan-500">{{ portfolio.meta_description }}</textarea>
+            </label>
+
+            <label class="grid gap-2 text-sm font-bold text-slate-700 lg:col-span-2">
+                OG Image URL
+                <input name="og_image_url" value="{{ portfolio.og_image_url }}" class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 outline-none transition focus:border-cyan-500" />
+            </label>
+        </div>
+    </section>
+
+    <section class="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0_20px_50px_rgba(15,23,42,0.05)]">
+        <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <div class="flex flex-wrap gap-6">
+                <label class="inline-flex items-center gap-3 text-sm font-bold text-slate-700">
+                    <input type="checkbox" name="featured" {% if portfolio.featured %}checked{% endif %} class="h-5 w-5 rounded border-slate-300 text-cyan-600" />
+                    Featured on listings
+                </label>
+
+                <label class="inline-flex items-center gap-3 text-sm font-bold text-slate-700">
+                    <input type="checkbox" name="published" {% if portfolio.published %}checked{% endif %} class="h-5 w-5 rounded border-slate-300 text-cyan-600" />
+                    Published publicly
+                </label>
+            </div>
+
+            <div class="flex flex-wrap gap-3">
+                <a href="/dashboard/portfolios" class="rounded-full border border-slate-300 px-5 py-3 text-sm font-bold text-slate-700 transition hover:border-cyan-500 hover:text-cyan-700">
+                    Back
+                </a>
+                <button type="submit" class="rounded-full bg-slate-950 px-6 py-3 text-sm font-black text-white transition hover:bg-cyan-600">
+                    Save Case Study
+                </button>
+            </div>
+        </div>
+    </section>
+</form>

@@ -1,1 +1,83 @@
-<h1>Page Ready</h1>
+{% extends "base.html" %}
+
+{% block title %}Terms and Conditions | LKProfessionals{% endblock %}
+{% block meta_description %}Read the terms and conditions for using LKProfessionals website, digital services, software delivery, consultations, and client communication channels.{% endblock %}
+{% block canonical %}https://lkprofessionals.com/terms-and-conditions{% endblock %}
+{% block og_title %}Terms and Conditions | LKProfessionals{% endblock %}
+{% block og_description %}The legal terms that govern use of LKProfessionals website, proposals, service engagement, and project communication.{% endblock %}
+{% block og_url %}https://lkprofessionals.com/terms-and-conditions{% endblock %}
+{% block twitter_title %}Terms and Conditions | LKProfessionals{% endblock %}
+{% block twitter_description %}Terms for using LKProfessionals digital services, proposals, consultations, and website content.{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Terms and Conditions",
+  "url": "https://lkprofessionals.com/terms-and-conditions",
+  "description": "Terms and conditions for using LKProfessionals website and service channels."
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<section class="bg-slate-950 px-6 py-24 text-white">
+  <div class="mx-auto max-w-5xl">
+    <p class="text-sm font-black uppercase tracking-[0.22em] text-cyan-300">Legal</p>
+    <h1 class="mt-6 text-4xl font-black tracking-tight md:text-6xl">Terms and Conditions</h1>
+    <p class="mt-6 max-w-3xl text-lg leading-8 text-slate-300">
+      These terms explain how visitors, prospects, and clients may use the LKProfessionals website,
+      proposals, digital deliverables, and communication channels.
+    </p>
+  </div>
+</section>
+
+<section class="bg-white px-6 py-20 text-slate-950">
+  <div class="mx-auto max-w-5xl space-y-10">
+    <article class="rounded-[2rem] border border-slate-200 p-8">
+      <h2 class="text-2xl font-black">Website Use</h2>
+      <p class="mt-4 text-sm leading-7 text-slate-600">
+        You may browse this website for lawful business and informational purposes. You agree not to
+        misuse the site, attempt unauthorized access, copy protected content for resale, or interfere
+        with website availability or security.
+      </p>
+    </article>
+
+    <article class="rounded-[2rem] border border-slate-200 p-8">
+      <h2 class="text-2xl font-black">Proposals and Service Scope</h2>
+      <p class="mt-4 text-sm leading-7 text-slate-600">
+        Project pricing, timelines, deliverables, support commitments, and revision rounds are governed
+        by the final approved proposal, quotation, or contract. Website copy alone does not constitute a
+        binding service agreement.
+      </p>
+    </article>
+
+    <article class="rounded-[2rem] border border-slate-200 p-8">
+      <h2 class="text-2xl font-black">Intellectual Property</h2>
+      <p class="mt-4 text-sm leading-7 text-slate-600">
+        All LKProfessionals branding, website copy, visuals, methods, and unpublished materials remain
+        our intellectual property unless explicitly transferred in writing. Client-owned assets remain the
+        property of the client or their licensors.
+      </p>
+    </article>
+
+    <article class="rounded-[2rem] border border-slate-200 p-8">
+      <h2 class="text-2xl font-black">Payments and Delivery</h2>
+      <p class="mt-4 text-sm leading-7 text-slate-600">
+        Delivery schedules depend on timely approvals, content supply, access credentials, and milestone
+        payments. Delays in client feedback or third-party dependencies can affect delivery timelines.
+      </p>
+    </article>
+
+    <article class="rounded-[2rem] border border-slate-200 p-8">
+      <h2 class="text-2xl font-black">Liability and Updates</h2>
+      <p class="mt-4 text-sm leading-7 text-slate-600">
+        We aim to keep website information accurate and current, but service descriptions may evolve. To
+        the extent permitted by law, LKProfessionals is not liable for indirect loss caused by website
+        downtime, third-party tool failures, or reliance on incomplete public information.
+      </p>
+    </article>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,42 @@
+<section class="service-shell relative overflow-hidden px-6 py-24 text-white">
+    <div class="absolute inset-0 opacity-60">
+        <div class="service-orb-left absolute -left-16 top-16 h-72 w-72 rounded-full blur-3xl"></div>
+        <div class="service-orb-right absolute right-0 top-0 h-96 w-96 rounded-full blur-3xl"></div>
+    </div>
+
+    <div class="relative mx-auto max-w-7xl">
+        <a href="/case-studies" class="inline-flex items-center gap-2 text-sm font-bold text-slate-300 transition hover:text-white">
+            <i class="fa-solid fa-arrow-left text-xs"></i>
+            Back to all case studies
+        </a>
+
+        <div class="mt-8 grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+            <div>
+                <p class="service-pill">{{ portfolio.service_category }}</p>
+                <h1 class="mt-6 max-w-4xl text-4xl font-black tracking-tight md:text-6xl">
+                    {{ portfolio.title }}
+                </h1>
+                <p class="mt-6 max-w-3xl text-lg leading-8 text-slate-300">
+                    {{ portfolio.excerpt }}
+                </p>
+
+                <div class="mt-10 flex flex-wrap gap-3">
+                    <span class="service-mini-panel">{{ portfolio.client_name }}</span>
+                    <span class="service-mini-panel">{{ portfolio.industry }}</span>
+                    <span class="service-mini-panel">Published {{ portfolio.published_date_label }}</span>
+                </div>
+
+                <div class="mt-10 flex flex-wrap gap-4">
+                    <a href="/contact" class="service-primary-cta">Discuss a Similar Build</a>
+                    {% if let Some(live_url) = portfolio.live_url %}
+                    <a href="{{ live_url }}" target="_blank" rel="noopener noreferrer" class="service-secondary-cta">Visit Live Project</a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="overflow-hidden rounded-[2rem] border border-white/10 shadow-[0_28px_70px_rgba(2,6,23,0.36)]">
+                <img src="{{ portfolio.cover_image_url }}" alt="{{ portfolio.title }}" decoding="async" class="h-full min-h-[22rem] w-full object-cover" />
+            </div>
+        </div>
+    </div>
+</section>

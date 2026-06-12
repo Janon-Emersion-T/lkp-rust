@@ -76,39 +76,27 @@
                     <div>
                         <p class="text-xs font-black uppercase tracking-wide text-slate-400">Service Interest</p>
                         <p class="mt-1 font-bold text-slate-950">
-                            {% if let Some(service) = message.service_interest %}
-                                {{ service }}
-                            {% else %}
-                                General inquiry
-                            {% endif %}
+                            {{ message.service_label() }}
                         </p>
                     </div>
 
                     <div>
                         <p class="text-xs font-black uppercase tracking-wide text-slate-400">Budget</p>
                         <p class="mt-1 font-bold text-slate-950">
-                            {% if let Some(budget) = message.budget_range %}
-                                {{ budget }}
-                            {% else %}
-                                Not provided
-                            {% endif %}
+                            {{ message.budget_label() }}
                         </p>
                     </div>
 
                     <div>
                         <p class="text-xs font-black uppercase tracking-wide text-slate-400">Timeline</p>
                         <p class="mt-1 font-bold text-slate-950">
-                            {% if let Some(timeline) = message.project_timeline %}
-                                {{ timeline }}
-                            {% else %}
-                                Not provided
-                            {% endif %}
+                            {{ message.timeline_label() }}
                         </p>
                     </div>
 
                     <div>
                         <p class="text-xs font-black uppercase tracking-wide text-slate-400">Source</p>
-                        <p class="mt-1 font-bold text-slate-950">{{ message.source }}</p>
+                        <p class="mt-1 font-bold text-slate-950">{{ message.source_label() }}</p>
                     </div>
                 </div>
             </article>
@@ -163,6 +151,7 @@
                         <label class="grid gap-2 text-sm font-bold text-slate-700">
                             Next Follow-up
                             <input name="next_follow_up_at" type="datetime-local"
+                                value="{% if let Some(value) = message.next_follow_up_input_value() %}{{ value }}{% endif %}"
                                 class="rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100">
                         </label>
                     </div>
@@ -201,6 +190,7 @@
                 <div class="mt-5 grid gap-3">
                     <form action="/dashboard/contact-messages/{{ message.id }}/quick-status" method="post">
                         <input type="hidden" name="status" value="contacted">
+                        <input type="hidden" name="redirect_to" value="/dashboard/contact-messages/{{ message.id }}">
                         <button class="w-full rounded-2xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm font-black text-blue-700 hover:bg-blue-100">
                             Mark Contacted
                         </button>
@@ -208,6 +198,7 @@
 
                     <form action="/dashboard/contact-messages/{{ message.id }}/quick-status" method="post">
                         <input type="hidden" name="status" value="qualified">
+                        <input type="hidden" name="redirect_to" value="/dashboard/contact-messages/{{ message.id }}">
                         <button class="w-full rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-black text-amber-700 hover:bg-amber-100">
                             Mark Qualified
                         </button>
@@ -215,6 +206,7 @@
 
                     <form action="/dashboard/contact-messages/{{ message.id }}/quick-status" method="post">
                         <input type="hidden" name="status" value="converted">
+                        <input type="hidden" name="redirect_to" value="/dashboard/contact-messages/{{ message.id }}">
                         <button class="w-full rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-black text-emerald-700 hover:bg-emerald-100">
                             Mark Converted
                         </button>
@@ -222,6 +214,7 @@
 
                     <form action="/dashboard/contact-messages/{{ message.id }}/quick-status" method="post">
                         <input type="hidden" name="status" value="spam">
+                        <input type="hidden" name="redirect_to" value="/dashboard/contact-messages/{{ message.id }}">
                         <button class="w-full rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-black text-rose-700 hover:bg-rose-100">
                             Mark Spam
                         </button>
@@ -243,11 +236,64 @@
                         <dd class="mt-1 font-semibold text-slate-700">{{ message.updated_at }}</dd>
                     </div>
 
+                    {% if let Some(value) = message.contacted_at %}
+                    <div>
+                        <dt class="font-black text-slate-400">Contacted</dt>
+                        <dd class="mt-1 font-semibold text-slate-700">{{ value }}</dd>
+                    </div>
+                    {% endif %}
+
+                    {% if let Some(value) = message.qualified_at %}
+                    <div>
+                        <dt class="font-black text-slate-400">Qualified</dt>
+                        <dd class="mt-1 font-semibold text-slate-700">{{ value }}</dd>
+                    </div>
+                    {% endif %}
+
+                    {% if let Some(value) = message.converted_at %}
+                    <div>
+                        <dt class="font-black text-slate-400">Converted</dt>
+                        <dd class="mt-1 font-semibold text-slate-700">{{ value }}</dd>
+                    </div>
+                    {% endif %}
+
+                    {% if let Some(value) = message.archived_at %}
+                    <div>
+                        <dt class="font-black text-slate-400">Archived</dt>
+                        <dd class="mt-1 font-semibold text-slate-700">{{ value }}</dd>
+                    </div>
+                    {% endif %}
+
+                    {% if let Some(value) = message.spam_at %}
+                    <div>
+                        <dt class="font-black text-slate-400">Marked Spam</dt>
+                        <dd class="mt-1 font-semibold text-slate-700">{{ value }}</dd>
+                    </div>
+                    {% endif %}
+
+                    {% if let Some(value) = message.replied_at %}
+                    <div>
+                        <dt class="font-black text-slate-400">Replied</dt>
+                        <dd class="mt-1 font-semibold text-slate-700">{{ value }}</dd>
+                    </div>
+                    {% endif %}
+
                     <div>
                         <dt class="font-black text-slate-400">Client IP</dt>
                         <dd class="mt-1 font-semibold text-slate-700">
                             {% if let Some(ip) = message.client_ip %}
                                 {{ ip }}
+                            {% else %}
+                                Not captured
+                            {% endif %}
+                        </dd>
+                    </div>
+
+                    <div>
+                        <dt class="font-black text-slate-400">User Agent</dt>
+                        <dd class="mt-1 font-semibold text-slate-700">
+                            {% if let Some(user_agent) = message.user_agent %}
+                                {{ user_agent }}
                             {% else %}
                                 Not captured
                             {% endif %}

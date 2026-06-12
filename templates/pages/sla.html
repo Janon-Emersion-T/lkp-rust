@@ -1,1 +1,57 @@
-<h1>Page Ready</h1>
+{% extends "base.html" %}
+
+{% block title %}Service Level Agreement | LKProfessionals{% endblock %}
+{% block meta_description %}Review LKProfessionals service level expectations for support responsiveness, issue handling, maintenance communication, and managed digital systems.{% endblock %}
+{% block canonical %}https://lkprofessionals.com/service-level-agreement{% endblock %}
+{% block og_title %}Service Level Agreement | LKProfessionals{% endblock %}
+{% block og_description %}Service level expectations for LKProfessionals support, maintenance, monitoring, and incident response workflows.{% endblock %}
+{% block og_url %}https://lkprofessionals.com/service-level-agreement{% endblock %}
+
+{% block content %}
+<section class="bg-slate-950 px-6 py-24 text-white">
+  <div class="mx-auto max-w-5xl">
+    <p class="text-sm font-black uppercase tracking-[0.22em] text-cyan-300">Legal</p>
+    <h1 class="mt-6 text-4xl font-black tracking-tight md:text-6xl">Service Level Agreement</h1>
+    <p class="mt-6 max-w-3xl text-lg leading-8 text-slate-300">
+      This page outlines general support expectations for managed websites, applications, hosting-related
+      services, and post-launch maintenance engagements handled by LKProfessionals.
+    </p>
+  </div>
+</section>
+
+<section class="bg-white px-6 py-20 text-slate-950">
+  <div class="mx-auto max-w-5xl space-y-8">
+    <article class="rounded-[2rem] border border-slate-200 p-8">
+      <h2 class="text-2xl font-black">Coverage</h2>
+      <p class="mt-4 text-sm leading-7 text-slate-600">
+        SLA commitments apply only to services covered by an active maintenance, hosting, or support
+        agreement. Custom project work, change requests, and new feature development are scoped separately.
+      </p>
+    </article>
+
+    <article class="rounded-[2rem] border border-slate-200 p-8">
+      <h2 class="text-2xl font-black">Issue Prioritization</h2>
+      <p class="mt-4 text-sm leading-7 text-slate-600">
+        Incidents are typically prioritized by operational severity: business-critical outages first,
+        followed by degraded features, then non-blocking defects, improvements, and advisory questions.
+      </p>
+    </article>
+
+    <article class="rounded-[2rem] border border-slate-200 p-8">
+      <h2 class="text-2xl font-black">Response and Communication</h2>
+      <p class="mt-4 text-sm leading-7 text-slate-600">
+        We aim to acknowledge valid support requests promptly during agreed support windows and keep clients
+        informed on investigation status, temporary mitigation, and the next expected update.
+      </p>
+    </article>
+
+    <article class="rounded-[2rem] border border-slate-200 p-8">
+      <h2 class="text-2xl font-black">Exclusions</h2>
+      <p class="mt-4 text-sm leading-7 text-slate-600">
+        Third-party outages, force majeure events, client-side credential delays, unpaid invoices, or
+        unsupported code changes may affect or suspend SLA coverage until the blocking issue is resolved.
+      </p>
+    </article>
+  </div>
+</section>
+{% endblock %}

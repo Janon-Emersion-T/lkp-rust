@@ -1,1 +1,7 @@
-<h1>Page Ready</h1>
+{% extends "dashboard/base.html" %}
+
+{% block title %}Edit Industry | Dashboard{% endblock %}
+
+{% block content %}
+{% include "dashboard/industries/form.html" %}
+{% endblock %}

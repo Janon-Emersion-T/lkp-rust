@@ -1,13 +1,24 @@
+pub mod careers;
 pub mod contact;
 pub mod dashboard;
+pub mod industry_content;
+pub mod insight_content;
 pub mod legal;
+pub mod newsletter;
+pub mod portfolio;
 pub mod public;
 pub mod render;
+pub mod service_content;
 pub mod services;
 pub mod templates;
 
+pub use careers::*;
 pub use contact::*;
 pub use dashboard::*;
+pub use industry_content::*;
+pub use insight_content::*;
 pub use legal::*;
+pub use newsletter::*;
+pub use portfolio::*;
 pub use public::*;
 pub use services::*;

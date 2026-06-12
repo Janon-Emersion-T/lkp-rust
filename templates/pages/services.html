@@ -1,1 +1,43 @@
-<h1>Page Ready</h1>
+{% extends "base.html" %}
+
+{% block title %}Services | Web, Software, SEO, Marketing & IT Solutions | LKProfessionals{% endblock %}
+
+{% block meta_description %}
+Explore LKProfessionals services including web development, software development, mobile apps, SEO, digital marketing, hosting, automation, and IT consultation.
+{% endblock %}
+
+{% block canonical %}https://lkprofessionals.com/services{% endblock %}
+{% block og_title %}Services by LKProfessionals | Digital Growth, Software & IT Solutions{% endblock %}
+{% block og_description %}A complete service lineup covering websites, software, automation, SEO, digital marketing, hosting, and strategic IT consultation.{% endblock %}
+{% block og_url %}https://lkprofessionals.com/services{% endblock %}
+{% block twitter_title %}Services by LKProfessionals{% endblock %}
+{% block twitter_description %}Discover LKProfessionals services for websites, software, SEO, marketing, hosting, cloud, and digital transformation.{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "LKProfessionals Services",
+    "url": "https://lkprofessionals.com/services",
+    "itemListElement": [
+        {% for service in services %}
+        {
+            "@type": "Service",
+            "position": {{ loop.index }},
+            "name": "{{ service.title }}",
+            "url": "https://lkprofessionals.com{{ service.slug }}",
+            "description": "{{ service.summary }}"
+        }{% if !loop.last %},{% endif %}
+        {% endfor %}
+    ]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+{% include "components/services/overview-hero.html" %}
+{% include "components/services/overview-grid.html" %}
+{% include "components/services/overview-process.html" %}
+{% include "components/services/overview-cta.html" %}
+{% endblock %}

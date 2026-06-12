@@ -23,127 +23,21 @@
 
     <!-- Industries Grid -->
     <div class="mt-16 grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
-
-      <!-- Retail -->
+      {% for industry in featured_industries %}
       <div class="group rounded-3xl border border-white/10 bg-white/10 p-7 backdrop-blur-xl transition hover:-translate-y-2 hover:border-cyan-300/40 hover:bg-white/[0.14]">
         <div class="grid h-14 w-14 place-items-center rounded-2xl bg-cyan-400 text-2xl text-slate-950">
-          <i class="fa-solid fa-store"></i>
+          <i class="{{ industry.icon_class }}"></i>
         </div>
 
         <h3 class="mt-6 text-2xl font-black">
-          Retail & Shops
+          {{ industry.title }}
         </h3>
 
         <p class="mt-4 text-sm leading-7 text-slate-300">
-          POS systems, inventory control, barcode management, sales reporting, and e-commerce integration.
+          {{ industry.short_description }}
         </p>
       </div>
-
-      <!-- Education -->
-      <div class="group rounded-3xl border border-white/10 bg-white/10 p-7 backdrop-blur-xl transition hover:-translate-y-2 hover:border-cyan-300/40 hover:bg-white/[0.14]">
-        <div class="grid h-14 w-14 place-items-center rounded-2xl bg-cyan-400 text-2xl text-slate-950">
-          <i class="fa-solid fa-graduation-cap"></i>
-        </div>
-
-        <h3 class="mt-6 text-2xl font-black">
-          Education
-        </h3>
-
-        <p class="mt-4 text-sm leading-7 text-slate-300">
-          Learning platforms, student portals, attendance systems, online classes, and academic management.
-        </p>
-      </div>
-
-      <!-- Healthcare -->
-      <div class="group rounded-3xl border border-white/10 bg-white/10 p-7 backdrop-blur-xl transition hover:-translate-y-2 hover:border-cyan-300/40 hover:bg-white/[0.14]">
-        <div class="grid h-14 w-14 place-items-center rounded-2xl bg-cyan-400 text-2xl text-slate-950">
-          <i class="fa-solid fa-hospital"></i>
-        </div>
-
-        <h3 class="mt-6 text-2xl font-black">
-          Healthcare
-        </h3>
-
-        <p class="mt-4 text-sm leading-7 text-slate-300">
-          Patient management systems, clinic platforms, medical records, booking systems, and digital healthcare workflows.
-        </p>
-      </div>
-
-      <!-- Corporate -->
-      <div class="group rounded-3xl border border-white/10 bg-white/10 p-7 backdrop-blur-xl transition hover:-translate-y-2 hover:border-cyan-300/40 hover:bg-white/[0.14]">
-        <div class="grid h-14 w-14 place-items-center rounded-2xl bg-cyan-400 text-2xl text-slate-950">
-          <i class="fa-solid fa-building"></i>
-        </div>
-
-        <h3 class="mt-6 text-2xl font-black">
-          Corporate
-        </h3>
-
-        <p class="mt-4 text-sm leading-7 text-slate-300">
-          Internal dashboards, workflow automation, HR systems, reporting tools, and operational platforms.
-        </p>
-      </div>
-
-      <!-- Hospitality -->
-      <div class="group rounded-3xl border border-white/10 bg-white/10 p-7 backdrop-blur-xl transition hover:-translate-y-2 hover:border-cyan-300/40 hover:bg-white/[0.14]">
-        <div class="grid h-14 w-14 place-items-center rounded-2xl bg-cyan-400 text-2xl text-slate-950">
-          <i class="fa-solid fa-hotel"></i>
-        </div>
-
-        <h3 class="mt-6 text-2xl font-black">
-          Hospitality
-        </h3>
-
-        <p class="mt-4 text-sm leading-7 text-slate-300">
-          Booking systems, hotel websites, reservation management, tourism platforms, and guest engagement tools.
-        </p>
-      </div>
-
-      <!-- Construction -->
-      <div class="group rounded-3xl border border-white/10 bg-white/10 p-7 backdrop-blur-xl transition hover:-translate-y-2 hover:border-cyan-300/40 hover:bg-white/[0.14]">
-        <div class="grid h-14 w-14 place-items-center rounded-2xl bg-cyan-400 text-2xl text-slate-950">
-          <i class="fa-solid fa-helmet-safety"></i>
-        </div>
-
-        <h3 class="mt-6 text-2xl font-black">
-          Construction
-        </h3>
-
-        <p class="mt-4 text-sm leading-7 text-slate-300">
-          Project tracking, workforce systems, quotation platforms, contractor portals, and operational management.
-        </p>
-      </div>
-
-      <!-- Logistics -->
-      <div class="group rounded-3xl border border-white/10 bg-white/10 p-7 backdrop-blur-xl transition hover:-translate-y-2 hover:border-cyan-300/40 hover:bg-white/[0.14]">
-        <div class="grid h-14 w-14 place-items-center rounded-2xl bg-cyan-400 text-2xl text-slate-950">
-          <i class="fa-solid fa-truck-fast"></i>
-        </div>
-
-        <h3 class="mt-6 text-2xl font-black">
-          Logistics
-        </h3>
-
-        <p class="mt-4 text-sm leading-7 text-slate-300">
-          Fleet systems, dispatch platforms, shipment tracking, warehouse management, and reporting automation.
-        </p>
-      </div>
-
-      <!-- Government -->
-      <div class="group rounded-3xl border border-white/10 bg-white/10 p-7 backdrop-blur-xl transition hover:-translate-y-2 hover:border-cyan-300/40 hover:bg-white/[0.14]">
-        <div class="grid h-14 w-14 place-items-center rounded-2xl bg-cyan-400 text-2xl text-slate-950">
-          <i class="fa-solid fa-landmark"></i>
-        </div>
-
-        <h3 class="mt-6 text-2xl font-black">
-          Government & NGOs
-        </h3>
-
-        <p class="mt-4 text-sm leading-7 text-slate-300">
-          Public service portals, digitization systems, data management platforms, and citizen engagement tools.
-        </p>
-      </div>
-
+      {% endfor %}
     </div>
 
     <!-- Bottom CTA -->
@@ -162,7 +56,7 @@
         </p>
       </div>
 
-      <a href="/contactus" class="mt-6 inline-flex rounded-full bg-cyan-400 px-8 py-4 text-center font-bold text-slate-950 shadow-lg shadow-cyan-500/30 transition hover:-translate-y-1 hover:bg-white lg:mt-0">
+      <a href="/contact" class="mt-6 inline-flex rounded-full bg-cyan-400 px-8 py-4 text-center font-bold text-slate-950 shadow-lg shadow-cyan-500/30 transition hover:-translate-y-1 hover:bg-white lg:mt-0">
         Discuss Your Industry
       </a>
     </div>

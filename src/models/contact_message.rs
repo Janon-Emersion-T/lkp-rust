@@ -63,3 +63,130 @@ impl LeadFilters {
             || !self.q.trim().is_empty()
     }
 }
+
+impl ContactMessage {
+    pub fn whatsapp_url(&self) -> Option<String> {
+        let phone = self.phone.as_deref()?.trim();
+        let digits: String = phone.chars().filter(|ch| ch.is_ascii_digit()).collect();
+
+        if digits.is_empty() {
+            return None;
+        }
+
+        Some(format!("https://wa.me/{digits}"))
+    }
+
+    pub fn service_label(&self) -> &str {
+        match self.service_interest.as_deref() {
+            Some("web_development") => "Website Development",
+            Some("custom_software") => "Custom Software",
+            Some("pos_erp") => "POS / ERP System",
+            Some("seo") => "SEO & Search Growth",
+            Some("digital_marketing") => "Digital Marketing",
+            Some("hosting_domain") => "Hosting & Domain",
+            Some("it_consultation") => "IT Consultation",
+            Some("ai_automation") => "AI & Automation",
+            Some(_) => "Other Service",
+            None => "General Inquiry",
+        }
+    }
+
+    pub fn budget_label(&self) -> &str {
+        match self.budget_range.as_deref() {
+            Some("below_100") => "Below USD 100",
+            Some("100_500") => "USD 100 - 500",
+            Some("500_1000") => "USD 500 - 1,000",
+            Some("1000_plus") => "USD 1,000+",
+            Some("enterprise") => "Enterprise / Long-term",
+            Some(_) => "Custom Budget",
+            None => "Not Given",
+        }
+    }
+
+    pub fn timeline_label(&self) -> &str {
+        match self.project_timeline.as_deref() {
+            Some("urgent") => "Urgent",
+            Some("this_month") => "This Month",
+            Some("1_3_months") => "1 - 3 Months",
+            Some("planning") => "Still Planning",
+            Some(_) => "Custom Timeline",
+            None => "Not Given",
+        }
+    }
+
+    pub fn status_label(&self) -> &str {
+        match self.status.as_str() {
+            "new" => "New",
+            "contacted" => "Contacted",
+            "qualified" => "Qualified",
+            "converted" => "Converted",
+            "archived" => "Archived",
+            "spam" => "Spam",
+            _ => "Unknown",
+        }
+    }
+
+    pub fn priority_label(&self) -> &str {
+        match self.priority.as_str() {
+            "high" => "High",
+            "medium" => "Medium",
+            "normal" => "Normal",
+            _ => "Normal",
+        }
+    }
+
+    pub fn priority_badge_class(&self) -> &str {
+        match self.priority.as_str() {
+            "high" => "bg-red-50 text-red-700 ring-red-200",
+            "medium" => "bg-amber-50 text-amber-700 ring-amber-200",
+            _ => "bg-slate-100 text-slate-700 ring-slate-200",
+        }
+    }
+
+    pub fn status_badge_class(&self) -> &str {
+        match self.status.as_str() {
+            "new" => "bg-cyan-50 text-cyan-700 ring-cyan-200",
+            "contacted" => "bg-blue-50 text-blue-700 ring-blue-200",
+            "qualified" => "bg-amber-50 text-amber-700 ring-amber-200",
+            "converted" => "bg-emerald-50 text-emerald-700 ring-emerald-200",
+            "archived" => "bg-slate-100 text-slate-600 ring-slate-200",
+            "spam" => "bg-red-50 text-red-700 ring-red-200",
+            _ => "bg-slate-100 text-slate-700 ring-slate-200",
+        }
+    }
+
+    pub fn score_bar_width(&self) -> i32 {
+        self.lead_score.clamp(0, 100)
+    }
+
+    pub fn company_label(&self) -> &str {
+        match self.company.as_deref() {
+            Some(company) if !company.trim().is_empty() => company,
+            _ => "No company provided",
+        }
+    }
+
+    pub fn next_follow_up_input_value(&self) -> Option<String> {
+        self.next_follow_up_at
+            .as_ref()
+            .map(|value| value.format("%Y-%m-%dT%H:%M").to_string())
+    }
+
+    pub fn source_label(&self) -> &str {
+        match self.source.as_str() {
+            "contact_page" => "Contact Page",
+            other if !other.trim().is_empty() => other,
+            _ => "Unknown",
+        }
+    }
+
+    pub fn note_preview(&self) -> Option<&str> {
+        self.admin_reply
+            .as_deref()
+            .filter(|value| !value.trim().is_empty())
+            .or(self
+                .internal_note
+                .as_deref()
+                .filter(|value| !value.trim().is_empty()))
+    }
+}

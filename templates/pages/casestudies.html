@@ -1,1 +1,23 @@
-<h1>Page Ready</h1>
+{% extends "base.html" %}
+
+{% block title %}Case Studies | LKProfessionals{% endblock %}
+{% block meta_description %}Explore LKProfessionals case studies covering websites, software, SEO, automation, and digital transformation delivery across industries.{% endblock %}
+{% block canonical %}https://lkprofessionals.com/case-studies{% endblock %}
+{% block og_title %}Case Studies | LKProfessionals{% endblock %}
+{% block og_description %}Browse LKProfessionals delivery stories, outcomes, and system implementations across industries.{% endblock %}
+{% block og_url %}https://lkprofessionals.com/case-studies{% endblock %}
+
+{% block content %}
+<section class="bg-slate-950 px-6 py-24 text-white">
+  <div class="mx-auto max-w-5xl text-center">
+    <p class="text-sm font-black uppercase tracking-[0.22em] text-cyan-300">Case Studies</p>
+    <h1 class="mt-6 text-4xl font-black tracking-tight md:text-6xl">Our case studies now live on the dynamic portfolio experience.</h1>
+    <p class="mt-6 text-lg leading-8 text-slate-300">
+      The newest LKProfessionals delivery stories are published through the dynamic case studies system.
+    </p>
+    <a href="/case-studies" class="mt-8 inline-flex rounded-2xl bg-cyan-500 px-6 py-4 text-sm font-black uppercase tracking-wide text-slate-950 transition hover:bg-cyan-400">
+      Open Dynamic Case Studies
+    </a>
+  </div>
+</section>
+{% endblock %}

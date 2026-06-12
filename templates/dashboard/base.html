@@ -38,5 +38,25 @@
 
     </div>
 
+    <script>
+        (() => {
+            const currentPath = window.location.pathname.replace(/\/+$/, "") || "/";
+            const links = document.querySelectorAll("[data-nav-match]");
+
+            for (const link of links) {
+                const href = (link.getAttribute("href") || "").replace(/\/+$/, "") || "/";
+                const mode = link.getAttribute("data-nav-match");
+
+                const isActive = mode === "exact"
+                    ? currentPath === href
+                    : currentPath === href || currentPath.startsWith(`${href}/`);
+
+                if (isActive) {
+                    link.classList.add("dashboard-nav-link-active");
+                    link.setAttribute("aria-current", "page");
+                }
+            }
+        })();
+    </script>
 </body>
 </html>

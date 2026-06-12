@@ -31,6 +31,10 @@ pub struct ContactMessageForm {
     pub project_timeline: Option<String>,
     pub subject: String,
     pub message: String,
+
+    // Honeypot field. Real users will never fill this.
+    // Bots usually fill every input they see.
+    pub website: Option<String>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -56,6 +60,7 @@ pub struct LeadUpdateForm {
 #[derive(Debug, Deserialize)]
 pub struct QuickStatusForm {
     pub status: String,
+    pub redirect_to: Option<String>,
 }
 
 fn clean_optional(value: &Option<String>) -> Option<String> {
@@ -166,6 +171,22 @@ pub async fn submit_contact_message(
     let email = form.email.trim().to_lowercase();
     let subject = form.subject.trim();
     let message = form.message.trim();
+
+    // Silent bot trap.
+    // If this hidden field has a value, act successful but do not store the lead.
+    if clean_optional(&form.website).is_some() {
+        return Redirect::to("/contact?success=1").into_response();
+    }
+
+    // Basic abuse protection.
+    // Keep this simple for now. Later we can add rate limiting.
+    if name.len() > 120 || email.len() > 180 || subject.len() > 180 || message.len() > 5000 {
+        return (
+            StatusCode::BAD_REQUEST,
+            "Your message is too long. Please shorten it and try again.",
+        )
+            .into_response();
+    }
 
     if name.len() < 2 || email.len() < 5 || subject.len() < 3 || message.len() < 10 {
         return (
@@ -439,7 +460,13 @@ pub async fn dashboard_contact_message_quick_status(
         eprintln!("Failed to quick-update contact message: {error}");
     }
 
-    Redirect::to("/dashboard/contact-messages")
+    let redirect_to = form
+        .redirect_to
+        .as_deref()
+        .filter(|value| value.starts_with("/dashboard"))
+        .unwrap_or("/dashboard/contact-messages");
+
+    Redirect::to(redirect_to)
 }
 
 #[derive(Debug, Deserialize)]

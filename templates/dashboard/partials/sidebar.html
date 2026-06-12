@@ -1,9 +1,9 @@
 <aside
-    class="fixed inset-y-0 left-0 z-50 hidden w-72 overflow-y-auto bg-slate-950 px-6 py-6 lg:block"
+    class="dashboard-sidebar fixed inset-y-0 left-0 z-50 hidden w-72 overflow-y-auto px-6 py-6 lg:block"
 >
 
     <!-- Logo -->
-    <div class="flex items-center gap-3 border-b border-slate-800 pb-6">
+    <div class="flex items-center gap-3 border-b border-white/10 pb-6">
 
         <img
             src="/static/images/logo/logo-white.png"
@@ -24,56 +24,142 @@
     </div>
 
     <!-- Navigation -->
-    <nav class="mt-8 space-y-2">
+    <nav class="mt-8 space-y-6">
 
-        <a href="/dashboard"
-           class="flex items-center rounded-lg bg-cyan-500/10 px-4 py-3 text-sm font-medium text-cyan-400 transition hover:bg-cyan-500/20">
+        <div class="space-y-2">
+            <p class="px-4 text-[11px] font-black uppercase tracking-[0.28em] text-slate-500">
+                Overview
+            </p>
 
-            Dashboard
-        </a>
+            <a href="/dashboard"
+               data-nav-match="exact"
+               class="dashboard-nav-link flex items-center rounded-2xl px-4 py-3 text-sm font-medium text-slate-300 transition">
 
-        <a href="/dashboard/portfolios"
-           class="flex items-center rounded-lg px-4 py-3 text-sm text-slate-300 transition hover:bg-slate-800 hover:text-white">
+                Dashboard
+            </a>
+        </div>
 
-            Portfolios
-        </a>
+        <div class="space-y-2">
+            <div class="flex items-center justify-between px-4">
+                <p class="text-[11px] font-black uppercase tracking-[0.28em] text-slate-500">
+                    CRM
+                </p>
 
-        <a href="/dashboard/insights"
-           class="flex items-center rounded-lg px-4 py-3 text-sm text-slate-300 transition hover:bg-slate-800 hover:text-white">
+                <span class="rounded-full border border-cyan-400/20 bg-cyan-400/10 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-cyan-300">
+                    Hot
+                </span>
+            </div>
 
-            Insights
-        </a>
+            <a href="/dashboard/leads"
+               data-nav-match="prefix"
+               class="dashboard-nav-link flex items-center justify-between rounded-2xl px-4 py-3 text-sm text-slate-300 transition">
 
-        <a href="/dashboard/services"
-           class="flex items-center rounded-lg px-4 py-3 text-sm text-slate-300 transition hover:bg-slate-800 hover:text-white">
+                <span>Leads Pipeline</span>
+                <span class="rounded-full bg-white/5 px-2 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
+                    Score
+                </span>
+            </a>
 
-            Services
-        </a>
+            <a href="/dashboard/contact-messages"
+               data-nav-match="prefix"
+               class="dashboard-nav-link flex items-center justify-between rounded-2xl px-4 py-3 text-sm text-slate-300 transition">
 
-        <a href="/dashboard/industries"
-           class="flex items-center rounded-lg px-4 py-3 text-sm text-slate-300 transition hover:bg-slate-800 hover:text-white">
+                <span>Contact Inbox</span>
+                <span class="rounded-full bg-white/5 px-2 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
+                    Review
+                </span>
+            </a>
+        </div>
 
-            Industries
-        </a>
+        <div class="space-y-2">
+            <p class="px-4 text-[11px] font-black uppercase tracking-[0.28em] text-slate-500">
+                Content
+            </p>
 
-        <a href="/dashboard/careers"
-           class="flex items-center rounded-lg px-4 py-3 text-sm text-slate-300 transition hover:bg-slate-800 hover:text-white">
+            <a href="/dashboard/portfolios"
+               data-nav-match="prefix"
+               class="dashboard-nav-link flex items-center rounded-2xl px-4 py-3 text-sm text-slate-300 transition">
 
-            Careers
-        </a>
+                Portfolios
+            </a>
 
-        <a href="/dashboard/leads"
-           class="flex items-center rounded-lg px-4 py-3 text-sm text-slate-300 transition hover:bg-slate-800 hover:text-white">
+            <a href="/dashboard/insights"
+               data-nav-match="prefix"
+               class="dashboard-nav-link flex items-center rounded-2xl px-4 py-3 text-sm text-slate-300 transition">
 
-            Leads
-        </a>
+                Insights
+            </a>
 
-        <a href="/dashboard/settings"
-           class="flex items-center rounded-lg px-4 py-3 text-sm text-slate-300 transition hover:bg-slate-800 hover:text-white">
+            <a href="/dashboard/newsletters"
+               data-nav-match="prefix"
+               class="dashboard-nav-link flex items-center rounded-2xl px-4 py-3 text-sm text-slate-300 transition">
 
-            Settings
-        </a>
+                Newsletters
+            </a>
+        </div>
 
+        <div class="space-y-2">
+            <p class="px-4 text-[11px] font-black uppercase tracking-[0.28em] text-slate-500">
+                HR Manager
+            </p>
+
+            <a href="/dashboard/careers"
+               data-nav-match="prefix"
+               class="dashboard-nav-link flex items-center rounded-2xl px-4 py-3 text-sm text-slate-300 transition">
+
+                Vacancies
+            </a>
+
+            <a href="/dashboard/career-applications"
+               data-nav-match="prefix"
+               class="dashboard-nav-link flex items-center rounded-2xl px-4 py-3 text-sm text-slate-300 transition">
+
+                Applications
+            </a>
+        </div>
+
+        <div class="space-y-2">
+            <p class="px-4 text-[11px] font-black uppercase tracking-[0.28em] text-slate-500">
+                Operations
+            </p>
+
+            <a href="/dashboard/services"
+               data-nav-match="prefix"
+               class="dashboard-nav-link flex items-center rounded-2xl px-4 py-3 text-sm text-slate-300 transition">
+
+                Services
+            </a>
+
+            <a href="/dashboard/industries"
+               data-nav-match="prefix"
+               class="dashboard-nav-link flex items-center rounded-2xl px-4 py-3 text-sm text-slate-300 transition">
+
+                Industries
+            </a>
+
+            <a href="/dashboard/settings"
+               data-nav-match="prefix"
+               class="dashboard-nav-link flex items-center rounded-2xl px-4 py-3 text-sm text-slate-300 transition">
+
+                Settings
+            </a>
+
+            <a href="/dashboard/newsletter-subscribers"
+               data-nav-match="prefix"
+               class="dashboard-nav-link flex items-center rounded-2xl px-4 py-3 text-sm text-slate-300 transition">
+
+                Subscribers
+            </a>
+        </div>
     </nav>
+
+    <div class="mt-8 rounded-3xl border border-white/10 bg-white/5 p-5">
+        <p class="text-xs font-black uppercase tracking-[0.25em] text-cyan-300">
+            CRM Workflow
+        </p>
+        <p class="mt-3 text-sm leading-6 text-slate-300">
+            Capture from contact page, qualify fast, reply clearly, and move strong inquiries toward conversion.
+        </p>
+    </div>
 
 </aside>

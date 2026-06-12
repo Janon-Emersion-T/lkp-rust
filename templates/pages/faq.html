@@ -1,1 +1,92 @@
-<h1>Page Ready</h1>
+{% extends "base.html" %}
+
+{% block title %}Frequently Asked Questions | LKProfessionals{% endblock %}
+{% block meta_description %}Answers to common questions about LKProfessionals services, project timelines, pricing approach, support, SEO work, software development, and onboarding.{% endblock %}
+{% block canonical %}https://lkprofessionals.com/faq{% endblock %}
+{% block og_title %}Frequently Asked Questions | LKProfessionals{% endblock %}
+{% block og_description %}Common questions about web development, software, SEO, automation, pricing, and support at LKProfessionals.{% endblock %}
+{% block og_url %}https://lkprofessionals.com/faq{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What services does LKProfessionals provide?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "LKProfessionals provides web development, software development, mobile apps, digital marketing, SEO, hosting, domain, AI automation, and IT consultation services."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can project details be managed through the dashboard?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Key website content such as case studies, insights, and industries is designed to be managed dynamically from the dashboard."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does LKProfessionals work with businesses outside Sri Lanka?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. LKProfessionals supports businesses in Sri Lanka and international clients through remote discovery, delivery, and support workflows."
+      }
+    }
+  ]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<section class="bg-slate-950 px-6 py-24 text-white">
+  <div class="mx-auto max-w-5xl">
+    <p class="text-sm font-black uppercase tracking-[0.22em] text-cyan-300">Help Center</p>
+    <h1 class="mt-6 text-4xl font-black tracking-tight md:text-6xl">Frequently Asked Questions</h1>
+    <p class="mt-6 max-w-3xl text-lg leading-8 text-slate-300">
+      Clear answers for teams evaluating a new website, custom software platform, SEO engagement, support
+      partner, or business automation rollout.
+    </p>
+  </div>
+</section>
+
+<section class="bg-white px-6 py-20 text-slate-950">
+  <div class="mx-auto grid max-w-5xl gap-5">
+    <details class="rounded-[2rem] border border-slate-200 p-7">
+      <summary class="cursor-pointer text-lg font-black">How does a typical project start?</summary>
+      <p class="mt-4 text-sm leading-7 text-slate-600">
+        Most engagements begin with a short discovery conversation, requirement review, and a practical
+        scope recommendation covering deliverables, timeline, and budget direction.
+      </p>
+    </details>
+
+    <details class="rounded-[2rem] border border-slate-200 p-7">
+      <summary class="cursor-pointer text-lg font-black">Do you only build websites?</summary>
+      <p class="mt-4 text-sm leading-7 text-slate-600">
+        No. We also build internal business systems, portals, custom software, mobile experiences,
+        automation workflows, and growth-supporting digital infrastructure.
+      </p>
+    </details>
+
+    <details class="rounded-[2rem] border border-slate-200 p-7">
+      <summary class="cursor-pointer text-lg font-black">Can you improve an existing system instead of rebuilding everything?</summary>
+      <p class="mt-4 text-sm leading-7 text-slate-600">
+        Yes. We often audit current websites or systems first, then recommend targeted upgrades, staged
+        modernization, or selective rewrites where that is the better business decision.
+      </p>
+    </details>
+
+    <details class="rounded-[2rem] border border-slate-200 p-7">
+      <summary class="cursor-pointer text-lg font-black">Do you provide ongoing support after launch?</summary>
+      <p class="mt-4 text-sm leading-7 text-slate-600">
+        Yes. Depending on the engagement, we can provide maintenance, hosting coordination, monitoring,
+        updates, and support workflows after the initial delivery phase.
+      </p>
+    </details>
+  </div>
+</section>
+{% endblock %}

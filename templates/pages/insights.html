@@ -1,1 +1,43 @@
-<h1>Page Ready</h1>
+{% extends "base.html" %}
+
+{% block title %}Insights & Articles | LKProfessionals{% endblock %}
+
+{% block meta_description %}
+Read dynamic insights and articles from LKProfessionals on software, SEO, automation, AI, and digital growth strategy.
+{% endblock %}
+
+{% block canonical %}https://lkprofessionals.com/insights{% if pagination.current_page > 1 %}?page={{ pagination.current_page }}{% endif %}{% endblock %}
+{% block og_title %}LKProfessionals Insights & Articles{% if pagination.current_page > 1 %} | Page {{ pagination.current_page }}{% endif %}{% endblock %}
+{% block og_description %}Explore practical insights on business systems, web engineering, automation, SEO, and digital transformation.{% endblock %}
+{% block og_url %}https://lkprofessionals.com/insights{% if pagination.current_page > 1 %}?page={{ pagination.current_page }}{% endif %}{% endblock %}
+{% block twitter_title %}LKProfessionals Insights{% endblock %}
+{% block twitter_description %}Discover thought leadership and practical articles from LKProfessionals on software and digital growth.{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "name": "LKProfessionals Insights",
+    "url": "https://lkprofessionals.com/insights",
+    "blogPost": [
+        {% for insight in insights %}
+        {
+            "@type": "BlogPosting",
+            "headline": "{{ insight.title }}",
+            "url": "https://lkprofessionals.com{{ insight.public_url }}"
+        }{% if !loop.last %},{% endif %}
+        {% endfor %}
+    ]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+{% include "components/insights/index-hero.html" %}
+{% if pagination.current_page == 1 %}
+{% include "components/insights/index-featured.html" %}
+{% endif %}
+{% include "components/insights/index-grid.html" %}
+{% include "components/insights/index-subscribe.html" %}
+{% endblock %}

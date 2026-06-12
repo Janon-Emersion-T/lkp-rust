@@ -8,8 +8,13 @@ use crate::{
 pub fn legal_routes() -> Router<AppState> {
     Router::new()
         .route("/terms-and-conditions", get(terms))
+        .route("/termsandconditions", get(terms))
         .route("/service-level-agreement", get(sla))
+        .route("/sla", get(sla))
         .route("/refund-policy", get(refund_policy))
+        .route("/refundpolicy", get(refund_policy))
         .route("/privacy-policy", get(privacy_policy))
+        .route("/privacypolicy", get(privacy_policy))
         .route("/cookie-policy", get(cookie_policy))
+        .route("/cookiepolicy", get(cookie_policy))
 }

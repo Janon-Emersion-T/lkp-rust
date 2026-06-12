@@ -1,0 +1,47 @@
+<section class="bg-white px-6 py-24">
+    <div class="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[1fr_0.9fr]">
+        <article class="rounded-[2rem] border border-slate-200 bg-white p-8 shadow-[0_20px_50px_rgba(15,23,42,0.05)]">
+            <p class="text-sm font-black uppercase tracking-[0.24em] text-cyan-700">About the Role</p>
+            <div class="mt-6 space-y-5 text-sm leading-8 text-slate-600">
+                {% for paragraph in career.description_paragraphs %}
+                <p>{{ paragraph }}</p>
+                {% endfor %}
+            </div>
+        </article>
+
+        <div class="space-y-8">
+            {% if career.responsibilities.len() > 0 %}
+            <article class="rounded-[2rem] border border-slate-200 bg-slate-50 p-8">
+                <h2 class="text-2xl font-black text-slate-950">What you will own</h2>
+                <div class="mt-6 grid gap-3">
+                    {% for item in career.responsibilities %}
+                    <div class="rounded-[1.5rem] border border-slate-200 bg-white px-5 py-4 text-sm leading-7 text-slate-600">{{ item }}</div>
+                    {% endfor %}
+                </div>
+            </article>
+            {% endif %}
+
+            {% if career.requirements.len() > 0 %}
+            <article class="rounded-[2rem] border border-slate-200 bg-slate-50 p-8">
+                <h2 class="text-2xl font-black text-slate-950">What we are looking for</h2>
+                <div class="mt-6 grid gap-3">
+                    {% for item in career.requirements %}
+                    <div class="rounded-[1.5rem] border border-slate-200 bg-white px-5 py-4 text-sm leading-7 text-slate-600">{{ item }}</div>
+                    {% endfor %}
+                </div>
+            </article>
+            {% endif %}
+
+            {% if career.benefits.len() > 0 %}
+            <article class="rounded-[2rem] border border-slate-200 bg-slate-50 p-8">
+                <h2 class="text-2xl font-black text-slate-950">Why candidates choose us</h2>
+                <div class="mt-6 grid gap-3">
+                    {% for item in career.benefits %}
+                    <div class="rounded-[1.5rem] border border-slate-200 bg-white px-5 py-4 text-sm leading-7 text-slate-600">{{ item }}</div>
+                    {% endfor %}
+                </div>
+            </article>
+            {% endif %}
+        </div>
+    </div>
+</section>

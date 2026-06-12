@@ -1,0 +1,18 @@
+<section class="service-shell px-6 py-20 text-white">
+    <div class="mx-auto flex max-w-7xl flex-col gap-8 rounded-[2.25rem] border border-white/10 bg-white/5 p-10 shadow-[0_32px_80px_rgba(2,6,23,0.28)] backdrop-blur-xl lg:flex-row lg:items-center lg:justify-between">
+        <div class="max-w-3xl">
+            <p class="text-sm font-black uppercase tracking-[0.24em] text-cyan-300">Ready to move?</p>
+            <h2 class="mt-4 text-3xl font-black tracking-tight md:text-4xl">
+                Let’s turn {{ page.title | lower }} into a cleaner, stronger business advantage.
+            </h2>
+            <p class="mt-4 text-sm leading-7 text-slate-300">
+                Tell us what is blocked, what needs improving, or what you are planning next. We will help shape the right next step.
+            </p>
+        </div>
+
+        <div class="flex flex-wrap gap-4">
+            <a href="{{ page.primary_cta_href }}" class="service-primary-cta">{{ page.primary_cta_label }}</a>
+            <a href="/request-quote" class="service-secondary-cta">Request Detailed Pricing</a>
+        </div>
+    </div>
+</section>

@@ -8,19 +8,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="{% block meta_description %}LKProfessionals (Pvt) Ltd. provides web development, custom software, SEO, digital marketing, hosting, domain, and IT consultation services in Sri Lanka.{% endblock %}">
     <meta name="robots" content="{% block robots %}index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1{% endblock %}">
+    <meta name="theme-color" content="#050b18">
     <link rel="canonical" href="{% block canonical %}https://lkprofessionals.com/{% endblock %}">
+    <link rel="preconnect" href="https://images.unsplash.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 
     <meta property="og:site_name" content="LKProfessionals (Pvt) Ltd.">
     <meta property="og:type" content="{% block og_type %}website{% endblock %}">
     <meta property="og:title" content="{% block og_title %}LKProfessionals (Pvt) Ltd. | IT Services Company in Sri Lanka{% endblock %}">
     <meta property="og:description" content="{% block og_description %}Reliable IT services, web development, SEO, digital marketing, hosting, domain, and business automation solutions for Sri Lankan and international businesses.{% endblock %}">
     <meta property="og:url" content="{% block og_url %}https://lkprofessionals.com/{% endblock %}">
-    <meta property="og:image" content="{% block og_image %}https://lkprofessionals.com/static/images/og/lkprofessionals-og.jpg{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80{% endblock %}">
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="{% block twitter_title %}LKProfessionals (Pvt) Ltd. | IT Services Company in Sri Lanka{% endblock %}">
     <meta name="twitter:description" content="{% block twitter_description %}Web development, custom software, SEO, digital marketing, hosting, domain, and IT consultation services by LKProfessionals.{% endblock %}">
-    <meta name="twitter:image" content="{% block twitter_image %}https://lkprofessionals.com/static/images/og/lkprofessionals-og.jpg{% endblock %}">
+    <meta name="twitter:image" content="{% block twitter_image %}https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80{% endblock %}">
 
     <link rel="stylesheet" href="/static/css/app.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -31,6 +35,32 @@
     <style>
         body {
             font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        .skip-link {
+            position: absolute;
+            left: 1rem;
+            top: 1rem;
+            z-index: 200;
+            transform: translateY(-200%);
+            border-radius: 9999px;
+            background: #06b6d4;
+            color: #082f49;
+            font-weight: 800;
+            padding: 0.875rem 1.25rem;
+            transition: transform 0.2s ease;
+        }
+
+        .skip-link:focus {
+            transform: translateY(0);
+        }
+
+        body.site-mobile-open {
+            overflow: hidden;
+        }
+
+        [x-cloak] {
+            display: none !important;
         }
 
         .footer-glow {
@@ -55,10 +85,11 @@
 </head>
 
 <body class="bg-white text-slate-950 antialiased">
+    <a href="#main-content" class="skip-link">Skip to main content</a>
 
     {% include "partials/header.html" %}
 
-    <main>
+    <main id="main-content">
         {% block content %}{% endblock %}
     </main>
 

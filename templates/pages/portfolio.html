@@ -1,1 +1,45 @@
-<h1>Page Ready</h1>
+{% extends "base.html" %}
+
+{% block title %}Case Studies & Portfolio | LKProfessionals{% endblock %}
+
+{% block meta_description %}
+Explore SEO-friendly case studies and portfolio work by LKProfessionals across software development, web platforms, automation, and digital growth delivery.
+{% endblock %}
+
+{% block canonical %}https://lkprofessionals.com/case-studies{% endblock %}
+{% block og_title %}LKProfessionals Case Studies & Portfolio{% endblock %}
+{% block og_description %}See how LKProfessionals delivers business websites, software platforms, automation systems, and growth-focused digital execution.{% endblock %}
+{% block og_url %}https://lkprofessionals.com/case-studies{% endblock %}
+{% block twitter_title %}LKProfessionals Case Studies{% endblock %}
+{% block twitter_description %}Browse project case studies, outcomes, technologies, and industry delivery experience from LKProfessionals.{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "LKProfessionals Case Studies",
+    "url": "https://lkprofessionals.com/case-studies",
+    "description": "Case studies and portfolio work from LKProfessionals across web, software, automation, and digital growth.",
+    "mainEntity": {
+        "@type": "ItemList",
+        "itemListElement": [
+            {% for portfolio in portfolios %}
+            {
+                "@type": "ListItem",
+                "position": {{ loop.index }},
+                "url": "https://lkprofessionals.com{{ portfolio.public_url }}",
+                "name": "{{ portfolio.title }}"
+            }{% if !loop.last %},{% endif %}
+            {% endfor %}
+        ]
+    }
+}
+</script>
+{% endblock %}
+
+{% block content %}
+{% include "components/portfolio/index-hero.html" %}
+{% include "components/portfolio/index-featured.html" %}
+{% include "components/portfolio/index-grid.html" %}
+{% endblock %}

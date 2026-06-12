@@ -1,1 +1,106 @@
-<h1>Page Ready</h1>
+{% extends "base.html" %}
+
+{% block title %}Industries We Serve | LKProfessionals{% endblock %}
+
+{% block meta_description %}
+Explore the industries LKProfessionals serves with tailored websites, software systems, automation workflows, and digital growth solutions.
+{% endblock %}
+
+{% block canonical %}https://lkprofessionals.com/industries{% endblock %}
+{% block og_title %}Industries We Serve | LKProfessionals{% endblock %}
+{% block og_description %}Industry-focused software, websites, automation, and digital delivery for retail, education, healthcare, logistics, hospitality, and more.{% endblock %}
+{% block og_url %}https://lkprofessionals.com/industries{% endblock %}
+{% block twitter_title %}Industries We Serve | LKProfessionals{% endblock %}
+{% block twitter_description %}See how LKProfessionals supports real-world industries with tailored digital systems and growth-ready execution.{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Industries We Serve",
+    "url": "https://lkprofessionals.com/industries",
+    "description": "Industry-specific delivery capabilities from LKProfessionals.",
+    "mainEntity": {
+        "@type": "ItemList",
+        "itemListElement": [
+            {% for industry in industries %}
+            {
+                "@type": "ListItem",
+                "position": {{ loop.index }},
+                "name": "{{ industry.title }}"
+            }{% if !loop.last %},{% endif %}
+            {% endfor %}
+        ]
+    }
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<section class="service-shell relative overflow-hidden px-6 py-24 text-white">
+    <div class="absolute inset-0 opacity-60">
+        <div class="service-orb-left absolute -left-16 top-16 h-72 w-72 rounded-full blur-3xl"></div>
+        <div class="service-orb-right absolute right-0 top-0 h-96 w-96 rounded-full blur-3xl"></div>
+    </div>
+
+    <div class="relative mx-auto max-w-7xl">
+        <div class="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
+            <div>
+                <p class="service-pill">Industries We Serve</p>
+                <h1 class="mt-6 max-w-4xl text-4xl font-black tracking-tight md:text-6xl">
+                    Digital systems shaped around real operational environments.
+                </h1>
+                <p class="mt-6 max-w-3xl text-lg leading-8 text-slate-300">
+                    LKProfessionals delivers websites, platforms, automation, and software solutions that reflect how each industry actually works, not a generic one-size-fits-all template.
+                </p>
+            </div>
+
+            <div class="service-panel">
+                <p class="text-xs font-black uppercase tracking-[0.28em] text-cyan-300">Industry Coverage</p>
+                <div class="mt-8 grid gap-4 sm:grid-cols-2">
+                    <div class="service-mini-panel">
+                        <p class="text-3xl font-black text-white">{{ total_count }}</p>
+                        <p class="mt-2 text-xs font-black uppercase tracking-[0.24em] text-cyan-300">Published industry entries</p>
+                    </div>
+                    <div class="service-mini-panel">
+                        <p class="text-3xl font-black text-white">{{ featured_count }}</p>
+                        <p class="mt-2 text-xs font-black uppercase tracking-[0.24em] text-cyan-300">Featured sectors</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-white px-6 py-24">
+    <div class="mx-auto max-w-7xl">
+        <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+            {% for industry in industries %}
+            <article class="service-card group">
+                <div class="service-card-icon">
+                    <i class="{{ industry.icon_class }}"></i>
+                </div>
+                <h2 class="mt-6 text-2xl font-black tracking-tight text-slate-950">{{ industry.title }}</h2>
+                <p class="mt-4 text-sm leading-7 text-slate-600">{{ industry.short_description }}</p>
+                <div class="mt-6 rounded-[1.5rem] bg-slate-50 p-5">
+                    <p class="text-sm leading-7 text-slate-600">{{ industry.overview }}</p>
+                </div>
+                {% if let Some(challenge_focus) = industry.challenge_focus %}
+                <div class="mt-4 rounded-[1.5rem] border border-slate-200 p-4">
+                    <p class="text-xs font-black uppercase tracking-[0.22em] text-slate-500">Challenge Focus</p>
+                    <p class="mt-3 text-sm leading-7 text-slate-600">{{ challenge_focus }}</p>
+                </div>
+                {% endif %}
+                {% if let Some(solution_focus) = industry.solution_focus %}
+                <div class="mt-4 rounded-[1.5rem] border border-cyan-100 bg-cyan-50/60 p-4">
+                    <p class="text-xs font-black uppercase tracking-[0.22em] text-cyan-700">Solution Focus</p>
+                    <p class="mt-3 text-sm leading-7 text-slate-700">{{ solution_focus }}</p>
+                </div>
+                {% endif %}
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

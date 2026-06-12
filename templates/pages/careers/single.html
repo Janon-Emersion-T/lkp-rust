@@ -1,3 +1,47 @@
-<!-- templates/pages/careers/single.html -->
-<h1>Career Details</h1>
-<p>Slug: {{ slug }}</p>
+{% extends "base.html" %}
+
+{% block title %}{{ career.meta_title }}{% endblock %}
+{% block meta_description %}{{ career.meta_description }}{% endblock %}
+{% block canonical %}{{ career.canonical_url }}{% endblock %}
+{% block og_title %}{{ career.meta_title }}{% endblock %}
+{% block og_description %}{{ career.meta_description }}{% endblock %}
+{% block og_url %}{{ career.canonical_url }}{% endblock %}
+{% block og_image %}{{ career.og_image_url }}{% endblock %}
+{% block twitter_title %}{{ career.meta_title }}{% endblock %}
+{% block twitter_description %}{{ career.meta_description }}{% endblock %}
+{% block twitter_image %}{{ career.og_image_url }}{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "JobPosting",
+    "title": "{{ career.title }}",
+    "description": "{{ career.meta_description }}",
+    "datePosted": "{{ career.published_date_iso }}",
+    "validThrough": "{{ career.updated_date_iso }}",
+    "employmentType": "{{ career.employment_type }}",
+    "hiringOrganization": {
+        "@type": "Organization",
+        "name": "LKProfessionals",
+        "sameAs": "https://lkprofessionals.com"
+    },
+    "jobLocationType": "{{ career.workplace_mode }}",
+    "jobLocation": {
+        "@type": "Place",
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "{{ career.location }}",
+            "addressCountry": "LK"
+        }
+    },
+    "url": "{{ career.canonical_url }}"
+}
+</script>
+{% endblock %}
+
+{% block content %}
+{% include "components/careers/detail-hero.html" %}
+{% include "components/careers/detail-body.html" %}
+{% include "components/careers/detail-related.html" %}
+{% endblock %}

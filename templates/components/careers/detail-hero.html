@@ -1,0 +1,48 @@
+<section class="service-shell relative overflow-hidden px-6 py-24 text-white">
+    <div class="absolute inset-0">
+        <img src="{{ career.cover_image_url }}" alt="{{ career.title }}" class="h-full w-full object-cover opacity-20" loading="eager" decoding="async" />
+        <div class="absolute inset-0 bg-[linear-gradient(135deg,rgba(2,6,23,0.92),rgba(8,47,73,0.9),rgba(12,74,110,0.85))]"></div>
+    </div>
+
+    <div class="relative mx-auto max-w-7xl">
+        <div class="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-end">
+            <div>
+                <p class="service-pill">{{ career.team }} · Career Opportunity</p>
+                <h1 class="mt-6 max-w-4xl text-4xl font-black tracking-tight md:text-6xl">
+                    {{ career.title }}
+                </h1>
+                <p class="mt-6 max-w-3xl text-lg leading-8 text-slate-300">
+                    {{ career.summary }}
+                </p>
+                <div class="mt-8 flex flex-wrap gap-3 text-xs font-black uppercase tracking-[0.18em] text-slate-200">
+                    <span class="rounded-full border border-white/10 bg-white/5 px-4 py-2">{{ career.location }}</span>
+                    <span class="rounded-full border border-white/10 bg-white/5 px-4 py-2">{{ career.workplace_mode }}</span>
+                    <span class="rounded-full border border-white/10 bg-white/5 px-4 py-2">{{ career.employment_type }}</span>
+                    <span class="rounded-full border border-white/10 bg-white/5 px-4 py-2">{{ career.experience_level }}</span>
+                </div>
+            </div>
+
+            <div class="service-panel">
+                <p class="text-xs font-black uppercase tracking-[0.28em] text-cyan-300">Role Summary</p>
+                <div class="mt-8 grid gap-4 sm:grid-cols-2">
+                    <div class="service-mini-panel">
+                        <p class="text-lg font-black text-white">{{ career.salary_range }}</p>
+                        <p class="mt-2 text-xs font-black uppercase tracking-[0.22em] text-slate-300">Compensation</p>
+                    </div>
+                    <div class="service-mini-panel">
+                        <p class="text-lg font-black text-white">{{ career.team }}</p>
+                        <p class="mt-2 text-xs font-black uppercase tracking-[0.22em] text-slate-300">Hiring team</p>
+                    </div>
+                </div>
+                <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+                    <a href="{{ career.apply_url }}" class="inline-flex items-center justify-center rounded-full bg-cyan-400 px-6 py-3 text-sm font-black text-slate-950 transition hover:bg-white">
+                        Apply Now
+                    </a>
+                    <a href="/careers/why-work-at-lkprofessionals" class="inline-flex items-center justify-center rounded-full border border-white/15 px-6 py-3 text-sm font-black text-white transition hover:border-cyan-300 hover:text-cyan-300">
+                        Why Work Here
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -32,16 +32,25 @@
 
     </div>
 
-    <!-- Featured Insights -->
     <div class="mt-16 grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
+      {% if featured_insights.len() == 0 %}
+      <div class="rounded-[2rem] border border-dashed border-slate-300 bg-white p-10 text-center lg:col-span-2">
+        <h3 class="text-2xl font-black">Featured insights will appear here</h3>
+        <p class="mt-4 text-sm leading-7 text-slate-600">
+          Add and publish insight entries from the dashboard to populate this section dynamically.
+        </p>
+      </div>
+      {% endif %}
 
-      <!-- Main Featured Article -->
+      {% if featured_insights.len() > 0 %}
+      {% let primary = &featured_insights[0] %}
       <article class="group overflow-hidden rounded-[2rem] bg-[#050b18] text-white shadow-2xl">
-
         <div class="relative overflow-hidden">
           <img
-            src="/static/images/insights/ai-business.jpg"
-            alt="AI and Business Systems"
+            src="{{ primary.cover_image_url }}"
+            alt="{{ primary.title }}"
+            loading="lazy"
+            decoding="async"
             class="h-[26rem] w-full object-cover transition duration-700 group-hover:scale-105"
           >
 
@@ -51,199 +60,72 @@
         </div>
 
         <div class="p-10">
-
           <div class="flex flex-wrap items-center gap-4 text-sm text-slate-400">
-            <span>Artificial Intelligence</span>
+            <span>{{ primary.category }}</span>
             <span>•</span>
-            <span>Digital Transformation</span>
+            <span>{{ primary.author }}</span>
             <span>•</span>
-            <span>8 min read</span>
+            <span>{{ primary.reading_time_label }}</span>
           </div>
 
           <h3 class="mt-5 text-4xl font-black leading-tight">
-            How AI-powered business systems are reshaping modern operations.
+            {{ primary.title }}
           </h3>
 
           <p class="mt-6 text-base leading-8 text-slate-300">
-            Businesses are moving beyond basic automation and entering an era of intelligent operational systems powered by AI, analytics, and workflow engineering.
+            {{ primary.excerpt }}
           </p>
 
-          <a href="/insights/ai-business-systems"
+          <a href="{{ primary.public_url }}"
              class="mt-8 inline-flex items-center gap-3 text-sm font-bold text-cyan-300">
             Read Full Article
             <i class="fa-solid fa-arrow-right transition group-hover:translate-x-1"></i>
           </a>
-
         </div>
-
       </article>
 
-      <!-- Side Articles -->
       <div class="space-y-8">
-
-        <!-- Article -->
+        {% for insight in featured_insights %}
+        {% if loop.index > 1 %}
         <article class="group overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-xl transition hover:-translate-y-2 hover:shadow-2xl">
-
           <div class="grid md:grid-cols-[0.9fr_1.1fr]">
-
             <div class="overflow-hidden">
               <img
-                src="/static/images/insights/seo.jpg"
-                alt="SEO Strategy"
+                src="{{ insight.cover_image_url }}"
+                alt="{{ insight.title }}"
+                loading="lazy"
+                decoding="async"
                 class="h-full w-full object-cover transition duration-700 group-hover:scale-105"
               >
             </div>
 
             <div class="p-8">
-
               <div class="flex items-center gap-3 text-xs font-bold uppercase tracking-[0.15em] text-cyan-600">
-                <span>SEO</span>
+                <span>{{ insight.category }}</span>
                 <span>•</span>
-                <span>Growth Strategy</span>
+                <span>{{ insight.reading_time_label }}</span>
               </div>
 
               <h3 class="mt-4 text-2xl font-black leading-tight">
-                What modern SEO actually looks like after Google’s evolution.
+                {{ insight.title }}
               </h3>
 
               <p class="mt-4 text-sm leading-7 text-slate-600">
-                Search visibility today requires technical structure, content authority, trust signals, and strategic digital positioning.
+                {{ insight.excerpt }}
               </p>
 
-              <a href="/insights/modern-seo-strategy"
+              <a href="{{ insight.public_url }}"
                  class="mt-6 inline-flex items-center gap-2 text-sm font-bold text-cyan-600">
                 Read Article
                 <i class="fa-solid fa-arrow-right transition group-hover:translate-x-1"></i>
               </a>
-
             </div>
-
           </div>
-
         </article>
-
-        <!-- Article -->
-        <article class="group overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-xl transition hover:-translate-y-2 hover:shadow-2xl">
-
-          <div class="grid md:grid-cols-[0.9fr_1.1fr]">
-
-            <div class="overflow-hidden">
-              <img
-                src="/static/images/insights/automation.jpg"
-                alt="Business Automation"
-                class="h-full w-full object-cover transition duration-700 group-hover:scale-105"
-              >
-            </div>
-
-            <div class="p-8">
-
-              <div class="flex items-center gap-3 text-xs font-bold uppercase tracking-[0.15em] text-cyan-600">
-                <span>Automation</span>
-                <span>•</span>
-                <span>Business Systems</span>
-              </div>
-
-              <h3 class="mt-4 text-2xl font-black leading-tight">
-                Why operational automation is becoming a competitive advantage.
-              </h3>
-
-              <p class="mt-4 text-sm leading-7 text-slate-600">
-                Smart workflow automation reduces repetitive work, improves reporting accuracy, and increases operational speed across organizations.
-              </p>
-
-              <a href="/insights/business-automation"
-                 class="mt-6 inline-flex items-center gap-2 text-sm font-bold text-cyan-600">
-                Read Article
-                <i class="fa-solid fa-arrow-right transition group-hover:translate-x-1"></i>
-              </a>
-
-            </div>
-
-          </div>
-
-        </article>
-
+        {% endif %}
+        {% endfor %}
       </div>
-
-    </div>
-
-    <!-- Topics -->
-    <div class="mt-16 rounded-[2rem] bg-white p-10 shadow-xl">
-
-      <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-
-        <div>
-          <p class="text-sm font-bold uppercase tracking-[0.25em] text-cyan-600">
-            Explore Topics
-          </p>
-
-          <h3 class="mt-4 text-3xl font-black">
-            Practical knowledge for modern businesses.
-          </h3>
-        </div>
-
-        <div class="flex flex-wrap gap-4">
-
-          <a href="/insights/category/software-development"
-             class="rounded-full border border-slate-200 bg-slate-50 px-5 py-3 text-sm font-bold transition hover:border-cyan-500 hover:bg-cyan-50 hover:text-cyan-700">
-            Software Development
-          </a>
-
-          <a href="/insights/category/seo"
-             class="rounded-full border border-slate-200 bg-slate-50 px-5 py-3 text-sm font-bold transition hover:border-cyan-500 hover:bg-cyan-50 hover:text-cyan-700">
-            SEO
-          </a>
-
-          <a href="/insights/category/automation"
-             class="rounded-full border border-slate-200 bg-slate-50 px-5 py-3 text-sm font-bold transition hover:border-cyan-500 hover:bg-cyan-50 hover:text-cyan-700">
-            Automation
-          </a>
-
-          <a href="/insights/category/artificial-intelligence"
-             class="rounded-full border border-slate-200 bg-slate-50 px-5 py-3 text-sm font-bold transition hover:border-cyan-500 hover:bg-cyan-50 hover:text-cyan-700">
-            Artificial Intelligence
-          </a>
-
-          <a href="/insights/category/digital-marketing"
-             class="rounded-full border border-slate-200 bg-slate-50 px-5 py-3 text-sm font-bold transition hover:border-cyan-500 hover:bg-cyan-50 hover:text-cyan-700">
-            Digital Marketing
-          </a>
-
-        </div>
-
-      </div>
-
-    </div>
-
-    <!-- Bottom CTA -->
-    <div class="mt-16 rounded-[2rem] bg-[#050b18] p-10 text-white shadow-2xl lg:flex lg:items-center lg:justify-between">
-
-      <div>
-        <p class="text-sm font-bold uppercase tracking-[0.25em] text-cyan-300">
-          Stay Updated
-        </p>
-
-        <h3 class="mt-4 text-3xl font-black">
-          Follow our thinking on technology and digital growth.
-        </h3>
-
-        <p class="mt-4 max-w-3xl text-sm leading-7 text-slate-300">
-          Get updates on software engineering, AI systems, operational automation, SEO evolution, and digital business strategy.
-        </p>
-      </div>
-
-      <div class="mt-8 flex flex-col gap-4 sm:flex-row lg:mt-0">
-        <a href="/insights"
-           class="inline-flex items-center justify-center rounded-full bg-cyan-400 px-8 py-4 font-bold text-slate-950 shadow-lg shadow-cyan-500/30 transition hover:-translate-y-1 hover:bg-white">
-          Read Insights
-        </a>
-
-        <a href="mailto:info@lkprofessionals.com?subject=Subscribe%20to%20LKProfessionals%20Insights"
-           class="inline-flex items-center justify-center rounded-full border border-white/15 px-8 py-4 font-bold text-white transition hover:-translate-y-1 hover:border-cyan-300 hover:text-cyan-300">
-          Subscribe
-        </a>
-      </div>
-
+      {% endif %}
     </div>
 
   </div>

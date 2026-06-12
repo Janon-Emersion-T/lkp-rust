@@ -1,84 +1,297 @@
-<section class="relative overflow-hidden bg-[#050b18] text-white">
-  <div class="absolute inset-0">
-    <div class="absolute -top-32 left-10 h-96 w-96 rounded-full bg-cyan-500/20 blur-3xl"></div>
-    <div class="absolute right-0 top-20 h-96 w-96 rounded-full bg-blue-600/20 blur-3xl"></div>
-  </div>
+<section
+  class="hero-ref relative isolate overflow-hidden text-white"
+  aria-labelledby="home-hero-title"
+>
+  <div class="hero-ref-bg"></div>
+  <div class="hero-ref-overlay"></div>
+  <div class="hero-ref-grid"></div>
+  <div class="hero-ref-spark hero-ref-spark-one"></div>
+  <div class="hero-ref-spark hero-ref-spark-two"></div>
 
-  <div class="relative mx-auto grid min-h-screen max-w-7xl items-center gap-12 px-6 py-24 lg:grid-cols-2 lg:px-8">
+  <div class="relative mx-auto flex min-h-[calc(100vh-6.75rem)] max-w-[1600px] flex-col px-4 py-4 sm:px-6 lg:px-8">
+    
+    <!-- Desktop Hero -->
+    <div class="hidden flex-1 lg:flex lg:flex-col">
 
-    <div>
-      <p class="mb-5 inline-flex rounded-full border border-cyan-400/30 bg-cyan-400/10 px-4 py-2 text-sm font-semibold text-cyan-300">
-        Software · AI · Automation · Digital Growth
-      </p>
-
-      <h1 class="text-4xl font-black tracking-tight md:text-6xl lg:text-7xl">
-        We build digital systems that help businesses scale.
-      </h1>
-
-      <p class="mt-6 max-w-2xl text-lg leading-8 text-slate-300">
-        LKProfessionals (Pvt) Ltd. designs and develops secure websites, custom software, mobile apps, POS systems, automation tools, SEO strategies, and AI-powered platforms for modern businesses.
-      </p>
-
-      <div class="mt-8 flex flex-col gap-4 sm:flex-row">
-        <a href="/requestquote" class="rounded-full bg-cyan-400 px-8 py-4 text-center font-bold text-slate-950 shadow-lg shadow-cyan-500/30 transition hover:-translate-y-1 hover:bg-white">
-          Request a Quote
+      <!-- Top Bar -->
+      <div class="grid grid-cols-[22rem_minmax(0,1fr)_24rem] items-start gap-6">
+        <a href="/" class="hero-ref-brand group" aria-label="LKProfessionals Home">
+          <img
+            src="/static/images/logo.png"
+            alt="LKProfessionals Logo"
+            decoding="async"
+            fetchpriority="high"
+            class="h-18 w-auto transition duration-500 group-hover:scale-105 xl:h-24"
+          />
+          <p class="mt-3 text-xl font-black tracking-tight text-blue-950 xl:text-3xl">
+            LKProfessionals
+          </p>
         </a>
 
-        <a href="/portfolio" class="rounded-full border border-white/20 px-8 py-4 text-center font-bold text-white transition hover:-translate-y-1 hover:border-cyan-300 hover:text-cyan-300">
-          View Our Work
-        </a>
-      </div>
-
-      <div class="mt-10 grid max-w-xl grid-cols-3 gap-6 border-t border-white/10 pt-8">
-        <div>
-          <strong class="text-2xl font-black text-cyan-300">200+</strong>
-          <p class="mt-1 text-sm text-slate-400">Projects Delivered</p>
-        </div>
-        <div>
-          <strong class="text-2xl font-black text-cyan-300">12+</strong>
-          <p class="mt-1 text-sm text-slate-400">Countries Served</p>
-        </div>
-        <div>
-          <strong class="text-2xl font-black text-cyan-300">24/7</strong>
-          <p class="mt-1 text-sm text-slate-400">Support Ready</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="relative">
-      <div class="rounded-[2rem] border border-white/10 bg-white/10 p-4 shadow-2xl backdrop-blur-xl">
-        <div class="rounded-[1.5rem] bg-slate-950 p-6">
-          <div class="mb-6 flex items-center gap-2">
-            <span class="h-3 w-3 rounded-full bg-red-400"></span>
-            <span class="h-3 w-3 rounded-full bg-yellow-400"></span>
-            <span class="h-3 w-3 rounded-full bg-green-400"></span>
-          </div>
-
-          <div class="space-y-4">
-            <div class="rounded-2xl bg-white/10 p-5">
-              <p class="text-sm text-slate-400">Current Focus</p>
-              <h3 class="mt-2 text-xl font-bold">Building scalable digital infrastructure</h3>
+        <div class="pt-4">
+          <div class="hero-ref-pill max-w-max">
+            <div class="hero-ref-pill-icon">
+              <i class="fa-solid fa-shield-halved"></i>
             </div>
-
-            <div class="grid grid-cols-2 gap-4">
-              <div class="rounded-2xl bg-cyan-400 p-5 text-slate-950">
-                <p class="text-sm font-semibold">Services</p>
-                <h4 class="mt-2 text-2xl font-black">IT + Growth</h4>
-              </div>
-
-              <div class="rounded-2xl bg-white/10 p-5">
-                <p class="text-sm text-slate-400">Delivery</p>
-                <h4 class="mt-2 text-2xl font-black">Global</h4>
-              </div>
-            </div>
-
-            <div class="rounded-2xl border border-cyan-400/20 bg-cyan-400/10 p-5">
-              <p class="text-sm text-cyan-300">LKProfessionals Operating Stack</p>
-              <p class="mt-2 text-sm leading-6 text-slate-300">
-                Laravel · Rust · AI · SEO · Automation · Cloud · POS · E-commerce
+            <div>
+              <p class="text-sm font-black uppercase tracking-[0.16em] text-white xl:text-base">
+                Reliable. Scalable. Secure.
+              </p>
+              <p class="mt-1 text-sm text-slate-300 xl:text-base">
+                Web, Software, AI Automation & Digital Growth Partner in Sri Lanka
               </p>
             </div>
           </div>
+        </div>
+
+        <a
+          href="https://wa.me/94761234321"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="hero-ref-pill hero-ref-phone justify-self-end"
+          aria-label="Contact LKProfessionals on WhatsApp"
+        >
+          <div class="hero-ref-pill-icon">
+            <i class="fa-brands fa-whatsapp"></i>
+          </div>
+          <div>
+            <p class="text-xl font-black text-cyan-300 xl:text-2xl">WhatsApp</p>
+            <p class="mt-1 text-3xl font-black text-white xl:text-5xl">0761234321</p>
+          </div>
+        </a>
+      </div>
+
+      <!-- Main Hero Content -->
+      <div class="mt-1 grid flex-1 grid-cols-[minmax(0,0.52fr)_minmax(0,0.48fr)] gap-6">
+        
+        <!-- Left Headline -->
+        <div class="hero-ref-headline flex flex-col justify-center pb-28 pl-2">
+          <p class="hero-ref-kicker mb-5 inline-flex w-max items-center gap-3 rounded-full border border-cyan-300/30 bg-white/10 px-5 py-3 text-sm font-black uppercase tracking-[0.18em] text-cyan-200 shadow-2xl shadow-cyan-950/20 backdrop-blur-xl">
+            <span class="h-2.5 w-2.5 rounded-full bg-cyan-300 shadow-[0_0_22px_rgba(103,232,249,0.9)]"></span>
+            IT Solutions Built For Serious Business Growth
+          </p>
+
+          <h1
+            id="home-hero-title"
+            class="max-w-5xl text-5xl font-black uppercase leading-none tracking-tight text-white xl:text-7xl 2xl:text-[5.15rem]"
+          >
+            We Build Digital Systems
+            <span class="mt-1 block text-cyan-400">
+              That Grow Businesses
+            </span>
+          </h1>
+
+          <div class="mt-6 h-1 w-28 rounded-full bg-cyan-400 shadow-[0_0_24px_rgba(34,211,238,0.68)]"></div>
+        </div>
+
+        <!-- Right Copy -->
+        <div class="hero-ref-copy flex flex-col justify-center pb-28 pr-2">
+          <p class="hero-ref-copy-lead mt-8 max-w-2xl text-2xl leading-[1.45] text-slate-100 2xl:text-[2rem]">
+            LKProfessionals designs and develops
+            <strong class="font-black text-cyan-300">websites</strong>,
+            <strong class="font-black text-cyan-300">custom software</strong>,
+            <strong class="font-black text-cyan-300">business automation</strong>,
+            and <strong class="font-black text-cyan-300">SEO-ready digital platforms</strong>
+            for companies that want systems, not excuses.
+          </p>
+
+          <div class="hero-ref-actions mt-10 flex flex-wrap gap-4">
+            <a
+              href="/request-quote"
+              class="inline-flex items-center justify-center gap-3 rounded-2xl bg-cyan-400 px-7 py-4 text-base font-black uppercase tracking-wide text-blue-950 shadow-2xl shadow-cyan-500/30 transition duration-300 hover:-translate-y-1 hover:bg-white"
+            >
+              Request a Quote
+              <i class="fa-solid fa-arrow-right"></i>
+            </a>
+
+            <a
+              href="/services"
+              class="inline-flex items-center justify-center gap-3 rounded-2xl border border-white/20 bg-white/10 px-7 py-4 text-base font-black uppercase tracking-wide text-white backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:border-cyan-300/60 hover:bg-white/15"
+            >
+              Explore Services
+              <i class="fa-solid fa-grid-2"></i>
+            </a>
+          </div>
+
+          <div class="mt-10 grid max-w-[32rem] gap-4">
+            <article class="hero-ref-feature hero-ref-feature-delay-1">
+              <div class="hero-ref-feature-icon">
+                <i class="fa-solid fa-bullseye"></i>
+              </div>
+              <div>
+                <h2 class="text-xl font-black uppercase text-white">Business First</h2>
+                <p class="mt-1 text-base leading-7 text-slate-300">
+                  Every system is planned around your workflow, customers, and revenue goals.
+                </p>
+              </div>
+            </article>
+
+            <article class="hero-ref-feature hero-ref-feature-delay-2">
+              <div class="hero-ref-feature-icon">
+                <i class="fa-solid fa-code-branch"></i>
+              </div>
+              <div>
+                <h2 class="text-xl font-black uppercase text-white">Built To Scale</h2>
+                <p class="mt-1 text-base leading-7 text-slate-300">
+                  Clean architecture, modern stack, and long-term maintainability from day one.
+                </p>
+              </div>
+            </article>
+
+            <article class="hero-ref-feature hero-ref-feature-delay-3">
+              <div class="hero-ref-feature-icon">
+                <i class="fa-solid fa-lock"></i>
+              </div>
+              <div>
+                <h2 class="text-xl font-black uppercase text-white">Secure & Reliable</h2>
+                <p class="mt-1 text-base leading-7 text-slate-300">
+                  Hosting, backups, support, and protection handled with professional discipline.
+                </p>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <!-- Right Services -->
+        <div class="relative">
+          <div class="absolute right-8 top-16 hidden rounded-[2rem] border border-cyan-300/20 bg-white/10 px-6 py-5 shadow-2xl shadow-cyan-950/30 backdrop-blur-xl 2xl:block">
+            <p class="text-sm font-black uppercase tracking-[0.18em] text-cyan-300">Trusted For</p>
+            <p class="mt-2 text-2xl font-black text-white">Web • Software • SEO • Automation</p>
+          </div>
+
+          <!-- <div class="hero-ref-services">
+            <div class="hero-ref-services-tag">Our Services</div>
+
+            <a href="/services/web-development" class="hero-ref-service">
+              <div class="hero-ref-service-icon"><i class="fa-solid fa-code"></i></div>
+              <h2 class="mt-4 text-[1.05rem] font-black uppercase text-blue-950">Web Development</h2>
+              <p class="mt-3 text-sm leading-6 text-slate-600">
+                Fast, responsive, SEO-ready websites built to convert visitors into real enquiries.
+              </p>
+            </a>
+
+            <a href="/services/software-development" class="hero-ref-service">
+              <div class="hero-ref-service-icon"><i class="fa-solid fa-laptop-code"></i></div>
+              <h2 class="mt-4 text-[1.05rem] font-black uppercase text-blue-950">Custom Software</h2>
+              <p class="mt-3 text-sm leading-6 text-slate-600">
+                Business applications, dashboards, portals, POS, ERP, and workflow systems.
+              </p>
+            </a>
+
+            <a href="/services/ai-automation-solutions" class="hero-ref-service">
+              <div class="hero-ref-service-icon"><i class="fa-solid fa-gears"></i></div>
+              <h2 class="mt-4 text-[1.05rem] font-black uppercase text-blue-950">AI Automation</h2>
+              <p class="mt-3 text-sm leading-6 text-slate-600">
+                Reduce repetitive work, speed up operations, and make your team more productive.
+              </p>
+            </a>
+
+            <a href="/services/digital-marketing" class="hero-ref-service">
+              <div class="hero-ref-service-icon"><i class="fa-solid fa-chart-line"></i></div>
+              <h2 class="mt-4 text-[1.05rem] font-black uppercase text-blue-950">SEO & Marketing</h2>
+              <p class="mt-3 text-sm leading-6 text-slate-600">
+                Search visibility, lead generation, content strategy, and digital growth campaigns.
+              </p>
+            </a>
+
+            <a href="/services/hosting-domain-cloud-services" class="hero-ref-service border-r-0">
+              <div class="hero-ref-service-icon"><i class="fa-solid fa-cloud"></i></div>
+              <h2 class="mt-4 text-[1.05rem] font-black uppercase text-blue-950">Hosting & Support</h2>
+              <p class="mt-3 text-sm leading-6 text-slate-600">
+                Domains, hosting, backups, maintenance, security, and reliable technical support.
+              </p>
+            </a>
+          </div> -->
+        </div>
+      </div>
+
+      <!-- Bottom Strip -->
+      <div class="mt-auto grid grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)_minmax(0,0.72fr)] gap-3">
+        <!-- <div class="hero-ref-bottom-block">
+          <p class="text-sm font-black uppercase tracking-[0.18em] text-cyan-300">Our Process</p>
+          <div class="mt-3 flex flex-wrap gap-2">
+            <span class="hero-ref-chip">01 Discover</span>
+            <span class="hero-ref-chip">02 Plan</span>
+            <span class="hero-ref-chip">03 Develop</span>
+            <span class="hero-ref-chip">04 Launch</span>
+            <span class="hero-ref-chip">05 Support</span>
+          </div>
+        </div> -->
+
+        <!-- <div class="hero-ref-bottom-block">
+          <p class="text-sm font-black uppercase tracking-[0.18em] text-cyan-300">Technologies We Use</p>
+          <div class="mt-3 flex flex-wrap gap-2">
+            <span class="hero-ref-chip hero-ref-chip-light">Rust</span>
+            <span class="hero-ref-chip hero-ref-chip-light">Python</span>
+            <span class="hero-ref-chip hero-ref-chip-light">Astro</span>
+            <span class="hero-ref-chip hero-ref-chip-light">Laravel</span>
+            <span class="hero-ref-chip hero-ref-chip-light">React</span>
+            <span class="hero-ref-chip hero-ref-chip-light">MySQL</span>
+            <span class="hero-ref-chip hero-ref-chip-light">PostgreSQL</span>
+          </div>
+        </div> -->
+
+        <!-- <a href="/contact" class="hero-ref-cta">
+          <p class="text-2xl font-black leading-tight text-white xl:text-3xl">
+            Ready to modernize your business?
+          </p>
+          <div class="mt-5 h-px w-full bg-white/20"></div>
+          <p class="mt-4 inline-flex items-center gap-3 text-lg font-bold text-white xl:text-xl">
+            <i class="fa-solid fa-globe text-cyan-300"></i>
+            lkprofessionals.com
+          </p>
+        </a> -->
+      </div>
+    </div>
+
+    <!-- Mobile Hero -->
+    <div class="lg:hidden">
+      <div class="hero-ref-mobile">
+        <div class="hero-ref-mobile-scene"></div>
+
+        <div class="hero-ref-mobile-head">
+          <a href="/" class="hero-ref-mobile-brand" aria-label="LKProfessionals Home">
+            <img
+              src="/static/images/logo.png"
+              alt="LKProfessionals Logo"
+              decoding="async"
+              fetchpriority="high"
+              class="h-11 w-auto"
+            />
+          </a>
+
+          <a href="https://wa.me/94761234321" target="_blank" rel="noopener noreferrer" class="hero-ref-mobile-phone">
+            <span>WhatsApp</span>
+            <strong>0761234321</strong>
+          </a>
+        </div>
+
+        <div class="hero-ref-mobile-copy">
+          <p class="text-[11px] font-black uppercase tracking-[0.18em] text-cyan-300">
+            Reliable. Scalable. Secure.
+          </p>
+
+          <h1 class="mt-3 text-3xl font-black uppercase leading-none tracking-tight text-white sm:text-[2.35rem]">
+            We Build Digital Systems
+            <span class="mt-2 block text-cyan-400">That Grow Businesses</span>
+          </h1>
+
+          <p class="mt-4 text-base leading-7 text-slate-200">
+            Websites, custom software, AI automation, SEO, hosting, and digital systems built for serious business growth.
+          </p>
+        </div>
+
+        <div class="hero-ref-mobile-services">
+          <span>Web Development</span>
+          <span>Software</span>
+          <span>AI Automation</span>
+          <span>SEO</span>
+          <span>Hosting</span>
+        </div>
+
+        <div class="hero-ref-mobile-actions">
+          <a href="/services" class="hero-ref-mobile-btn">Explore Services</a>
+          <a href="/request-quote" class="hero-ref-mobile-btn hero-ref-mobile-btn-primary">Request Quote</a>
         </div>
       </div>
     </div>

@@ -1,6 +1,16 @@
 use askama::Template;
 
-use crate::models::{ContactMessage, LeadStats};
+use crate::{
+    handlers::service_content::{ServiceCard, ServicePageContext, ServicePoint, ServiceStep},
+    models::{
+        CareerApplicationEditorView, CareerApplicationRecord, CareerCardView, CareerDetailView,
+        CareerEditorView, CareerRecord, ContactMessage, IndustryCardView, IndustryEditorView,
+        IndustryRecord, InsightCardView, InsightDetailView, InsightEditorView, InsightRecord,
+        LeadStats, NewsletterCampaignEditorView, NewsletterCampaignRecord,
+        NewsletterSubscriberEditorView, NewsletterSubscriberRecord, PortfolioCardView,
+        PortfolioDetailView, PortfolioEditorView, PortfolioRecord,
+    },
+};
 
 macro_rules! page {
     ($name:ident, $path:literal) => {
@@ -11,13 +21,79 @@ macro_rules! page {
 }
 
 // Public pages
-page!(HomeTemplate, "pages/home.html");
+#[derive(Template)]
+#[template(path = "pages/home.html")]
+pub struct HomeTemplate {
+    pub featured_portfolios: Vec<PortfolioCardView>,
+    pub featured_insights: Vec<InsightCardView>,
+    pub featured_industries: Vec<IndustryCardView>,
+}
 page!(AboutTemplate, "pages/aboutus.html");
-page!(ServicesTemplate, "pages/services.html");
-page!(IndustriesTemplate, "pages/industries.html");
-page!(PortfolioTemplate, "pages/portfolio.html");
-page!(InsightsTemplate, "pages/insights.html");
-page!(CareersTemplate, "pages/careers.html");
+#[derive(Template)]
+#[template(path = "pages/services.html")]
+pub struct ServicesTemplate {
+    pub services: Vec<ServiceCard>,
+    pub proof_points: Vec<ServicePoint>,
+    pub process: Vec<ServiceStep>,
+}
+#[derive(Template)]
+#[template(path = "pages/industries.html")]
+pub struct IndustriesTemplate {
+    pub industries: Vec<IndustryCardView>,
+    pub total_count: usize,
+    pub featured_count: usize,
+}
+#[derive(Template)]
+#[template(path = "pages/portfolio.html")]
+pub struct CaseStudiesTemplate {
+    pub portfolios: Vec<PortfolioCardView>,
+    pub featured_portfolios: Vec<PortfolioCardView>,
+    pub total_count: usize,
+    pub featured_count: usize,
+    pub industry_count: usize,
+}
+#[derive(Template)]
+#[template(path = "pages/insights.html")]
+pub struct InsightsTemplate {
+    pub insights: Vec<InsightCardView>,
+    pub featured_insights: Vec<InsightCardView>,
+    pub categories: Vec<String>,
+    pub snapshot_metrics: Vec<InsightSnapshotMetric>,
+    pub pagination: PaginationView,
+}
+
+#[derive(Debug, Clone)]
+pub struct InsightSnapshotMetric {
+    pub value: String,
+    pub label: String,
+}
+
+#[derive(Debug, Clone)]
+pub struct PaginationView {
+    pub current_page: usize,
+    pub total_pages: usize,
+    pub previous_page_url: Option<String>,
+    pub next_page_url: Option<String>,
+    pub page_links: Vec<PaginationLink>,
+}
+
+#[derive(Debug, Clone)]
+pub struct PaginationLink {
+    pub label: String,
+    pub url: String,
+    pub active: bool,
+}
+#[derive(Template)]
+#[template(path = "pages/careers.html")]
+pub struct CareersTemplate {
+    pub careers: Vec<CareerCardView>,
+    pub featured_roles: Vec<CareerCardView>,
+    pub open_roles: usize,
+    pub teams: Vec<String>,
+}
+
+page!(WhyWorkTemplate, "pages/careers/why-work.html");
+page!(FaqTemplate, "pages/faq.html");
 #[derive(Template)]
 #[template(path = "pages/contactus.html")]
 pub struct ContactTemplate {
@@ -33,87 +109,136 @@ page!(PrivacyPolicyTemplate, "pages/privacypolicy.html");
 page!(CookiePolicyTemplate, "pages/cookiepolicy.html");
 
 // Service pages
-page!(
-    WebDevelopmentTemplate,
-    "pages/services/web-development.html"
-);
-page!(
-    MobileAppDevelopmentTemplate,
-    "pages/services/mobile-app-development.html"
-);
-page!(
-    CustomSoftwareDevelopmentTemplate,
-    "pages/services/custom-software-development.html"
-);
-page!(
-    SoftwareDevelopmentTemplate,
-    "pages/services/software-development.html"
-);
-page!(
-    DigitalMarketingTemplate,
-    "pages/services/digital-marketing.html"
-);
-page!(
-    SeoSearchGrowthTemplate,
-    "pages/services/seo-search-growth.html"
-);
-page!(
-    HostingDomainCloudTemplate,
-    "pages/services/hosting-domain-cloud.html"
-);
-page!(AiAutomationTemplate, "pages/services/ai-automation.html");
-page!(
-    ItConsultationTemplate,
-    "pages/services/it-consultation.html"
-);
+#[derive(Template)]
+#[template(path = "pages/services/detail.html")]
+pub struct WebDevelopmentTemplate {
+    pub page: ServicePageContext,
+}
+
+#[derive(Template)]
+#[template(path = "pages/services/detail.html")]
+pub struct MobileAppDevelopmentTemplate {
+    pub page: ServicePageContext,
+}
+
+#[derive(Template)]
+#[template(path = "pages/services/detail.html")]
+pub struct CustomSoftwareDevelopmentTemplate {
+    pub page: ServicePageContext,
+}
+
+#[derive(Template)]
+#[template(path = "pages/services/detail.html")]
+pub struct SoftwareDevelopmentTemplate {
+    pub page: ServicePageContext,
+}
+
+#[derive(Template)]
+#[template(path = "pages/services/detail.html")]
+pub struct DigitalMarketingTemplate {
+    pub page: ServicePageContext,
+}
+
+#[derive(Template)]
+#[template(path = "pages/services/detail.html")]
+pub struct SeoSearchGrowthTemplate {
+    pub page: ServicePageContext,
+}
+
+#[derive(Template)]
+#[template(path = "pages/services/detail.html")]
+pub struct HostingDomainCloudTemplate {
+    pub page: ServicePageContext,
+}
+
+#[derive(Template)]
+#[template(path = "pages/services/detail.html")]
+pub struct AiAutomationTemplate {
+    pub page: ServicePageContext,
+}
+
+#[derive(Template)]
+#[template(path = "pages/services/detail.html")]
+pub struct ItConsultationTemplate {
+    pub page: ServicePageContext,
+}
 
 // Dynamic public pages
 #[derive(Template)]
 #[template(path = "pages/portfolios/single.html")]
 pub struct PortfolioSingleTemplate {
-    pub slug: String,
+    pub portfolio: PortfolioDetailView,
+    pub related: Vec<PortfolioCardView>,
 }
 
 #[derive(Template)]
 #[template(path = "pages/insights/single.html")]
 pub struct InsightSingleTemplate {
-    pub slug: String,
+    pub insight: InsightDetailView,
+    pub related: Vec<InsightCardView>,
 }
 
 #[derive(Template)]
 #[template(path = "pages/careers/single.html")]
 pub struct CareerSingleTemplate {
-    pub slug: String,
+    pub career: CareerDetailView,
+    pub related: Vec<CareerCardView>,
 }
 
 #[derive(Template)]
 #[template(path = "pages/careers/apply.html")]
 pub struct CareerApplyTemplate {
-    pub slug: String,
+    pub career: CareerDetailView,
+    pub form: CareerApplicationEditorView,
+    pub success: bool,
 }
 
 // Dashboard
 page!(DashboardTemplate, "dashboard/index.html");
 
-page!(
-    DashboardPortfoliosTemplate,
-    "dashboard/portfolios/index.html"
-);
-page!(
-    DashboardPortfolioCreateTemplate,
-    "dashboard/portfolios/create.html"
-);
-page!(
-    DashboardPortfolioEditTemplate,
-    "dashboard/portfolios/edit.html"
-);
+#[derive(Template)]
+#[template(path = "dashboard/portfolios/index.html")]
+pub struct DashboardPortfoliosTemplate {
+    pub portfolios: Vec<PortfolioRecord>,
+    pub saved: bool,
+    pub deleted: bool,
+}
 
-page!(DashboardInsightsTemplate, "dashboard/insights/index.html");
-page!(
-    DashboardInsightCreateTemplate,
-    "dashboard/insights/create.html"
-);
-page!(DashboardInsightEditTemplate, "dashboard/insights/edit.html");
+#[derive(Template)]
+#[template(path = "dashboard/portfolios/create.html")]
+pub struct DashboardPortfolioCreateTemplate {
+    pub portfolio: PortfolioEditorView,
+    pub action_url: String,
+}
+
+#[derive(Template)]
+#[template(path = "dashboard/portfolios/edit.html")]
+pub struct DashboardPortfolioEditTemplate {
+    pub portfolio: PortfolioEditorView,
+    pub action_url: String,
+}
+
+#[derive(Template)]
+#[template(path = "dashboard/insights/index.html")]
+pub struct DashboardInsightsTemplate {
+    pub insights: Vec<InsightRecord>,
+    pub saved: bool,
+    pub deleted: bool,
+}
+
+#[derive(Template)]
+#[template(path = "dashboard/insights/create.html")]
+pub struct DashboardInsightCreateTemplate {
+    pub insight: InsightEditorView,
+    pub action_url: String,
+}
+
+#[derive(Template)]
+#[template(path = "dashboard/insights/edit.html")]
+pub struct DashboardInsightEditTemplate {
+    pub insight: InsightEditorView,
+    pub action_url: String,
+}
 
 page!(
     DashboardInsightCategoriesTemplate,
@@ -187,10 +312,33 @@ page!(
     DashboardQuoteRequestsTemplate,
     "dashboard/quote-requests/index.html"
 );
-page!(
-    DashboardNewsletterSubscribersTemplate,
-    "dashboard/newsletter-subscribers/index.html"
-);
+#[derive(Template)]
+#[template(path = "dashboard/newsletter-subscribers/index.html")]
+pub struct DashboardNewsletterSubscribersTemplate {
+    pub subscribers: Vec<NewsletterSubscriberRecord>,
+    pub subscriber: NewsletterSubscriberEditorView,
+    pub action_url: String,
+    pub saved: bool,
+    pub deleted: bool,
+    pub imported_count: usize,
+}
+
+#[derive(Template)]
+#[template(path = "dashboard/newsletter-subscribers/edit.html")]
+pub struct DashboardNewsletterSubscriberEditTemplate {
+    pub subscriber: NewsletterSubscriberEditorView,
+    pub action_url: String,
+}
+
+#[derive(Template)]
+#[template(path = "dashboard/newsletters/index.html")]
+pub struct DashboardNewslettersTemplate {
+    pub campaigns: Vec<NewsletterCampaignRecord>,
+    pub campaign: NewsletterCampaignEditorView,
+    pub action_url: String,
+    pub saved: bool,
+    pub deleted: bool,
+}
 
 page!(DashboardFaqsTemplate, "dashboard/faqs/index.html");
 page!(DashboardFaqCreateTemplate, "dashboard/faqs/create.html");
@@ -209,16 +357,44 @@ page!(
     "dashboard/testimonials/edit.html"
 );
 
-page!(DashboardCareersTemplate, "dashboard/careers/index.html");
-page!(
-    DashboardCareerCreateTemplate,
-    "dashboard/careers/create.html"
-);
-page!(DashboardCareerEditTemplate, "dashboard/careers/edit.html");
-page!(
-    DashboardCareerApplicationsTemplate,
-    "dashboard/career-applications/index.html"
-);
+#[derive(Template)]
+#[template(path = "dashboard/careers/index.html")]
+pub struct DashboardCareersTemplate {
+    pub careers: Vec<CareerRecord>,
+    pub saved: bool,
+    pub deleted: bool,
+}
+
+#[derive(Template)]
+#[template(path = "dashboard/careers/create.html")]
+pub struct DashboardCareerCreateTemplate {
+    pub career: CareerEditorView,
+    pub action_url: String,
+}
+
+#[derive(Template)]
+#[template(path = "dashboard/careers/edit.html")]
+pub struct DashboardCareerEditTemplate {
+    pub career: CareerEditorView,
+    pub action_url: String,
+}
+
+#[derive(Template)]
+#[template(path = "dashboard/career-applications/index.html")]
+pub struct DashboardCareerApplicationsTemplate {
+    pub applications: Vec<CareerApplicationRecord>,
+    pub total_count: usize,
+    pub new_count: usize,
+    pub shortlisted_count: usize,
+    pub updated: bool,
+    pub deleted: bool,
+}
+
+#[derive(Template)]
+#[template(path = "dashboard/career-applications/show.html")]
+pub struct CareerApplicationShowTemplate {
+    pub application: CareerApplicationRecord,
+}
 
 page!(DashboardServicesTemplate, "dashboard/services/index.html");
 page!(
@@ -227,18 +403,27 @@ page!(
 );
 page!(DashboardServiceEditTemplate, "dashboard/services/edit.html");
 
-page!(
-    DashboardIndustriesTemplate,
-    "dashboard/industries/index.html"
-);
-page!(
-    DashboardIndustryCreateTemplate,
-    "dashboard/industries/create.html"
-);
-page!(
-    DashboardIndustryEditTemplate,
-    "dashboard/industries/edit.html"
-);
+#[derive(Template)]
+#[template(path = "dashboard/industries/index.html")]
+pub struct DashboardIndustriesTemplate {
+    pub industries: Vec<IndustryRecord>,
+    pub saved: bool,
+    pub deleted: bool,
+}
+
+#[derive(Template)]
+#[template(path = "dashboard/industries/create.html")]
+pub struct DashboardIndustryCreateTemplate {
+    pub industry: IndustryEditorView,
+    pub action_url: String,
+}
+
+#[derive(Template)]
+#[template(path = "dashboard/industries/edit.html")]
+pub struct DashboardIndustryEditTemplate {
+    pub industry: IndustryEditorView,
+    pub action_url: String,
+}
 
 page!(DashboardPagesTemplate, "dashboard/pages/index.html");
 page!(DashboardSeoTemplate, "dashboard/seo/index.html");

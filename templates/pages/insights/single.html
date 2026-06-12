@@ -1,3 +1,49 @@
-<!-- templates/pages/insights/single.html -->
-<h1>Insight Details</h1>
-<p>Slug: {{ slug }}</p>
+{% extends "base.html" %}
+
+{% block title %}{{ insight.meta_title }}{% endblock %}
+
+{% block meta_description %}
+{{ insight.meta_description }}
+{% endblock %}
+
+{% block canonical %}{{ insight.canonical_url }}{% endblock %}
+{% block og_title %}{{ insight.meta_title }}{% endblock %}
+{% block og_description %}{{ insight.meta_description }}{% endblock %}
+{% block og_url %}{{ insight.canonical_url }}{% endblock %}
+{% block og_image %}{{ insight.og_image_url }}{% endblock %}
+{% block twitter_title %}{{ insight.meta_title }}{% endblock %}
+{% block twitter_description %}{{ insight.meta_description }}{% endblock %}
+{% block twitter_image %}{{ insight.og_image_url }}{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "{{ insight.title }}",
+    "description": "{{ insight.meta_description }}",
+    "image": "{{ insight.og_image_url }}",
+    "datePublished": "{{ insight.published_date_iso }}",
+    "dateModified": "{{ insight.updated_date_iso }}",
+    "author": {
+        "@type": "Person",
+        "name": "{{ insight.author }}"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "LKProfessionals (Pvt) Ltd.",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://lkprofessionals.com/static/images/logo.png"
+        }
+    },
+    "mainEntityOfPage": "{{ insight.canonical_url }}"
+}
+</script>
+{% endblock %}
+
+{% block content %}
+{% include "components/insights/detail-hero.html" %}
+{% include "components/insights/detail-body.html" %}
+{% include "components/insights/detail-related.html" %}
+{% endblock %}

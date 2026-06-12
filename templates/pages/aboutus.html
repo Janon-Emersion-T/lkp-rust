@@ -1,6 +1,45 @@
 {% extends "base.html" %}
 
-{% block title %}LKProfessionals (Pvt) Ltd. | IT Solutions{% endblock %}
+{% block title %}About LKProfessionals | Digital Solutions Company in Sri Lanka{% endblock %}
+{% block meta_description %}Learn about LKProfessionals, our digital delivery approach, service ecosystem, technical capabilities, and the industries we support from Sri Lanka to global markets.{% endblock %}
+{% block canonical %}https://lkprofessionals.com/about{% endblock %}
+{% block og_title %}About LKProfessionals | Digital Solutions Company{% endblock %}
+{% block og_description %}Meet the team, methods, and operational mindset behind LKProfessionals web, software, SEO, and automation services.{% endblock %}
+{% block og_url %}https://lkprofessionals.com/about{% endblock %}
+{% block twitter_title %}About LKProfessionals | Digital Solutions Company{% endblock %}
+{% block twitter_description %}The story, culture, service model, and technical depth behind LKProfessionals.{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  "name": "About LKProfessionals",
+  "url": "https://lkprofessionals.com/about",
+  "description": "Learn about LKProfessionals, a digital solutions company based in Jaffna, Sri Lanka."
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://lkprofessionals.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "About",
+      "item": "https://lkprofessionals.com/about"
+    }
+  ]
+}
+</script>
+{% endblock %}
 
 {% block content %}
 {% include "components/about/hero.html" %}

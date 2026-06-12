@@ -1,88 +1,264 @@
 {% extends "dashboard/base.html" %}
 
+{% block title %}
+    Contact Inbox | LKProfessionals Dashboard
+{% endblock %}
+
 {% block content %}
 <div class="space-y-8">
-    <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-        <div>
-            <p class="text-sm font-bold uppercase tracking-[0.25em] text-cyan-600">Inbox</p>
-            <h1 class="mt-2 text-3xl font-black text-slate-950">Contact Messages</h1>
-            <p class="mt-2 text-sm text-slate-600">
-                Review contact submissions, mark them as contacted, and store internal replies.
-            </p>
+    <section class="crm-hero overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-sm">
+        <div class="grid gap-8 p-6 lg:grid-cols-[1.35fr_0.85fr] lg:p-8">
+            <div>
+                <p class="text-sm font-black uppercase tracking-[0.28em] text-cyan-700">CRM Inbox</p>
+                <h1 class="mt-3 max-w-3xl text-3xl font-black tracking-tight text-slate-950 md:text-4xl">
+                    Every contact message in one review queue, with lead context baked into every card.
+                </h1>
+                <p class="mt-4 max-w-2xl text-sm leading-7 text-slate-600 md:text-base">
+                    This inbox is optimized for response quality. Read the inquiry, see score and status instantly,
+                    store follow-up notes, and move the best conversations deeper into the pipeline.
+                </p>
+
+                <div class="crm-subnav mt-6">
+                    <a href="/dashboard/leads" class="crm-subnav-link">Leads Pipeline</a>
+                    <a href="/dashboard/contact-messages" class="crm-subnav-link crm-subnav-link-active">Contact Inbox</a>
+                </div>
+            </div>
+
+            <div class="grid gap-4 sm:grid-cols-2">
+                <div class="crm-hero-panel">
+                    <p class="crm-hero-label">Inbox Ready</p>
+                    <p class="mt-3 text-3xl font-black text-slate-950">{{ stats.new_count }}</p>
+                    <p class="mt-2 text-sm text-slate-500">New inquiries waiting for first touch.</p>
+                </div>
+
+                <div class="crm-hero-panel">
+                    <p class="crm-hero-label">High Priority</p>
+                    <p class="mt-3 text-3xl font-black text-slate-950">{{ stats.high_priority_count }}</p>
+                    <p class="mt-2 text-sm text-slate-500">High-intent records worth quick response.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <article class="crm-stat-card">
+            <p class="crm-stat-label">Inbox Total</p>
+            <p class="crm-stat-value">{{ stats.total }}</p>
+            <p class="crm-stat-note">Every contact message captured from the site.</p>
+        </article>
+
+        <article class="crm-stat-card">
+            <p class="crm-stat-label">Contacted</p>
+            <p class="crm-stat-value">{{ stats.contacted_count }}</p>
+            <p class="crm-stat-note">Records where first response has already happened.</p>
+        </article>
+
+        <article class="crm-stat-card">
+            <p class="crm-stat-label">Qualified</p>
+            <p class="crm-stat-value">{{ stats.qualified_count }}</p>
+            <p class="crm-stat-note">Conversations that look commercially promising.</p>
+        </article>
+
+        <article class="crm-stat-card">
+            <p class="crm-stat-label">Spam + Archived</p>
+            <p class="crm-stat-value">{{ stats.spam_count + stats.archived_count }}</p>
+            <p class="crm-stat-note">Messages already closed out of the main queue.</p>
+        </article>
+    </section>
+
+    <section class="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
+        <div class="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+            <div>
+                <p class="text-sm font-black uppercase tracking-[0.24em] text-slate-500">Inbox Filters</p>
+                <h2 class="mt-2 text-2xl font-black text-slate-950">Focus the queue without losing context</h2>
+                <p class="mt-2 text-sm text-slate-500">
+                    Use the same CRM filters here as the pipeline so your view stays consistent.
+                </p>
+            </div>
+
+            {% if filters.is_active() %}
+            <a href="/dashboard/contact-messages"
+                class="text-sm font-black text-cyan-700 transition hover:text-cyan-900">
+                Clear all filters
+            </a>
+            {% endif %}
         </div>
 
-        <a href="/dashboard/leads"
-            class="rounded-2xl bg-slate-950 px-5 py-3 text-sm font-bold text-white transition hover:bg-cyan-600">
-            Leads Dashboard
-        </a>
-    </div>
+        <form action="/dashboard/contact-messages" method="get" class="mt-6 grid gap-4 xl:grid-cols-[1.15fr_0.7fr_0.7fr_0.7fr_auto]">
+            <label class="grid gap-2 text-sm font-bold text-slate-700">
+                Search
+                <input name="q" value="{{ filters.q }}" placeholder="Name, email, company, subject, message..."
+                    class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-cyan-500 focus:bg-white focus:ring-4 focus:ring-cyan-100">
+            </label>
 
-    <div class="grid gap-6">
-        {% for message in messages %}
-        <article class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-            <div class="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
-                <div>
-                    <div class="flex flex-wrap items-center gap-2">
-                        <span class="rounded-full bg-cyan-50 px-3 py-1 text-xs font-black uppercase text-cyan-700">
-                            {{ message.status }}
-                        </span>
+            <label class="grid gap-2 text-sm font-bold text-slate-700">
+                Status
+                <select name="status" class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-cyan-500 focus:bg-white focus:ring-4 focus:ring-cyan-100">
+                    <option value="all" {% if filters.status == "all" %}selected{% endif %}>All status</option>
+                    <option value="new" {% if filters.status == "new" %}selected{% endif %}>New</option>
+                    <option value="contacted" {% if filters.status == "contacted" %}selected{% endif %}>Contacted</option>
+                    <option value="qualified" {% if filters.status == "qualified" %}selected{% endif %}>Qualified</option>
+                    <option value="converted" {% if filters.status == "converted" %}selected{% endif %}>Converted</option>
+                    <option value="archived" {% if filters.status == "archived" %}selected{% endif %}>Archived</option>
+                    <option value="spam" {% if filters.status == "spam" %}selected{% endif %}>Spam</option>
+                </select>
+            </label>
 
-                        <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-black uppercase text-slate-700">
-                            {{ message.priority }} priority
-                        </span>
+            <label class="grid gap-2 text-sm font-bold text-slate-700">
+                Priority
+                <select name="priority" class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-cyan-500 focus:bg-white focus:ring-4 focus:ring-cyan-100">
+                    <option value="all" {% if filters.priority == "all" %}selected{% endif %}>All priority</option>
+                    <option value="high" {% if filters.priority == "high" %}selected{% endif %}>High</option>
+                    <option value="medium" {% if filters.priority == "medium" %}selected{% endif %}>Medium</option>
+                    <option value="normal" {% if filters.priority == "normal" %}selected{% endif %}>Normal</option>
+                </select>
+            </label>
 
-                        <span class="rounded-full bg-amber-50 px-3 py-1 text-xs font-black uppercase text-amber-700">
-                            Score {{ message.lead_score }}
-                        </span>
-                    </div>
+            <label class="grid gap-2 text-sm font-bold text-slate-700">
+                Service
+                <select name="service" class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-cyan-500 focus:bg-white focus:ring-4 focus:ring-cyan-100">
+                    <option value="all" {% if filters.service == "all" %}selected{% endif %}>All services</option>
+                    <option value="web_development" {% if filters.service == "web_development" %}selected{% endif %}>Web Development</option>
+                    <option value="custom_software" {% if filters.service == "custom_software" %}selected{% endif %}>Custom Software</option>
+                    <option value="pos_erp" {% if filters.service == "pos_erp" %}selected{% endif %}>POS / ERP</option>
+                    <option value="seo" {% if filters.service == "seo" %}selected{% endif %}>SEO</option>
+                    <option value="digital_marketing" {% if filters.service == "digital_marketing" %}selected{% endif %}>Digital Marketing</option>
+                    <option value="hosting_domain" {% if filters.service == "hosting_domain" %}selected{% endif %}>Hosting & Domain</option>
+                    <option value="it_consultation" {% if filters.service == "it_consultation" %}selected{% endif %}>IT Consultation</option>
+                    <option value="ai_automation" {% if filters.service == "ai_automation" %}selected{% endif %}>AI Automation</option>
+                </select>
+            </label>
 
-                    <h2 class="mt-4 text-xl font-black text-slate-950">{{ message.subject }}</h2>
+            <div class="flex items-end">
+                <button class="w-full rounded-2xl bg-slate-950 px-5 py-3 text-sm font-black text-white transition hover:bg-cyan-600 xl:w-auto">
+                    Apply Filters
+                </button>
+            </div>
+        </form>
+    </section>
 
-                    <div class="mt-2 text-sm text-slate-500">
-                        {{ message.name }} · {{ message.email }}
-                        {% if let Some(phone) = message.phone %}
-                        · {{ phone }}
-                        {% endif %}
-                    </div>
-
-                    {% if let Some(company) = message.company %}
-                    <div class="mt-1 text-sm font-semibold text-slate-600">
-                        Company: {{ company }}
-                    </div>
-                    {% endif %}
-                </div>
-
-                <a href="/dashboard/contact-messages/{{ message.id }}"
-                    class="rounded-2xl border border-slate-200 px-4 py-3 text-sm font-bold text-slate-700 transition hover:border-cyan-300 hover:bg-cyan-50 hover:text-cyan-700">
-                    Mark Reviewed
-                </a>
+    <section class="space-y-4">
+        <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+            <div>
+                <p class="text-sm font-black uppercase tracking-[0.24em] text-slate-500">Review Queue</p>
+                <h2 class="mt-2 text-2xl font-black text-slate-950">Message-first cards for better follow-up</h2>
             </div>
 
-            <div class="mt-6 rounded-2xl bg-slate-50 p-5 text-sm leading-7 text-slate-700">
-                {{ message.message }}
-            </div>
-
-            <form action="/dashboard/contact-messages/{{ message.id }}/reply" method="post" class="mt-6 grid gap-3">
-                <label class="text-sm font-black text-slate-950">Internal Reply / Follow-up Note</label>
-
-                <textarea name="admin_reply" rows="3"
-                    placeholder="Example: Called client, asked for project scope, send quote tomorrow..."
-                    class="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100">{% if let Some(reply) = message.admin_reply %}{{ reply }}{% endif %}</textarea>
-
-                <div>
-                    <button class="rounded-2xl bg-cyan-500 px-5 py-3 text-sm font-black text-slate-950 transition hover:bg-cyan-400">
-                        Save Reply
-                    </button>
-                </div>
-            </form>
-        </article>
-        {% endfor %}
+            <a href="/dashboard/leads"
+                class="inline-flex items-center rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-black text-slate-700 transition hover:border-cyan-300 hover:bg-cyan-50 hover:text-cyan-700">
+                Open Leads Pipeline
+            </a>
+        </div>
 
         {% if messages.len() == 0 %}
-        <div class="rounded-3xl border border-dashed border-slate-300 bg-white p-10 text-center text-sm font-semibold text-slate-500">
-            No contact messages yet.
+        <div class="rounded-[2rem] border border-dashed border-slate-300 bg-white p-12 text-center shadow-sm">
+            <p class="text-lg font-black text-slate-950">No contact messages found</p>
+            <p class="mt-3 text-sm leading-7 text-slate-500">
+                New inquiries will land here automatically as visitors submit the contact form.
+            </p>
+        </div>
+        {% else %}
+        <div class="grid gap-5 2xl:grid-cols-2">
+            {% for message in messages %}
+            <article class="crm-lead-card">
+                <div class="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+                    <div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="inline-flex rounded-full px-3 py-1 text-[11px] font-black uppercase ring-1 {{ message.status_badge_class() }}">
+                                {{ message.status_label() }}
+                            </span>
+                            <span class="inline-flex rounded-full px-3 py-1 text-[11px] font-black uppercase ring-1 {{ message.priority_badge_class() }}">
+                                {{ message.priority_label() }}
+                            </span>
+                            <span class="inline-flex rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-[11px] font-black uppercase tracking-[0.2em] text-slate-600">
+                                {{ message.lead_score }}/100
+                            </span>
+                        </div>
+
+                        <h3 class="mt-4 text-xl font-black text-slate-950">{{ message.subject }}</h3>
+                        <p class="mt-2 text-sm font-semibold text-slate-600">{{ message.name }} · {{ message.email }}</p>
+
+                        <div class="mt-4 grid gap-3 sm:grid-cols-3">
+                            <div class="crm-mini-stat">
+                                <p class="crm-mini-label">Service</p>
+                                <p class="crm-mini-value">{{ message.service_label() }}</p>
+                            </div>
+
+                            <div class="crm-mini-stat">
+                                <p class="crm-mini-label">Company</p>
+                                <p class="crm-mini-value">{{ message.company_label() }}</p>
+                            </div>
+
+                            <div class="crm-mini-stat">
+                                <p class="crm-mini-label">Timeline</p>
+                                <p class="crm-mini-value">{{ message.timeline_label() }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 lg:min-w-44">
+                        <p class="text-xs font-black uppercase tracking-[0.22em] text-slate-500">Captured</p>
+                        <p class="mt-2 text-sm font-bold leading-6 text-slate-900">{{ message.created_at }}</p>
+                        <p class="mt-3 text-xs font-bold uppercase tracking-[0.2em] text-slate-400">{{ message.source_label() }}</p>
+                    </div>
+                </div>
+
+                <div class="mt-6 rounded-3xl border border-slate-200 bg-white p-4">
+                    <p class="text-xs font-black uppercase tracking-[0.22em] text-slate-500">Message</p>
+                    <p class="mt-3 line-clamp-4 text-sm leading-7 text-slate-600">{{ message.message }}</p>
+                </div>
+
+                {% if let Some(note_preview) = message.note_preview() %}
+                <div class="mt-4 rounded-3xl border border-cyan-100 bg-cyan-50/70 p-4">
+                    <p class="text-xs font-black uppercase tracking-[0.22em] text-cyan-700">Latest Team Note</p>
+                    <p class="mt-2 line-clamp-2 text-sm leading-7 text-slate-700">{{ note_preview }}</p>
+                </div>
+                {% endif %}
+
+                <div class="mt-6 grid gap-3">
+                    <label class="text-sm font-black text-slate-950">Internal Reply / Follow-up Note</label>
+
+                    <form action="/dashboard/contact-messages/{{ message.id }}/reply" method="post" class="grid gap-3">
+                        <textarea name="admin_reply" rows="3"
+                            placeholder="Called client, requested scope, preparing quote, follow-up tomorrow..."
+                            class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-cyan-500 focus:bg-white focus:ring-4 focus:ring-cyan-100">{% if let Some(reply) = message.admin_reply %}{{ reply }}{% endif %}</textarea>
+
+                        <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                            <div class="flex flex-wrap gap-3">
+                                <button class="rounded-full bg-slate-950 px-4 py-2 text-sm font-black text-white transition hover:bg-cyan-600">
+                                    Save Note
+                                </button>
+
+                                <a href="/dashboard/contact-messages/{{ message.id }}"
+                                    class="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-black text-slate-700 transition hover:border-cyan-300 hover:bg-cyan-50 hover:text-cyan-700">
+                                    Open Full Record
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="flex flex-wrap gap-3">
+                        <form action="/dashboard/contact-messages/{{ message.id }}/quick-status" method="post">
+                            <input type="hidden" name="status" value="contacted">
+                            <input type="hidden" name="redirect_to" value="/dashboard/contact-messages">
+                            <button class="rounded-full border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-black text-blue-700 transition hover:bg-blue-100">
+                                Mark Contacted
+                            </button>
+                        </form>
+
+                        <form action="/dashboard/contact-messages/{{ message.id }}/quick-status" method="post">
+                            <input type="hidden" name="status" value="qualified">
+                            <input type="hidden" name="redirect_to" value="/dashboard/contact-messages">
+                            <button class="rounded-full border border-amber-200 bg-amber-50 px-4 py-2 text-sm font-black text-amber-700 transition hover:bg-amber-100">
+                                Mark Qualified
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
         </div>
         {% endif %}
-    </div>
+    </section>
 </div>
 {% endblock %}
