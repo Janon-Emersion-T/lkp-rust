@@ -31,6 +31,8 @@ pub struct ContactMessageForm {
     pub project_timeline: Option<String>,
     pub subject: String,
     pub message: String,
+    pub source: Option<String>,
+    pub redirect_to: Option<String>,
 
     // Honeypot field. Real users will never fill this.
     // Bots usually fill every input they see.
@@ -162,6 +164,76 @@ fn user_agent(headers: &HeaderMap) -> Option<String> {
         .map(ToOwned::to_owned)
 }
 
+fn safe_public_redirect(value: Option<&str>, fallback: &str) -> String {
+    value
+        .map(str::trim)
+        .filter(|value| value.starts_with('/'))
+        .filter(|value| !value.starts_with("//"))
+        .filter(|value| !value.starts_with("/dashboard"))
+        .map(ToOwned::to_owned)
+        .unwrap_or_else(|| fallback.to_string())
+}
+
+fn clean_source(value: &Option<String>, fallback: &str) -> String {
+    clean_optional(value).unwrap_or_else(|| fallback.to_string())
+}
+
+async fn insert_contact_message(
+    state: &AppState,
+    headers: &HeaderMap,
+    form: &ContactMessageForm,
+    fallback_source: &str,
+) -> Result<(), sqlx::Error> {
+    let name = form.name.trim();
+    let email = form.email.trim().to_lowercase();
+    let subject = form.subject.trim();
+    let message = form.message.trim();
+    let lead_score = calculate_lead_score(form);
+    let priority = calculate_priority(lead_score);
+
+    sqlx::query(
+        r#"
+        INSERT INTO contact_messages
+        (
+            name,
+            email,
+            phone,
+            company,
+            service_interest,
+            budget_range,
+            project_timeline,
+            subject,
+            message,
+            source,
+            status,
+            priority,
+            lead_score,
+            client_ip,
+            user_agent
+        )
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, 'new', $11, $12, $13, $14)
+        "#,
+    )
+    .bind(name)
+    .bind(email)
+    .bind(clean_optional(&form.phone))
+    .bind(clean_optional(&form.company))
+    .bind(clean_optional(&form.service_interest))
+    .bind(clean_optional(&form.budget_range))
+    .bind(clean_optional(&form.project_timeline))
+    .bind(subject)
+    .bind(message)
+    .bind(clean_source(&form.source, fallback_source))
+    .bind(priority)
+    .bind(lead_score)
+    .bind(client_ip(headers))
+    .bind(user_agent(headers))
+    .execute(&state.db)
+    .await?;
+
+    Ok(())
+}
+
 pub async fn submit_contact_message(
     State(state): State<AppState>,
     headers: HeaderMap,
@@ -196,49 +268,7 @@ pub async fn submit_contact_message(
             .into_response();
     }
 
-    let lead_score = calculate_lead_score(&form);
-    let priority = calculate_priority(lead_score);
-
-    let result = sqlx::query(
-        r#"
-        INSERT INTO contact_messages
-        (
-            name,
-            email,
-            phone,
-            company,
-            service_interest,
-            budget_range,
-            project_timeline,
-            subject,
-            message,
-            source,
-            status,
-            priority,
-            lead_score,
-            client_ip,
-            user_agent
-        )
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, 'contact_page', 'new', $10, $11, $12, $13)
-        "#,
-    )
-    .bind(name)
-    .bind(email)
-    .bind(clean_optional(&form.phone))
-    .bind(clean_optional(&form.company))
-    .bind(clean_optional(&form.service_interest))
-    .bind(clean_optional(&form.budget_range))
-    .bind(clean_optional(&form.project_timeline))
-    .bind(subject)
-    .bind(message)
-    .bind(priority)
-    .bind(lead_score)
-    .bind(client_ip(&headers))
-    .bind(user_agent(&headers))
-    .execute(&state.db)
-    .await;
-
-    match result {
+    match insert_contact_message(&state, &headers, &form, "contact_page").await {
         Ok(_) => Redirect::to("/contact?success=1").into_response(),
         Err(error) => {
             eprintln!("Failed to submit contact message: {error}");
@@ -246,6 +276,59 @@ pub async fn submit_contact_message(
             (
                 StatusCode::INTERNAL_SERVER_ERROR,
                 "Failed to submit contact message.",
+            )
+                .into_response()
+        }
+    }
+}
+
+pub async fn submit_request_quote(
+    State(state): State<AppState>,
+    headers: HeaderMap,
+    Form(form): Form<ContactMessageForm>,
+) -> impl IntoResponse {
+    let name = form.name.trim();
+    let email = form.email.trim().to_lowercase();
+    let message = form.message.trim();
+    let subject = if form.subject.trim().is_empty() {
+        "Project Quote Request"
+    } else {
+        form.subject.trim()
+    };
+
+    if clean_optional(&form.website).is_some() {
+        let redirect_to =
+            safe_public_redirect(form.redirect_to.as_deref(), "/?request_quote=success");
+        return Redirect::to(&redirect_to).into_response();
+    }
+
+    if name.len() > 120 || email.len() > 180 || subject.len() > 180 || message.len() > 5000 {
+        return (
+            StatusCode::BAD_REQUEST,
+            "Your request is too long. Please shorten it and try again.",
+        )
+            .into_response();
+    }
+
+    if name.len() < 2 || email.len() < 5 || message.len() < 10 {
+        return (
+            StatusCode::BAD_REQUEST,
+            "Please complete the quote request correctly.",
+        )
+            .into_response();
+    }
+
+    match insert_contact_message(&state, &headers, &form, "request_quote_modal").await {
+        Ok(_) => {
+            let redirect_to =
+                safe_public_redirect(form.redirect_to.as_deref(), "/?request_quote=success");
+            Redirect::to(&redirect_to).into_response()
+        }
+        Err(error) => {
+            eprintln!("Failed to submit quote request: {error}");
+            (
+                StatusCode::INTERNAL_SERVER_ERROR,
+                "Failed to submit quote request.",
             )
                 .into_response()
         }

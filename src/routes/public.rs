@@ -7,7 +7,8 @@ use crate::{
     handlers::{
         about, career_apply, career_single, careers, case_studies, case_study_single, contact, faq,
         home, industries, insight_single, insights, request_quote, services,
-        submit_career_application, submit_contact_message, subscribe_newsletter, why_work,
+        submit_career_application, submit_contact_message, submit_request_quote,
+        subscribe_newsletter, why_work,
     },
     state::AppState,
 };
@@ -34,5 +35,5 @@ pub fn public_routes() -> Router<AppState> {
         )
         .route("/contact", get(contact).post(submit_contact_message))
         .route("/faq", get(faq))
-        .route("/request-quote", get(request_quote))
+        .route("/request-quote", get(request_quote).post(submit_request_quote))
 }

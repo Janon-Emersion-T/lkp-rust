@@ -60,6 +60,10 @@
             overflow: hidden;
         }
 
+        body.site-modal-open {
+            overflow: hidden;
+        }
+
         [x-cloak] {
             display: none !important;
         }
@@ -85,7 +89,61 @@
     </style>
 </head>
 
-<body class="bg-white text-slate-950 antialiased">
+<body
+    x-data="{
+        requestQuoteOpen: false,
+        requestQuoteSuccess: false,
+        requestQuoteRedirect: '/',
+        init() {
+            const updateRedirect = () => {
+                const url = new URL(window.location.href);
+                url.searchParams.delete('request_quote');
+                this.requestQuoteRedirect = `${url.pathname}${url.search}${url.hash}` || '/';
+            };
+            const syncFromUrl = () => {
+                const url = new URL(window.location.href);
+                this.requestQuoteSuccess = url.searchParams.get('request_quote') === 'success';
+                if (this.requestQuoteSuccess) {
+                    this.requestQuoteOpen = true;
+                }
+            };
+            updateRedirect();
+            syncFromUrl();
+            document.addEventListener('open-request-quote', () => {
+                updateRedirect();
+                this.requestQuoteSuccess = false;
+                this.requestQuoteOpen = true;
+            });
+            document.addEventListener('click', (event) => {
+                const link = event.target.closest('a[href=\"/request-quote\"]');
+                if (!link || event.defaultPrevented || event.button !== 0) {
+                    return;
+                }
+                if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+                    return;
+                }
+                event.preventDefault();
+                updateRedirect();
+                this.requestQuoteSuccess = false;
+                this.requestQuoteOpen = true;
+            });
+            this.$watch('requestQuoteOpen', (value) => {
+                document.body.classList.toggle('site-modal-open', value);
+            });
+        },
+        closeRequestQuote() {
+            this.requestQuoteOpen = false;
+            if (this.requestQuoteSuccess) {
+                const url = new URL(window.location.href);
+                url.searchParams.delete('request_quote');
+                window.history.replaceState({}, '', `${url.pathname}${url.search}${url.hash}`);
+                this.requestQuoteSuccess = false;
+            }
+        }
+    }"
+    @keydown.escape.window="closeRequestQuote()"
+    class="bg-white text-slate-950 antialiased"
+>
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
     {% include "partials/header.html" %}
@@ -95,6 +153,185 @@
     </main>
 
     {% include "partials/footer.html" %}
+
+    <div
+        x-cloak
+        x-show="requestQuoteOpen"
+        x-transition.opacity
+        class="fixed inset-0 z-[120] flex items-center justify-center bg-slate-950/70 px-4 py-6"
+        @click.self="closeRequestQuote()"
+    >
+        <div
+            x-show="requestQuoteOpen"
+            x-transition:enter="transition duration-200 ease-out"
+            x-transition:enter-start="opacity-0 translate-y-4 scale-95"
+            x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+            x-transition:leave="transition duration-150 ease-in"
+            x-transition:leave-start="opacity-100 translate-y-0 scale-100"
+            x-transition:leave-end="opacity-0 translate-y-4 scale-95"
+            class="relative max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-[2rem] bg-white p-6 text-slate-950 shadow-2xl md:p-8"
+        >
+            <button
+                type="button"
+                class="absolute right-4 top-4 inline-flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:border-cyan-400 hover:text-cyan-600"
+                @click="closeRequestQuote()"
+                aria-label="Close request quote form"
+            >
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="pr-12">
+                <p class="text-sm font-black uppercase tracking-[0.22em] text-cyan-600">Request Quote</p>
+                <h2 class="mt-4 text-3xl font-black tracking-tight md:text-4xl">Tell us what you need and we will qualify the project properly.</h2>
+                <p class="mt-4 text-sm leading-7 text-slate-600">
+                    Share the business context, service area, timeline, and budget direction. Your request will go straight into the dashboard with the rest of the lead pipeline.
+                </p>
+            </div>
+
+            <div
+                x-show="requestQuoteSuccess"
+                class="mt-6 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm font-semibold text-emerald-700"
+            >
+                Thank you. Your quote request has been received and added to the dashboard.
+            </div>
+
+            <form action="/request-quote" method="post" class="mt-8 grid gap-5">
+                <input type="hidden" name="source" value="request_quote_modal">
+                <input type="hidden" name="subject" value="Project Quote Request">
+                <input
+                    type="hidden"
+                    name="redirect_to"
+                    :value="`${requestQuoteRedirect}${requestQuoteRedirect.includes('?') ? '&' : '?'}request_quote=success`"
+                >
+
+                <div class="hidden" aria-hidden="true">
+                    <label>
+                        Website
+                        <input type="text" name="website" tabindex="-1" autocomplete="off">
+                    </label>
+                </div>
+
+                <div class="grid gap-5 sm:grid-cols-2">
+                    <label class="grid gap-2 text-sm font-bold">
+                        Name
+                        <input
+                            name="name"
+                            required
+                            minlength="2"
+                            autocomplete="name"
+                            placeholder="Your name"
+                            class="rounded-2xl border border-slate-200 px-4 py-3 font-medium outline-none transition focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100"
+                        >
+                    </label>
+
+                    <label class="grid gap-2 text-sm font-bold">
+                        Email
+                        <input
+                            name="email"
+                            type="email"
+                            required
+                            autocomplete="email"
+                            placeholder="you@example.com"
+                            class="rounded-2xl border border-slate-200 px-4 py-3 font-medium outline-none transition focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100"
+                        >
+                    </label>
+                </div>
+
+                <div class="grid gap-5 sm:grid-cols-2">
+                    <label class="grid gap-2 text-sm font-bold">
+                        Phone / WhatsApp
+                        <input
+                            name="phone"
+                            autocomplete="tel"
+                            placeholder="+94..."
+                            class="rounded-2xl border border-slate-200 px-4 py-3 font-medium outline-none transition focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100"
+                        >
+                    </label>
+
+                    <label class="grid gap-2 text-sm font-bold">
+                        Company / Brand
+                        <input
+                            name="company"
+                            autocomplete="organization"
+                            placeholder="Company / Brand"
+                            class="rounded-2xl border border-slate-200 px-4 py-3 font-medium outline-none transition focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100"
+                        >
+                    </label>
+                </div>
+
+                <div class="grid gap-5 sm:grid-cols-2">
+                    <label class="grid gap-2 text-sm font-bold">
+                        Service Interest
+                        <select
+                            name="service_interest"
+                            class="rounded-2xl border border-slate-200 px-4 py-3 font-medium outline-none transition focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100"
+                        >
+                            <option value="">Select a service</option>
+                            <option value="web_development">Website Development</option>
+                            <option value="custom_software">Custom Software Development</option>
+                            <option value="software_development">Software Development</option>
+                            <option value="mobile_apps">Mobile App Development</option>
+                            <option value="seo">SEO / Search Growth</option>
+                            <option value="digital_marketing">Digital Marketing</option>
+                            <option value="automation">AI / Automation</option>
+                            <option value="hosting_domains">Hosting / Domains / Cloud</option>
+                            <option value="it_consulting">IT Consultation</option>
+                        </select>
+                    </label>
+
+                    <label class="grid gap-2 text-sm font-bold">
+                        Budget Range
+                        <select
+                            name="budget_range"
+                            class="rounded-2xl border border-slate-200 px-4 py-3 font-medium outline-none transition focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100"
+                        >
+                            <option value="">Select a budget range</option>
+                            <option value="under_500">Under 500 USD</option>
+                            <option value="500_to_1000">500 to 1,000 USD</option>
+                            <option value="1000_to_3000">1,000 to 3,000 USD</option>
+                            <option value="3000_to_5000">3,000 to 5,000 USD</option>
+                            <option value="5000_plus">5,000+ USD</option>
+                            <option value="enterprise">Enterprise / Ongoing</option>
+                        </select>
+                    </label>
+                </div>
+
+                <label class="grid gap-2 text-sm font-bold">
+                    Project Timeline
+                    <select
+                        name="project_timeline"
+                        class="rounded-2xl border border-slate-200 px-4 py-3 font-medium outline-none transition focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100"
+                    >
+                        <option value="">Select a timeline</option>
+                        <option value="urgent">Urgent</option>
+                        <option value="this_month">This month</option>
+                        <option value="next_30_60_days">Next 30 to 60 days</option>
+                        <option value="this_quarter">This quarter</option>
+                        <option value="flexible">Flexible</option>
+                    </select>
+                </label>
+
+                <label class="grid gap-2 text-sm font-bold">
+                    Project Details
+                    <textarea
+                        name="message"
+                        required
+                        minlength="10"
+                        rows="6"
+                        placeholder="Describe what you want to build, improve, or automate."
+                        class="rounded-[1.5rem] border border-slate-200 px-4 py-3 font-medium outline-none transition focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100"
+                    ></textarea>
+                </label>
+
+                <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <p class="text-xs leading-6 text-slate-500">This goes directly into the same dashboard workflow as the main contact form.</p>
+                    <button type="submit" class="inline-flex items-center justify-center rounded-full bg-cyan-500 px-7 py-4 text-sm font-black uppercase tracking-wide text-slate-950 transition hover:-translate-y-0.5 hover:bg-cyan-400">
+                        Submit Quote Request
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 
 </body>
 </html>
