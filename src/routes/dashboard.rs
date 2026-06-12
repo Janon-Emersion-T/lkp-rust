@@ -1,9 +1,11 @@
 use axum::{
+    middleware,
     Router,
     routing::{get, post},
 };
 
 use crate::{
+    auth::middleware::require_auth,
     handlers::{
         dashboard, dashboard_audit_logs, dashboard_career_application_delete,
         dashboard_career_application_show, dashboard_career_application_update,
@@ -217,4 +219,5 @@ pub fn dashboard_routes() -> Router<AppState> {
             "/dashboard/contact-messages/{id}/delete",
             post(dashboard_contact_message_delete),
         )
+        .route_layer(middleware::from_fn(require_auth))
 }
