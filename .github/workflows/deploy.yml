@@ -23,6 +23,7 @@ jobs:
             cd /var/www/lkprofessionals/app
             git fetch origin main
             git reset --hard origin/main
+            chown -R lkprofessionals:lkprofessionals /var/www/lkprofessionals/app
             sudo -u lkprofessionals -H bash -lc 'cd /var/www/lkprofessionals/app && source ~/.cargo/env && npm install && ~/.cargo/bin/just build'
             systemctl restart lkprofessionals
             systemctl status lkprofessionals --no-pager
