@@ -21,7 +21,8 @@ jobs:
             set -e
             git config --global --add safe.directory /var/www/lkprofessionals/app
             cd /var/www/lkprofessionals/app
-            git pull origin main
+            git fetch origin main
+            git reset --hard origin/main
             sudo -u lkprofessionals -H bash -lc 'cd /var/www/lkprofessionals/app && source ~/.cargo/env && npm install && ~/.cargo/bin/just build'
             systemctl restart lkprofessionals
             systemctl status lkprofessionals --no-pager
