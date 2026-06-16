@@ -6,15 +6,21 @@ use axum::{
 use crate::{
     handlers::{
         about, career_apply, career_single, careers, case_studies, case_study_single, contact, faq,
-        home, industries, insight_single, insights, request_quote, services,
-        submit_career_application, submit_contact_message, submit_request_quote,
-        subscribe_newsletter, why_work,
+        home, industries, insight_single, insights, llmo_txt, llms_txt, request_quote, robot_txt,
+        robots_txt, services, sitemap_html, sitemap_xml, submit_career_application,
+        submit_contact_message, submit_request_quote, subscribe_newsletter, why_work,
     },
     state::AppState,
 };
 
 pub fn public_routes() -> Router<AppState> {
     Router::new()
+        .route("/robots.txt", get(robots_txt))
+        .route("/robot.txt", get(robot_txt))
+        .route("/llms.txt", get(llms_txt))
+        .route("/llmo.txt", get(llmo_txt))
+        .route("/sitemap.html", get(sitemap_html))
+        .route("/sitemap.xml", get(sitemap_xml))
         .route("/", get(home))
         .route("/about", get(about))
         .route("/services", get(services))
@@ -35,5 +41,8 @@ pub fn public_routes() -> Router<AppState> {
         )
         .route("/contact", get(contact).post(submit_contact_message))
         .route("/faq", get(faq))
-        .route("/request-quote", get(request_quote).post(submit_request_quote))
+        .route(
+            "/request-quote",
+            get(request_quote).post(submit_request_quote),
+        )
 }

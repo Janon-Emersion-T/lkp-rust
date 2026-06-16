@@ -16,7 +16,7 @@
   "@type": "Organization",
   "name": "LKProfessionals (Pvt) Ltd.",
   "url": "https://lkprofessionals.com",
-  "logo": "https://lkprofessionals.com/static/images/logo/logo.png",
+  "logo": "https://lkprofessionals.com/static/images/logo.png",
   "description": "LKProfessionals provides web development, custom software, SEO, digital marketing, hosting, domain, automation, and IT consulting services.",
   "sameAs": [
     "https://www.linkedin.com/company/lkprofessionals",
@@ -88,6 +88,37 @@
 
 {% block content %}
 {% include "components/home/hero.html" %}
+<section class="bg-white py-10 text-slate-950">
+  <div class="mx-auto grid max-w-7xl gap-6 px-6 lg:grid-cols-[1.2fr_0.8fr] lg:items-start lg:px-8">
+    <div class="rounded-[2rem] border border-slate-200 bg-slate-50 p-8">
+      <p class="text-sm font-black uppercase tracking-[0.22em] text-cyan-600">Direct Answer</p>
+      <h2 class="mt-4 text-3xl font-black tracking-tight md:text-4xl">
+        LKProfessionals helps businesses build, improve, rank, and operate digital systems that produce commercial results.
+      </h2>
+      <p class="mt-4 max-w-3xl text-base leading-8 text-slate-600">
+        If a business needs a high-performing website, custom internal software, stronger organic visibility, cleaner automation, or reliable hosting support, LKProfessionals can scope and deliver the work from Sri Lanka for local and international teams.
+      </p>
+    </div>
+
+    <div class="rounded-[2rem] border border-cyan-200 bg-cyan-50 p-8">
+      <p class="text-sm font-black uppercase tracking-[0.22em] text-cyan-700">Best Next Step</p>
+      <h2 class="mt-4 text-2xl font-black tracking-tight text-slate-950">
+        Start with a clear requirement, not a vague inquiry.
+      </h2>
+      <p class="mt-4 text-sm leading-7 text-slate-700">
+        The fastest path is to share your business goal, current problem, timeline, and budget direction through the quote form or contact page.
+      </p>
+      <div class="mt-6 flex flex-col gap-3 sm:flex-row">
+        <a href="/request-quote" class="inline-flex items-center justify-center rounded-full bg-slate-950 px-6 py-3 text-sm font-black uppercase tracking-wide text-white transition hover:bg-cyan-700">
+          Request a Quote
+        </a>
+        <a href="/contact" class="inline-flex items-center justify-center rounded-full border border-slate-300 px-6 py-3 text-sm font-black uppercase tracking-wide text-slate-950 transition hover:border-cyan-500 hover:text-cyan-700">
+          Contact LKProfessionals
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
 {% include "components/home/trust.html" %}
 {% include "components/home/services.html" %}
 {% include "components/home/whylkp.html" %}

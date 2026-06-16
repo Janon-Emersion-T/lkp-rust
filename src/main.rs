@@ -8,9 +8,9 @@ mod services;
 mod state;
 
 use routes::app_routes;
-use std::env;
 use services::newsletter::start_newsletter_worker;
 use state::AppState;
+use std::env;
 use tower_sessions::{MemoryStore, SessionManagerLayer};
 
 #[tokio::main]
@@ -94,7 +94,12 @@ async fn main() {
 fn env_flag(name: &str, default: bool) -> bool {
     env::var(name)
         .ok()
-        .map(|value| matches!(value.trim().to_ascii_lowercase().as_str(), "1" | "true" | "yes"))
+        .map(|value| {
+            matches!(
+                value.trim().to_ascii_lowercase().as_str(),
+                "1" | "true" | "yes"
+            )
+        })
         .unwrap_or(default)
 }
 

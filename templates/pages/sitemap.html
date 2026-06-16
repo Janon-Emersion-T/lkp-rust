@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}Sitemap | LKProfessionals{% endblock %}
+{% block meta_description %}Browse the LKProfessionals sitemap, including core pages, services, case studies, insights, careers, legal pages, and discovery endpoints.{% endblock %}
+{% block canonical %}https://lkprofessionals.com/sitemap.html{% endblock %}
+{% block og_title %}Sitemap | LKProfessionals{% endblock %}
+{% block og_description %}Human-readable sitemap for LKProfessionals with dynamically updated content links and discovery endpoints.{% endblock %}
+{% block og_url %}https://lkprofessionals.com/sitemap.html{% endblock %}
+
+{% block content %}
+<section class="relative overflow-hidden bg-slate-950 px-6 py-24 text-white">
+  <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(34,211,238,0.18),_transparent_32%),radial-gradient(circle_at_bottom_right,_rgba(14,165,233,0.14),_transparent_26%)]"></div>
+  <div class="relative mx-auto max-w-7xl">
+    <p class="text-sm font-black uppercase tracking-[0.24em] text-cyan-300">Sitemap</p>
+    <div class="mt-6 grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
+      <div>
+        <h1 class="max-w-4xl text-4xl font-black tracking-tight md:text-6xl">Every important LKProfessionals page in one place.</h1>
+        <p class="mt-6 max-w-3xl text-lg leading-8 text-slate-300">
+          This sitemap is generated from the live route structure and published content so clients, search engines, and AI systems can find the right page quickly.
+        </p>
+      </div>
+      <div class="grid gap-4 sm:grid-cols-3 lg:grid-cols-1">
+        <div class="rounded-[1.75rem] border border-white/10 bg-white/6 p-5 backdrop-blur-sm">
+          <p class="text-3xl font-black">{{ total_urls }}</p>
+          <p class="mt-2 text-sm leading-6 text-slate-300">Total indexed links listed across static and dynamic sections.</p>
+        </div>
+        <div class="rounded-[1.75rem] border border-white/10 bg-white/6 p-5 backdrop-blur-sm">
+          <p class="text-sm font-black uppercase tracking-[0.22em] text-cyan-300">Discovery</p>
+          <p class="mt-2 text-sm leading-6 text-slate-300">Includes `sitemap.xml`, `sitemap.html`, `robots.txt`, and `llms.txt` endpoints.</p>
+        </div>
+        <div class="rounded-[1.75rem] border border-white/10 bg-white/6 p-5 backdrop-blur-sm">
+          <p class="text-sm font-black uppercase tracking-[0.22em] text-cyan-300">Dynamic</p>
+          <p class="mt-2 text-sm leading-6 text-slate-300">Published insights, case studies, and career pages update automatically.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="bg-slate-50 px-6 py-20">
+  <div class="mx-auto max-w-7xl">
+    <div class="grid gap-6 xl:grid-cols-2">
+      {% for section in sections %}
+      <section class="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0_18px_50px_rgba(15,23,42,0.06)] md:p-8">
+        <div class="flex flex-col gap-3 border-b border-slate-200 pb-5 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p class="text-xs font-black uppercase tracking-[0.24em] text-cyan-600">{{ section.title }}</p>
+            <p class="mt-3 max-w-2xl text-sm leading-7 text-slate-600">{{ section.description }}</p>
+          </div>
+          <p class="text-sm font-bold text-slate-500">{{ section.link_count }} links</p>
+        </div>
+
+        <div class="mt-6 grid gap-4">
+          {% for link in section.links %}
+          <a
+            href="{{ link.url }}"
+            class="group rounded-[1.5rem] border border-slate-200 bg-slate-50/70 p-4 transition hover:-translate-y-0.5 hover:border-cyan-300 hover:bg-cyan-50"
+          >
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <h2 class="text-lg font-black tracking-tight text-slate-950 group-hover:text-cyan-700">{{ link.title }}</h2>
+                <p class="mt-2 text-sm leading-7 text-slate-600">{{ link.description }}</p>
+                <p class="mt-3 break-all text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">{{ link.url }}</p>
+              </div>
+              <span class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-400 transition group-hover:border-cyan-300 group-hover:text-cyan-600">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+              </span>
+            </div>
+            {% if link.has_lastmod %}
+            <p class="mt-4 text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Updated {{ link.lastmod_label }}</p>
+            {% endif %}
+          </a>
+          {% endfor %}
+        </div>
+      </section>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

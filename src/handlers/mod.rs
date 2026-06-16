@@ -1,6 +1,7 @@
 pub mod careers;
 pub mod contact;
 pub mod dashboard;
+pub mod discovery;
 pub mod industry_content;
 pub mod insight_content;
 pub mod legal;
@@ -15,6 +16,7 @@ pub mod templates;
 pub use careers::*;
 pub use contact::*;
 pub use dashboard::*;
+pub use discovery::*;
 pub use industry_content::*;
 pub use insight_content::*;
 pub use legal::*;

@@ -83,6 +83,25 @@ pub struct PaginationLink {
     pub url: String,
     pub active: bool,
 }
+
+#[derive(Debug, Clone)]
+pub struct SitemapLinkView {
+    pub title: String,
+    pub url: String,
+    pub description: String,
+    pub has_lastmod: bool,
+    pub lastmod: Option<String>,
+    pub lastmod_label: String,
+}
+
+#[derive(Debug, Clone)]
+pub struct SitemapSectionView {
+    pub title: String,
+    pub description: String,
+    pub link_count: usize,
+    pub links: Vec<SitemapLinkView>,
+}
+
 #[derive(Template)]
 #[template(path = "pages/careers.html")]
 pub struct CareersTemplate {
@@ -100,6 +119,12 @@ pub struct ContactTemplate {
     pub success: bool,
 }
 page!(RequestQuoteTemplate, "pages/requestquote.html");
+#[derive(Template)]
+#[template(path = "pages/sitemap.html")]
+pub struct SitemapTemplate {
+    pub sections: Vec<SitemapSectionView>,
+    pub total_urls: usize,
+}
 
 // Legal pages
 page!(TermsTemplate, "pages/termsandconditions.html");
