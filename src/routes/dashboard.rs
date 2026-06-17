@@ -29,6 +29,8 @@ use crate::{
         dashboard_portfolio_delete, dashboard_portfolio_edit, dashboard_portfolio_store,
         dashboard_portfolio_update, dashboard_portfolios, dashboard_product_create,
         dashboard_product_edit, dashboard_products, dashboard_quote_requests, dashboard_seo,
+        dashboard_service_area_create, dashboard_service_area_delete, dashboard_service_area_edit,
+        dashboard_service_area_store, dashboard_service_area_update, dashboard_service_areas,
         dashboard_service_create, dashboard_service_edit, dashboard_services, dashboard_settings,
         dashboard_testimonial_create, dashboard_testimonial_edit, dashboard_testimonials,
         dashboard_users,
@@ -190,6 +192,22 @@ pub fn dashboard_routes() -> Router<AppState> {
         .route(
             "/dashboard/industries/{id}/delete",
             post(dashboard_industry_delete),
+        )
+        .route(
+            "/dashboard/service-areas",
+            get(dashboard_service_areas).post(dashboard_service_area_store),
+        )
+        .route(
+            "/dashboard/service-areas/create",
+            get(dashboard_service_area_create),
+        )
+        .route(
+            "/dashboard/service-areas/{id}/edit",
+            get(dashboard_service_area_edit).post(dashboard_service_area_update),
+        )
+        .route(
+            "/dashboard/service-areas/{id}/delete",
+            post(dashboard_service_area_delete),
         )
         .route("/dashboard/pages", get(dashboard_pages))
         .route("/dashboard/seo", get(dashboard_seo))

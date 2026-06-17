@@ -24,4 +24,5 @@ pub use legal::*;
 pub use newsletter::*;
 pub use portfolio::*;
 pub use public::*;
+pub use service_area_content::*;
 pub use services::*;

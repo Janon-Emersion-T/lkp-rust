@@ -6,6 +6,7 @@ pub mod insight;
 pub mod newsletter_campaign;
 pub mod newsletter_subscriber;
 pub mod portfolio;
+pub mod service_area;
 pub mod shared;
 
 pub use career::*;
@@ -16,3 +17,4 @@ pub use insight::*;
 pub use newsletter_campaign::*;
 pub use newsletter_subscriber::*;
 pub use portfolio::*;
+pub use service_area::*;

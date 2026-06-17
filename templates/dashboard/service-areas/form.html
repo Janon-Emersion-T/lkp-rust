@@ -1,0 +1,141 @@
+<section class="crm-hero rounded-[2rem] p-6 md:p-8">
+    <div class="max-w-3xl">
+        <p class="crm-hero-label">Service Area Editor</p>
+        <h1 class="mt-4 text-3xl font-black tracking-tight text-slate-950 md:text-5xl">
+            {% if service_area.area_name.len() > 0 %}Refine service area positioning and SEO.{% else %}Create a new service area page.{% endif %}
+        </h1>
+        <p class="mt-4 text-sm leading-7 text-slate-600">
+            This form controls the public service area hub, individual city pages, metadata, and the three-image gallery for each location.
+        </p>
+    </div>
+</section>
+
+<form method="post" action="{{ action_url }}" class="mt-8 grid gap-8">
+    <section class="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0_20px_50px_rgba(15,23,42,0.05)]">
+        <div class="grid gap-6 lg:grid-cols-2">
+            <label class="grid gap-2 text-sm font-bold text-slate-700">
+                Area Name
+                <input name="area_name" required minlength="2" value="{{ service_area.area_name }}" class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 outline-none transition focus:border-cyan-500" />
+            </label>
+            <label class="grid gap-2 text-sm font-bold text-slate-700">
+                Slug
+                <input name="slug" value="{{ service_area.slug }}" placeholder="auto-generated-from-area-name" class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 outline-none transition focus:border-cyan-500" />
+            </label>
+            <label class="grid gap-2 text-sm font-bold text-slate-700">
+                Area Type
+                <select name="area_type" class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 outline-none transition focus:border-cyan-500">
+                    <option value="city" {% if service_area.area_type == "city" %}selected{% endif %}>City</option>
+                    <option value="state" {% if service_area.area_type == "state" %}selected{% endif %}>State / Region</option>
+                    <option value="country" {% if service_area.area_type == "country" %}selected{% endif %}>Country</option>
+                </select>
+            </label>
+            <label class="grid gap-2 text-sm font-bold text-slate-700">
+                Country
+                <input name="country" required minlength="2" value="{{ service_area.country }}" class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 outline-none transition focus:border-cyan-500" />
+            </label>
+            <label class="grid gap-2 text-sm font-bold text-slate-700">
+                Market Region
+                <input name="market_region" required value="{{ service_area.market_region }}" placeholder="Sri Lanka, UK & Europe, India & South Asia..." class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 outline-none transition focus:border-cyan-500" />
+            </label>
+            <label class="grid gap-2 text-sm font-bold text-slate-700">
+                Sort Order
+                <input type="number" name="sort_order" value="{{ service_area.sort_order }}" class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 outline-none transition focus:border-cyan-500" />
+            </label>
+        </div>
+
+        <div class="mt-6 grid gap-6">
+            <label class="grid gap-2 text-sm font-bold text-slate-700">
+                Short Description
+                <textarea name="short_description" required rows="4" class="rounded-[1.5rem] border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 outline-none transition focus:border-cyan-500">{{ service_area.short_description }}</textarea>
+            </label>
+            <label class="grid gap-2 text-sm font-bold text-slate-700">
+                Overview
+                <textarea name="overview" required rows="7" class="rounded-[1.5rem] border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 outline-none transition focus:border-cyan-500">{{ service_area.overview }}</textarea>
+            </label>
+            <div class="grid gap-6 lg:grid-cols-2">
+                <label class="grid gap-2 text-sm font-bold text-slate-700">
+                    Buyer Profile
+                    <textarea name="buyer_profile" rows="5" class="rounded-[1.5rem] border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 outline-none transition focus:border-cyan-500">{{ service_area.buyer_profile }}</textarea>
+                </label>
+                <label class="grid gap-2 text-sm font-bold text-slate-700">
+                    Delivery Focus
+                    <textarea name="delivery_focus" rows="5" class="rounded-[1.5rem] border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 outline-none transition focus:border-cyan-500">{{ service_area.delivery_focus }}</textarea>
+                </label>
+            </div>
+            <div class="grid gap-6 lg:grid-cols-2">
+                <label class="grid gap-2 text-sm font-bold text-slate-700">
+                    Timezone / Collaboration Note
+                    <textarea name="timezone_note" rows="4" class="rounded-[1.5rem] border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 outline-none transition focus:border-cyan-500">{{ service_area.timezone_note }}</textarea>
+                </label>
+                <label class="grid gap-2 text-sm font-bold text-slate-700">
+                    Nearby Markets
+                    <textarea name="nearby_markets" rows="4" placeholder="Comma separated" class="rounded-[1.5rem] border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 outline-none transition focus:border-cyan-500">{{ service_area.nearby_markets }}</textarea>
+                </label>
+            </div>
+        </div>
+    </section>
+
+    <section class="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0_20px_50px_rgba(15,23,42,0.05)]">
+        <p class="text-sm font-black uppercase tracking-[0.24em] text-slate-500">Images</p>
+        <div class="mt-6 grid gap-6">
+            <label class="grid gap-2 text-sm font-bold text-slate-700">
+                Hero Image URL
+                <input name="hero_image_url" value="{{ service_area.hero_image_url }}" class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 outline-none transition focus:border-cyan-500" />
+            </label>
+            <label class="grid gap-2 text-sm font-bold text-slate-700">
+                Gallery Image URL 2
+                <input name="gallery_image_url_2" value="{{ service_area.gallery_image_url_2 }}" class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 outline-none transition focus:border-cyan-500" />
+            </label>
+            <label class="grid gap-2 text-sm font-bold text-slate-700">
+                Gallery Image URL 3
+                <input name="gallery_image_url_3" value="{{ service_area.gallery_image_url_3 }}" class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 outline-none transition focus:border-cyan-500" />
+            </label>
+        </div>
+    </section>
+
+    <section class="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0_20px_50px_rgba(15,23,42,0.05)]">
+        <p class="text-sm font-black uppercase tracking-[0.24em] text-slate-500">SEO</p>
+        <div class="mt-6 grid gap-6 lg:grid-cols-2">
+            <label class="grid gap-2 text-sm font-bold text-slate-700">
+                Meta Title
+                <input name="meta_title" value="{{ service_area.meta_title }}" class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 outline-none transition focus:border-cyan-500" />
+            </label>
+            <label class="grid gap-2 text-sm font-bold text-slate-700">
+                Canonical URL
+                <input name="canonical_url" value="{{ service_area.canonical_url }}" class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 outline-none transition focus:border-cyan-500" />
+            </label>
+            <label class="grid gap-2 text-sm font-bold text-slate-700 lg:col-span-2">
+                Meta Description
+                <textarea name="meta_description" rows="4" class="rounded-[1.5rem] border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 outline-none transition focus:border-cyan-500">{{ service_area.meta_description }}</textarea>
+            </label>
+            <label class="grid gap-2 text-sm font-bold text-slate-700 lg:col-span-2">
+                OG Image URL
+                <input name="og_image_url" value="{{ service_area.og_image_url }}" class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 outline-none transition focus:border-cyan-500" />
+            </label>
+        </div>
+    </section>
+
+    <section class="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0_20px_50px_rgba(15,23,42,0.05)]">
+        <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <div class="flex flex-wrap gap-6">
+                <label class="inline-flex items-center gap-3 text-sm font-bold text-slate-700">
+                    <input type="checkbox" name="featured" {% if service_area.featured %}checked{% endif %} class="h-5 w-5 rounded border-slate-300 text-cyan-600" />
+                    Featured on service area hub
+                </label>
+                <label class="inline-flex items-center gap-3 text-sm font-bold text-slate-700">
+                    <input type="checkbox" name="published" {% if service_area.published %}checked{% endif %} class="h-5 w-5 rounded border-slate-300 text-cyan-600" />
+                    Published publicly
+                </label>
+            </div>
+
+            <div class="flex flex-wrap gap-3">
+                <a href="/dashboard/service-areas" class="rounded-full border border-slate-300 px-5 py-3 text-sm font-bold text-slate-700 transition hover:border-cyan-500 hover:text-cyan-700">
+                    Back
+                </a>
+                <button type="submit" class="rounded-full bg-slate-950 px-6 py-3 text-sm font-black text-white transition hover:bg-cyan-600">
+                    Save Service Area
+                </button>
+            </div>
+        </div>
+    </section>
+</form>

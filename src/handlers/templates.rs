@@ -8,7 +8,8 @@ use crate::{
         IndustryRecord, InsightCardView, InsightDetailView, InsightEditorView, InsightRecord,
         LeadStats, NewsletterCampaignEditorView, NewsletterCampaignRecord,
         NewsletterSubscriberEditorView, NewsletterSubscriberRecord, PortfolioCardView,
-        PortfolioDetailView, PortfolioEditorView, PortfolioRecord,
+        PortfolioDetailView, PortfolioEditorView, PortfolioRecord, ServiceAreaEditorView,
+        ServiceAreaRecord,
     },
 };
 
@@ -108,6 +109,7 @@ pub struct ServiceAreaCardView {
     pub title: String,
     pub path: String,
     pub summary: String,
+    pub area_type_label: String,
 }
 
 #[derive(Debug, Clone)]
@@ -145,6 +147,8 @@ pub struct ServiceAreaPageView {
     pub buyer_points: Vec<ServiceAreaDetailPointView>,
     pub service_points: Vec<ServiceAreaDetailPointView>,
     pub faqs: Vec<ServiceAreaDetailFaqView>,
+    pub image_gallery: Vec<String>,
+    pub area_type_label: String,
 }
 
 #[derive(Template)]
@@ -507,6 +511,28 @@ pub struct DashboardIndustryCreateTemplate {
 #[template(path = "dashboard/industries/edit.html")]
 pub struct DashboardIndustryEditTemplate {
     pub industry: IndustryEditorView,
+    pub action_url: String,
+}
+
+#[derive(Template)]
+#[template(path = "dashboard/service-areas/index.html")]
+pub struct DashboardServiceAreasTemplate {
+    pub service_areas: Vec<ServiceAreaRecord>,
+    pub saved: bool,
+    pub deleted: bool,
+}
+
+#[derive(Template)]
+#[template(path = "dashboard/service-areas/create.html")]
+pub struct DashboardServiceAreaCreateTemplate {
+    pub service_area: ServiceAreaEditorView,
+    pub action_url: String,
+}
+
+#[derive(Template)]
+#[template(path = "dashboard/service-areas/edit.html")]
+pub struct DashboardServiceAreaEditTemplate {
+    pub service_area: ServiceAreaEditorView,
     pub action_url: String,
 }
 

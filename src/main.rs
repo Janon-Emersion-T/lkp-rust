@@ -61,6 +61,10 @@ async fn main() {
         {
             eprintln!("Failed to seed default newsletter subscribers: {error}");
         }
+
+        if let Err(error) = seeds::service_areas::seed_default_service_areas(&db).await {
+            eprintln!("Failed to seed default service areas: {error}");
+        }
     }
 
     if enable_newsletter_worker {

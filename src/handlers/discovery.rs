@@ -8,7 +8,6 @@ use sqlx::FromRow;
 use crate::{
     handlers::{
         render::render,
-        service_area_content::service_area_sitemap_entries,
         templates::{SitemapLinkView, SitemapSectionView, SitemapTemplate},
     },
     state::AppState,
@@ -19,6 +18,13 @@ const SITE_URL: &str = "https://lkprofessionals.com";
 #[derive(Debug, FromRow)]
 struct SitemapSlugRecord {
     title: String,
+    slug: String,
+    lastmod: Option<String>,
+}
+
+#[derive(Debug, FromRow)]
+struct SitemapServiceAreaRecord {
+    area_name: String,
     slug: String,
     lastmod: Option<String>,
 }
@@ -135,6 +141,7 @@ async fn build_sitemap_sections(state: &AppState) -> Vec<SitemapSectionView> {
     let insight_pages = fetch_slug_urls(state, "insights", "/insights").await;
     let portfolio_pages = fetch_slug_urls(state, "portfolios", "/case-studies").await;
     let career_pages = fetch_slug_urls(state, "careers", "/careers").await;
+    let service_area_pages = fetch_service_area_urls(state).await;
 
     let mut sections = Vec::new();
 
@@ -188,25 +195,24 @@ async fn build_sitemap_sections(state: &AppState) -> Vec<SitemapSectionView> {
         });
     }
 
-    let service_area_links = service_area_sitemap_entries()
-        .into_iter()
-        .map(|entry| SitemapLinkView {
-            title: entry.title.to_string(),
-            url: format!("{SITE_URL}{}", entry.path),
-            description: entry.description.to_string(),
-            has_lastmod: false,
-            lastmod: None,
-            lastmod_label: String::new(),
-        })
-        .collect::<Vec<_>>();
-
     sections.push(SitemapSectionView {
         title: String::from("Service Areas"),
         description: String::from(
             "City-focused landing pages for LKProfessionals delivery markets.",
         ),
-        link_count: service_area_links.len(),
-        links: service_area_links,
+        link_count: service_area_pages.len() + 1,
+        links: std::iter::once(SitemapLinkView {
+            title: String::from("Service Areas"),
+            url: format!("{SITE_URL}/service-areas"),
+            description: String::from(
+                "Global service area hub for LKProfessionals delivery markets.",
+            ),
+            has_lastmod: false,
+            lastmod: None,
+            lastmod_label: String::new(),
+        })
+        .chain(service_area_pages.into_iter())
+        .collect(),
     });
 
     sections.push(SitemapSectionView {
@@ -220,6 +226,42 @@ async fn build_sitemap_sections(state: &AppState) -> Vec<SitemapSectionView> {
     });
 
     sections
+}
+
+async fn fetch_service_area_urls(state: &AppState) -> Vec<SitemapLinkView> {
+    match sqlx::query_as::<_, SitemapServiceAreaRecord>(
+        r#"
+        SELECT
+            area_name,
+            slug,
+            to_char(
+                COALESCE(updated_at, published_at, created_at) AT TIME ZONE 'UTC',
+                'YYYY-MM-DD"T"HH24:MI:SS"Z"'
+            ) AS lastmod
+        FROM service_areas
+        WHERE published = TRUE
+        ORDER BY market_region ASC, sort_order ASC, area_name ASC
+        "#,
+    )
+    .fetch_all(&state.db)
+    .await
+    {
+        Ok(records) => records
+            .into_iter()
+            .map(|record| SitemapLinkView {
+                title: record.area_name.clone(),
+                url: format!("{SITE_URL}/service-areas/{}", record.slug),
+                description: format!("Service area page for {}.", record.area_name),
+                has_lastmod: record.lastmod.is_some(),
+                lastmod_label: record.lastmod.clone().unwrap_or_default(),
+                lastmod: record.lastmod,
+            })
+            .collect(),
+        Err(error) => {
+            eprintln!("Failed to build sitemap section for service_areas: {error}");
+            Vec::new()
+        }
+    }
 }
 
 async fn fetch_slug_urls(state: &AppState, table: &str, prefix: &str) -> Vec<SitemapLinkView> {
