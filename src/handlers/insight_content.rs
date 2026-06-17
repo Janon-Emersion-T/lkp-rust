@@ -1,4 +1,4 @@
-use std::collections::{BTreeSet, HashMap};
+use std::collections::{BTreeMap, BTreeSet, HashMap};
 
 use axum::{
     extract::{Form, Path, Query, State},
@@ -19,7 +19,8 @@ use crate::{
 use super::{
     render::render,
     templates::{
-        DashboardInsightCreateTemplate, DashboardInsightEditTemplate, DashboardInsightsTemplate,
+        DashboardInsightCategoryView, DashboardInsightCreateTemplate, DashboardInsightEditTemplate,
+        DashboardInsightMetric, DashboardInsightTimelineView, DashboardInsightsTemplate,
         InsightSingleTemplate, InsightSnapshotMetric, InsightsTemplate, PaginationLink,
         PaginationView,
     },
@@ -242,20 +243,6 @@ async fn fetch_newsletter_subscriber_count(state: &AppState) -> i64 {
     .fetch_one(&state.db)
     .await
     .unwrap_or(0)
-}
-
-fn format_number(value: i64) -> String {
-    let digits = value.max(0).to_string();
-    let mut formatted = String::with_capacity(digits.len() + (digits.len() / 3));
-
-    for (index, character) in digits.chars().rev().enumerate() {
-        if index > 0 && index % 3 == 0 {
-            formatted.push(',');
-        }
-        formatted.push(character);
-    }
-
-    formatted.chars().rev().collect()
 }
 
 fn build_insights_page_url(page: usize) -> String {
@@ -530,12 +517,112 @@ pub async fn dashboard_insights(
     Query(query): Query<HashMap<String, String>>,
 ) -> impl IntoResponse {
     match fetch_dashboard_insights(&state).await {
-        Ok(insights) => render(DashboardInsightsTemplate {
-            insights,
-            saved: query.get("saved").is_some_and(|value| value == "1"),
-            deleted: query.get("deleted").is_some_and(|value| value == "1"),
-        })
-        .into_response(),
+        Ok(insights) => {
+            let total_count = insights.len();
+            let published_count = insights.iter().filter(|item| item.published).count();
+            let draft_count = total_count.saturating_sub(published_count);
+            let featured_count = insights.iter().filter(|item| item.featured).count();
+            let total_views: i64 = insights.iter().map(|item| i64::from(item.view_count)).sum();
+            let average_read_time = if insights.is_empty() {
+                0.0
+            } else {
+                insights
+                    .iter()
+                    .map(|item| f64::from(item.reading_time_minutes))
+                    .sum::<f64>()
+                    / insights.len() as f64
+            };
+
+            let mut category_counts: BTreeMap<String, usize> = BTreeMap::new();
+            let mut timeline_counts: BTreeMap<String, usize> = BTreeMap::new();
+
+            for insight in &insights {
+                *category_counts
+                    .entry(insight.category_label().to_string())
+                    .or_insert(0) += 1;
+
+                let published = insight.published_at.unwrap_or(insight.created_at);
+                *timeline_counts
+                    .entry(published.format("%Y").to_string())
+                    .or_insert(0) += 1;
+            }
+
+            let top_category = category_counts
+                .iter()
+                .max_by_key(|(_, count)| **count)
+                .map(|(label, count)| format!("{label} ({count})"))
+                .unwrap_or_else(|| "No categories yet".to_string());
+
+            let latest_update = insights
+                .iter()
+                .map(|item| item.updated_at)
+                .max()
+                .map(|value| value.format("%d %b %Y").to_string())
+                .unwrap_or_else(|| "No updates yet".to_string());
+
+            let all_categories = category_counts.keys().cloned().collect::<Vec<_>>();
+
+            let metrics = vec![
+                DashboardInsightMetric {
+                    label: "Total library".to_string(),
+                    value: total_count.to_string(),
+                    note: format!("{published_count} live and {draft_count} drafts"),
+                },
+                DashboardInsightMetric {
+                    label: "Featured pieces".to_string(),
+                    value: featured_count.to_string(),
+                    note: "Homepage and highlight-ready articles".to_string(),
+                },
+                DashboardInsightMetric {
+                    label: "Total views".to_string(),
+                    value: format_number(total_views),
+                    note: "Combined public article page views".to_string(),
+                },
+                DashboardInsightMetric {
+                    label: "Avg. read time".to_string(),
+                    value: format!("{} min", average_read_time.round().max(1.0) as i64),
+                    note: format!("Top category: {top_category} · Updated {latest_update}"),
+                },
+            ];
+
+            let max_category_count = category_counts.values().copied().max().unwrap_or(1);
+            let mut category_breakdown: Vec<DashboardInsightCategoryView> = category_counts
+                .into_iter()
+                .map(|(label, count)| DashboardInsightCategoryView {
+                    label,
+                    count,
+                    width_percent: ((count * 100) / max_category_count).max(12),
+                })
+                .collect();
+            category_breakdown.sort_by(|left, right| right.count.cmp(&left.count));
+            category_breakdown.truncate(6);
+
+            let max_timeline_count = timeline_counts.values().copied().max().unwrap_or(1);
+            let mut timeline: Vec<DashboardInsightTimelineView> = timeline_counts
+                .into_iter()
+                .map(|(label, count)| DashboardInsightTimelineView {
+                    label,
+                    count,
+                    height_percent: ((count * 100) / max_timeline_count).max(14),
+                })
+                .collect();
+            timeline.sort_by(|left, right| left.label.cmp(&right.label));
+
+            render(DashboardInsightsTemplate {
+                insights,
+                metrics,
+                category_breakdown,
+                all_categories,
+                timeline,
+                total_count,
+                published_count,
+                draft_count,
+                featured_count,
+                saved: query.get("saved").is_some_and(|value| value == "1"),
+                deleted: query.get("deleted").is_some_and(|value| value == "1"),
+            })
+            .into_response()
+        }
         Err(error) => {
             eprintln!("Failed to load dashboard insights: {error}");
             (
@@ -545,6 +632,20 @@ pub async fn dashboard_insights(
                 .into_response()
         }
     }
+}
+
+fn format_number(value: i64) -> String {
+    let digits = value.max(0).to_string();
+    let mut formatted = String::with_capacity(digits.len() + (digits.len() / 3));
+
+    for (index, character) in digits.chars().rev().enumerate() {
+        if index > 0 && index % 3 == 0 {
+            formatted.push(',');
+        }
+        formatted.push(character);
+    }
+
+    formatted.chars().rev().collect()
 }
 
 pub async fn dashboard_insight_create() -> impl IntoResponse {

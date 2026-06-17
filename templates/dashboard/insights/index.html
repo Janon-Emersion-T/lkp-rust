@@ -3,21 +3,36 @@
 {% block title %}Insights CMS | Dashboard{% endblock %}
 
 {% block content %}
-<section class="crm-hero rounded-[2rem] p-6 md:p-8">
-    <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-        <div class="max-w-3xl">
-            <p class="crm-hero-label">Insights CMS</p>
+<section class="overflow-hidden rounded-[2rem] bg-[radial-gradient(circle_at_top_left,_rgba(34,211,238,0.22),_transparent_28%),linear-gradient(135deg,_#ffffff_0%,_#ecfeff_42%,_#f8fafc_100%)] p-6 shadow-[0_25px_60px_rgba(15,23,42,0.08)] md:p-8">
+    <div class="flex flex-col gap-6 xl:flex-row xl:items-end xl:justify-between">
+        <div class="max-w-4xl">
+            <p class="text-[11px] font-black uppercase tracking-[0.34em] text-cyan-700">Insights Command</p>
             <h1 class="mt-4 text-3xl font-black tracking-tight text-slate-950 md:text-5xl">
-                Manage articles, featured insights, and search-ready metadata.
+                Run the entire content engine from one responsive screen.
             </h1>
-            <p class="mt-4 text-sm leading-7 text-slate-600">
-                Articles published here power the public insights hub, individual article pages, and the featured insights section on the home page.
+            <p class="mt-4 max-w-3xl text-sm leading-7 text-slate-600">
+                Review publishing balance, spot category depth, filter the library instantly, and move from analytics to editing without leaving the page.
             </p>
         </div>
 
-        <a href="/dashboard/insights/create" class="rounded-full bg-slate-950 px-6 py-3 text-sm font-black text-white transition hover:bg-cyan-600">
-            Create Insight
-        </a>
+        <div class="flex flex-col gap-3 sm:flex-row">
+            <a href="/dashboard/insights/create" class="inline-flex items-center justify-center rounded-full bg-slate-950 px-6 py-3 text-sm font-black text-white transition hover:bg-cyan-600">
+                Create Insight
+            </a>
+            <a href="/insights" target="_blank" rel="noopener" class="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white/80 px-6 py-3 text-sm font-black text-slate-700 transition hover:border-cyan-400 hover:text-cyan-700">
+                View Public Hub
+            </a>
+        </div>
+    </div>
+
+    <div class="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        {% for metric in metrics %}
+        <article class="rounded-[1.6rem] border border-white/70 bg-white/80 p-5 shadow-[0_18px_45px_rgba(15,23,42,0.06)] backdrop-blur">
+            <p class="text-[11px] font-black uppercase tracking-[0.28em] text-slate-500">{{ metric.label }}</p>
+            <h2 class="mt-3 text-3xl font-black tracking-tight text-slate-950">{{ metric.value }}</h2>
+            <p class="mt-2 text-sm leading-6 text-slate-500">{{ metric.note }}</p>
+        </article>
+        {% endfor %}
     </div>
 </section>
 
@@ -33,16 +48,152 @@
 </div>
 {% endif %}
 
-<section class="mt-8 rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0_20px_50px_rgba(15,23,42,0.05)]">
-    <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-        <div>
-            <p class="text-sm font-black uppercase tracking-[0.24em] text-slate-500">All Entries</p>
-            <h2 class="mt-2 text-2xl font-black text-slate-950">Insights library</h2>
+<section class="mt-8 grid gap-6 2xl:grid-cols-[minmax(0,1.45fr)_minmax(320px,0.95fr)]">
+    <article class="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0_20px_50px_rgba(15,23,42,0.05)]">
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+                <p class="text-[11px] font-black uppercase tracking-[0.28em] text-slate-500">Publishing Mix</p>
+                <h2 class="mt-2 text-2xl font-black text-slate-950">Content status overview</h2>
+            </div>
+            <p class="text-sm text-slate-500">{{ total_count }} total articles in the CMS</p>
         </div>
-        <p class="text-sm text-slate-500">{{ insights.len() }} total articles</p>
+
+        <div class="mt-8 grid gap-4 sm:grid-cols-3">
+            <div class="rounded-[1.5rem] bg-slate-950 p-5 text-white">
+                <p class="text-[11px] font-black uppercase tracking-[0.26em] text-cyan-300">Published</p>
+                <p class="mt-3 text-3xl font-black">{{ published_count }}</p>
+                <p class="mt-2 text-sm text-slate-300">Live on the public insights hub.</p>
+            </div>
+            <div class="rounded-[1.5rem] border border-amber-200 bg-amber-50 p-5">
+                <p class="text-[11px] font-black uppercase tracking-[0.26em] text-amber-700">Drafts</p>
+                <p class="mt-3 text-3xl font-black text-slate-950">{{ draft_count }}</p>
+                <p class="mt-2 text-sm text-slate-600">Waiting for review, polish, or approval.</p>
+            </div>
+            <div class="rounded-[1.5rem] border border-cyan-200 bg-cyan-50 p-5">
+                <p class="text-[11px] font-black uppercase tracking-[0.26em] text-cyan-700">Featured</p>
+                <p class="mt-3 text-3xl font-black text-slate-950">{{ featured_count }}</p>
+                <p class="mt-2 text-sm text-slate-600">Priority pieces used for stronger visibility.</p>
+            </div>
+        </div>
+
+        <div class="mt-8">
+            <div class="flex items-center justify-between">
+                <p class="text-sm font-black uppercase tracking-[0.24em] text-slate-500">Timeline</p>
+                <p class="text-xs text-slate-400">Articles by publish year</p>
+            </div>
+
+            <div class="mt-6 grid min-h-[16rem] grid-cols-5 items-end gap-3 sm:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12">
+                {% for point in timeline %}
+                <div class="flex min-w-0 flex-col items-center gap-3">
+                    <div class="flex h-56 w-full items-end rounded-[1.5rem] bg-slate-100 p-2">
+                        <div
+                            class="w-full rounded-[1rem] bg-[linear-gradient(180deg,_#22d3ee_0%,_#0f172a_100%)] shadow-[0_18px_30px_rgba(34,211,238,0.22)]"
+                            style="height: {{ point.height_percent }}%;"
+                            title="{{ point.label }}: {{ point.count }} articles"
+                        ></div>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-sm font-black text-slate-900">{{ point.count }}</p>
+                        <p class="text-[11px] font-bold uppercase tracking-[0.16em] text-slate-400">{{ point.label }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </article>
+
+    <article class="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0_20px_50px_rgba(15,23,42,0.05)]">
+        <div>
+            <p class="text-[11px] font-black uppercase tracking-[0.28em] text-slate-500">Top Categories</p>
+            <h2 class="mt-2 text-2xl font-black text-slate-950">Authority coverage</h2>
+            <p class="mt-3 text-sm leading-7 text-slate-600">
+                See where your insight volume is concentrated and where the next authority cluster may be thin.
+            </p>
+        </div>
+
+        <div class="mt-8 space-y-4">
+            {% for category in category_breakdown %}
+            <div class="rounded-[1.5rem] border border-slate-200 bg-slate-50 p-4">
+                <div class="flex items-center justify-between gap-4">
+                    <p class="text-sm font-black text-slate-900">{{ category.label }}</p>
+                    <p class="text-sm font-bold text-slate-500">{{ category.count }}</p>
+                </div>
+                <div class="mt-3 h-3 overflow-hidden rounded-full bg-slate-200">
+                    <div class="h-full rounded-full bg-[linear-gradient(90deg,_#0f172a_0%,_#22d3ee_100%)]" style="width: {{ category.width_percent }}%;"></div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="mt-8 rounded-[1.5rem] border border-slate-200 bg-slate-50 p-5">
+            <p class="text-[11px] font-black uppercase tracking-[0.28em] text-slate-500">Management Notes</p>
+            <ul class="mt-4 space-y-3 text-sm leading-6 text-slate-600">
+                <li>Use the filter row below to isolate drafts, featured items, or one category fast.</li>
+                <li>High-volume categories can support topic clusters, internal links, and location-led expansion.</li>
+                <li>Thin categories are often the easiest place to win topical authority with focused new articles.</li>
+            </ul>
+        </div>
+    </article>
+</section>
+
+<section class="mt-8 rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0_20px_50px_rgba(15,23,42,0.05)]">
+    <div class="flex flex-col gap-5 xl:flex-row xl:items-end xl:justify-between">
+        <div>
+            <p class="text-[11px] font-black uppercase tracking-[0.28em] text-slate-500">Manage Library</p>
+            <h2 class="mt-2 text-2xl font-black text-slate-950">Search, filter, and maintain insights</h2>
+            <p class="mt-3 text-sm leading-7 text-slate-600">
+                This screen is tuned for quick editing on desktop, tablet, and mobile. Filter by title, author, category, or publishing state without a page reload.
+            </p>
+        </div>
+
+        <div class="grid gap-3 sm:grid-cols-2 xl:flex xl:flex-wrap xl:justify-end">
+            <label class="block">
+                <span class="mb-2 block text-[11px] font-black uppercase tracking-[0.24em] text-slate-500">Search</span>
+                <input
+                    id="insights-search"
+                    type="search"
+                    placeholder="Title, author, category..."
+                    class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-cyan-400 focus:bg-white"
+                >
+            </label>
+            <label class="block">
+                <span class="mb-2 block text-[11px] font-black uppercase tracking-[0.24em] text-slate-500">Status</span>
+                <select id="insights-status-filter" class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-cyan-400 focus:bg-white">
+                    <option value="all">All statuses</option>
+                    <option value="published">Published</option>
+                    <option value="draft">Drafts</option>
+                    <option value="featured">Featured</option>
+                </select>
+            </label>
+            <label class="block">
+                <span class="mb-2 block text-[11px] font-black uppercase tracking-[0.24em] text-slate-500">Category</span>
+                <select id="insights-category-filter" class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-cyan-400 focus:bg-white">
+                    <option value="all">All categories</option>
+                    {% for category in all_categories %}
+                    <option value="{{ category|lower }}">{{ category }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+        </div>
     </div>
 
-    <div class="mt-8 grid gap-5">
+    <div class="mt-6 flex flex-wrap items-center gap-3 rounded-[1.5rem] border border-slate-200 bg-slate-50 px-4 py-4">
+        <span class="inline-flex rounded-full bg-white px-3 py-1 text-[11px] font-black uppercase tracking-[0.2em] text-slate-500 ring-1 ring-slate-200">
+            Library Size {{ total_count }}
+        </span>
+        <span class="inline-flex rounded-full bg-white px-3 py-1 text-[11px] font-black uppercase tracking-[0.2em] text-emerald-700 ring-1 ring-emerald-200">
+            Published {{ published_count }}
+        </span>
+        <span class="inline-flex rounded-full bg-white px-3 py-1 text-[11px] font-black uppercase tracking-[0.2em] text-amber-700 ring-1 ring-amber-200">
+            Drafts {{ draft_count }}
+        </span>
+        <span class="inline-flex rounded-full bg-white px-3 py-1 text-[11px] font-black uppercase tracking-[0.2em] text-cyan-700 ring-1 ring-cyan-200">
+            Featured {{ featured_count }}
+        </span>
+        <p id="insights-results-count" class="text-sm font-semibold text-slate-500">Showing all {{ insights.len() }} entries</p>
+    </div>
+
+    <div class="mt-8 grid gap-5" id="insights-list">
         {% if insights.len() == 0 %}
         <div class="rounded-[1.75rem] border border-dashed border-slate-300 bg-slate-50 px-6 py-12 text-center">
             <h3 class="text-xl font-black text-slate-950">No insights yet</h3>
@@ -53,9 +204,15 @@
         {% endif %}
 
         {% for insight in insights %}
-        <article class="rounded-[1.75rem] border border-slate-200 bg-slate-50 p-5">
-            <div class="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
-                <div class="max-w-4xl">
+        <article
+            class="insight-row rounded-[1.75rem] border border-slate-200 bg-slate-50 p-5 transition hover:border-cyan-200 hover:bg-white"
+            data-search="{{ insight.title|lower }} {{ insight.author|lower }} {{ insight.category_label()|lower }} {{ insight.slug|lower }}"
+            data-status="{% if insight.published %}published{% else %}draft{% endif %}"
+            data-featured="{% if insight.featured %}true{% else %}false{% endif %}"
+            data-category="{{ insight.category_label()|lower }}"
+        >
+            <div class="flex flex-col gap-5 2xl:flex-row 2xl:items-start 2xl:justify-between">
+                <div class="min-w-0 flex-1">
                     <div class="flex flex-wrap items-center gap-3">
                         <span class="inline-flex rounded-full px-3 py-1 text-[11px] font-black uppercase ring-1 {{ insight.status_badge_class() }}">
                             {{ insight.status_label() }}
@@ -63,25 +220,46 @@
                         <span class="inline-flex rounded-full px-3 py-1 text-[11px] font-black uppercase ring-1 {{ insight.feature_badge_class() }}">
                             {{ insight.feature_label() }}
                         </span>
-                        <span class="text-xs font-bold uppercase tracking-[0.22em] text-slate-400">
+                        <span class="inline-flex rounded-full bg-white px-3 py-1 text-[11px] font-black uppercase text-slate-600 ring-1 ring-slate-200">
                             {{ insight.category_label() }}
                         </span>
                     </div>
 
-                    <h3 class="mt-4 text-2xl font-black text-slate-950">{{ insight.title }}</h3>
-                    <p class="mt-2 text-sm font-semibold text-slate-600">{{ insight.author }} · {{ insight.reading_time_label() }}</p>
-                    <p class="mt-4 max-w-3xl text-sm leading-7 text-slate-600">{{ insight.summary() }}</p>
+                    <div class="mt-4 flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
+                        <div class="min-w-0 max-w-4xl">
+                            <h3 class="text-2xl font-black text-slate-950">{{ insight.title }}</h3>
+                            <p class="mt-2 text-sm font-semibold text-slate-600">
+                                {{ insight.author }} · {{ insight.reading_time_label() }} · {{ insight.view_count_label() }} views
+                            </p>
+                            <p class="mt-4 max-w-3xl text-sm leading-7 text-slate-600">{{ insight.summary() }}</p>
+                        </div>
+
+                        <div class="grid shrink-0 gap-3 rounded-[1.5rem] border border-slate-200 bg-white p-4 sm:grid-cols-3 xl:min-w-[19rem] xl:grid-cols-1">
+                            <div>
+                                <p class="text-[11px] font-black uppercase tracking-[0.24em] text-slate-400">Slug</p>
+                                <p class="mt-2 break-all text-sm font-semibold text-slate-700">{{ insight.slug }}</p>
+                            </div>
+                            <div>
+                                <p class="text-[11px] font-black uppercase tracking-[0.24em] text-slate-400">Published</p>
+                                <p class="mt-2 text-sm font-semibold text-slate-700">{{ insight.published_label() }}</p>
+                            </div>
+                            <div>
+                                <p class="text-[11px] font-black uppercase tracking-[0.24em] text-slate-400">Updated</p>
+                                <p class="mt-2 text-sm font-semibold text-slate-700">{{ insight.updated_label() }}</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="flex flex-wrap gap-3 lg:justify-end">
-                    <a href="{{ insight.public_url() }}" target="_blank" rel="noopener" class="rounded-full border border-slate-300 px-4 py-2 text-sm font-bold text-slate-700 transition hover:border-cyan-500 hover:text-cyan-700">
+                <div class="flex flex-wrap gap-3 2xl:w-auto 2xl:justify-end">
+                    <a href="{{ insight.public_url() }}" target="_blank" rel="noopener" class="inline-flex items-center justify-center rounded-full border border-slate-300 px-4 py-2 text-sm font-bold text-slate-700 transition hover:border-cyan-500 hover:text-cyan-700">
                         View
                     </a>
-                    <a href="{{ insight.admin_edit_url() }}" class="rounded-full bg-slate-950 px-4 py-2 text-sm font-bold text-white transition hover:bg-cyan-600">
+                    <a href="{{ insight.admin_edit_url() }}" class="inline-flex items-center justify-center rounded-full bg-slate-950 px-4 py-2 text-sm font-bold text-white transition hover:bg-cyan-600">
                         Edit
                     </a>
                     <form action="{{ insight.admin_delete_url() }}" method="post" onsubmit="return confirm('Delete this insight?');">
-                        <button type="submit" class="rounded-full border border-rose-200 px-4 py-2 text-sm font-bold text-rose-700 transition hover:bg-rose-50">
+                        <button type="submit" class="inline-flex items-center justify-center rounded-full border border-rose-200 px-4 py-2 text-sm font-bold text-rose-700 transition hover:bg-rose-50">
                             Delete
                         </button>
                     </form>
@@ -90,5 +268,57 @@
         </article>
         {% endfor %}
     </div>
+
+    <div id="insights-empty-state" class="mt-6 hidden rounded-[1.75rem] border border-dashed border-slate-300 bg-slate-50 px-6 py-12 text-center">
+        <h3 class="text-xl font-black text-slate-950">No matching insights</h3>
+        <p class="mt-3 text-sm leading-7 text-slate-600">
+            Try a different search term or reset the filters to bring the full library back.
+        </p>
+    </div>
 </section>
+
+<script>
+    (() => {
+        const searchInput = document.getElementById("insights-search");
+        const statusFilter = document.getElementById("insights-status-filter");
+        const categoryFilter = document.getElementById("insights-category-filter");
+        const rows = [...document.querySelectorAll(".insight-row")];
+        const emptyState = document.getElementById("insights-empty-state");
+        const resultsCount = document.getElementById("insights-results-count");
+
+        if (!searchInput || !statusFilter || !categoryFilter || !resultsCount) {
+            return;
+        }
+
+        const applyFilters = () => {
+            const search = searchInput.value.trim().toLowerCase();
+            const status = statusFilter.value;
+            const category = categoryFilter.value;
+            let visibleCount = 0;
+
+            for (const row of rows) {
+                const matchesSearch = !search || row.dataset.search.includes(search);
+                const matchesCategory = category === "all" || row.dataset.category === category;
+                const matchesStatus = status === "all"
+                    || row.dataset.status === status
+                    || (status === "featured" && row.dataset.featured === "true");
+
+                const visible = matchesSearch && matchesCategory && matchesStatus;
+                row.classList.toggle("hidden", !visible);
+
+                if (visible) {
+                    visibleCount += 1;
+                }
+            }
+
+            resultsCount.textContent = `Showing ${visibleCount} of ${rows.length} entries`;
+            emptyState?.classList.toggle("hidden", visibleCount !== 0);
+        };
+
+        searchInput.addEventListener("input", applyFilters);
+        statusFilter.addEventListener("change", applyFilters);
+        categoryFilter.addEventListener("change", applyFilters);
+        applyFilters();
+    })();
+</script>
 {% endblock %}

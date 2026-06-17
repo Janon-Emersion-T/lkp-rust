@@ -1,25 +1,37 @@
 <aside
-    class="dashboard-sidebar fixed inset-y-0 left-0 z-50 hidden w-72 overflow-y-auto px-6 py-6 lg:block"
+    id="dashboard-sidebar"
+    class="dashboard-sidebar fixed inset-y-0 left-0 z-50 w-[88vw] max-w-72 -translate-x-[110%] overflow-y-auto px-5 py-5 transition duration-300 lg:block lg:w-72 lg:translate-x-0 lg:px-6 lg:py-6"
 >
 
     <!-- Logo -->
-    <div class="flex items-center gap-3 border-b border-white/10 pb-6">
+    <div class="flex items-center justify-between gap-3 border-b border-white/10 pb-5 lg:pb-6">
 
-        <img
-            src="/static/images/logo/logo-white.png"
-            alt="LKProfessionals"
-            class="h-10 w-auto"
-        >
+        <div class="flex items-center gap-3">
+            <img
+                src="/static/images/logo/logo-white.png"
+                alt="LKProfessionals"
+                class="h-10 w-auto"
+            >
 
-        <div>
-            <h2 class="text-lg font-bold text-white">
-                LKProfessionals
-            </h2>
+            <div>
+                <h2 class="text-lg font-bold text-white">
+                    LKProfessionals
+                </h2>
 
-            <p class="text-xs text-slate-400">
-                Admin Dashboard
-            </p>
+                <p class="text-xs text-slate-400">
+                    Admin Dashboard
+                </p>
+            </div>
         </div>
+
+        <button
+            id="dashboard-sidebar-close"
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-lg font-bold text-white transition hover:bg-white/10 lg:hidden"
+            aria-label="Close navigation"
+        >
+            ×
+        </button>
 
     </div>
 

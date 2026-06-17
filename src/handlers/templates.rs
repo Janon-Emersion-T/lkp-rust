@@ -70,6 +70,27 @@ pub struct InsightSnapshotMetric {
 }
 
 #[derive(Debug, Clone)]
+pub struct DashboardInsightMetric {
+    pub label: String,
+    pub value: String,
+    pub note: String,
+}
+
+#[derive(Debug, Clone)]
+pub struct DashboardInsightCategoryView {
+    pub label: String,
+    pub count: usize,
+    pub width_percent: usize,
+}
+
+#[derive(Debug, Clone)]
+pub struct DashboardInsightTimelineView {
+    pub label: String,
+    pub count: usize,
+    pub height_percent: usize,
+}
+
+#[derive(Debug, Clone)]
 pub struct PaginationView {
     pub current_page: usize,
     pub total_pages: usize,
@@ -311,6 +332,14 @@ pub struct DashboardPortfolioEditTemplate {
 #[template(path = "dashboard/insights/index.html")]
 pub struct DashboardInsightsTemplate {
     pub insights: Vec<InsightRecord>,
+    pub metrics: Vec<DashboardInsightMetric>,
+    pub category_breakdown: Vec<DashboardInsightCategoryView>,
+    pub all_categories: Vec<String>,
+    pub timeline: Vec<DashboardInsightTimelineView>,
+    pub total_count: usize,
+    pub published_count: usize,
+    pub draft_count: usize,
+    pub featured_count: usize,
     pub saved: bool,
     pub deleted: bool,
 }

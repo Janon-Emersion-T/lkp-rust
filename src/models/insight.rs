@@ -195,6 +195,21 @@ impl InsightRecord {
         format!("{} min read", self.reading_time_minutes.max(1))
     }
 
+    pub fn published_label(&self) -> String {
+        self.published_at
+            .unwrap_or(self.created_at)
+            .format("%d %b %Y")
+            .to_string()
+    }
+
+    pub fn updated_label(&self) -> String {
+        self.updated_at.format("%d %b %Y").to_string()
+    }
+
+    pub fn view_count_label(&self) -> String {
+        format_number(self.view_count)
+    }
+
     pub fn to_card_view(&self) -> InsightCardView {
         let published = self.published_at.unwrap_or(self.created_at);
 
@@ -304,4 +319,18 @@ fn truncate_text(value: &str, max_chars: usize) -> String {
     }
 
     output
+}
+
+fn format_number(value: i32) -> String {
+    let digits = value.max(0).to_string();
+    let mut formatted = String::with_capacity(digits.len() + (digits.len() / 3));
+
+    for (index, character) in digits.chars().rev().enumerate() {
+        if index > 0 && index % 3 == 0 {
+            formatted.push(',');
+        }
+        formatted.push(character);
+    }
+
+    formatted.chars().rev().collect()
 }
