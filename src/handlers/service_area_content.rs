@@ -19,8 +19,8 @@ use super::{
     render::render,
     templates::{
         DashboardServiceAreaCreateTemplate, DashboardServiceAreaEditTemplate,
-        DashboardServiceAreasTemplate, ServiceAreaCardView, ServiceAreaDetailTemplate, ServiceAreaGroupView,
-        ServiceAreasTemplate,
+        DashboardServiceAreasTemplate, ServiceAreaCardView, ServiceAreaDetailTemplate,
+        ServiceAreaGroupView, ServiceAreasTemplate,
     },
 };
 

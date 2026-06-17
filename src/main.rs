@@ -29,6 +29,10 @@ async fn main() {
     let enable_newsletter_worker = env_flag("ENABLE_NEWSLETTER_WORKER", true);
     let secure_cookies = env_flag("SESSION_COOKIE_SECURE", is_production);
 
+    println!(
+        "Startup config: APP_ENV={app_env}, RUN_MIGRATIONS={run_migrations}, RUN_SEEDERS={run_seeders}, ENABLE_NEWSLETTER_WORKER={enable_newsletter_worker}, SESSION_COOKIE_SECURE={secure_cookies}"
+    );
+
     // Database connection
     let db = db::connect_db().await;
 
@@ -96,15 +100,23 @@ async fn main() {
 }
 
 fn env_flag(name: &str, default: bool) -> bool {
-    env::var(name)
-        .ok()
-        .map(|value| {
-            matches!(
-                value.trim().to_ascii_lowercase().as_str(),
-                "1" | "true" | "yes"
-            )
-        })
-        .unwrap_or(default)
+    match env::var(name) {
+        Ok(value) => {
+            let normalized = value.trim().to_ascii_lowercase();
+
+            match normalized.as_str() {
+                "1" | "true" | "yes" | "on" | "enabled" => true,
+                "0" | "false" | "no" | "off" | "disabled" => false,
+                _ => {
+                    eprintln!(
+                        "Invalid boolean value for {name}: {value:?}. Using default: {default}."
+                    );
+                    default
+                }
+            }
+        }
+        Err(_) => default,
+    }
 }
 
 async fn set_security_headers(mut response: axum::response::Response) -> axum::response::Response {
