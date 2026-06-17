@@ -144,22 +144,15 @@
         }
 
         .quote-modal-card {
-            max-height: min(860px, calc(100vh - 2rem));
-            width: min(960px, 100%);
-            border: 1px solid rgba(148, 163, 184, 0.18);
+            max-height: min(840px, calc(100vh - 2rem));
+            width: min(880px, 100%);
+            border: 1px solid rgba(148, 163, 184, 0.16);
             background:
-                radial-gradient(circle at top left, rgba(34, 211, 238, 0.16), transparent 34%),
-                radial-gradient(circle at bottom right, rgba(14, 165, 233, 0.12), transparent 30%),
-                linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 0.98));
+                radial-gradient(circle at top right, rgba(34, 211, 238, 0.08), transparent 24%),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.99), rgba(248, 250, 252, 0.99));
             box-shadow:
-                0 30px 80px rgba(2, 6, 23, 0.24),
+                0 36px 90px rgba(2, 6, 23, 0.26),
                 inset 0 1px 0 rgba(255, 255, 255, 0.7);
-        }
-
-        .quote-modal-hero {
-            background:
-                radial-gradient(circle at top left, rgba(103, 232, 249, 0.22), transparent 28%),
-                linear-gradient(140deg, #082f49, #0f172a 62%, #111827);
         }
 
         .quote-modal-scroll {
@@ -184,19 +177,15 @@
 
         .quote-modal-field {
             border: 1px solid rgba(148, 163, 184, 0.28);
-            background: rgba(255, 255, 255, 0.94);
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
+            background: rgba(255, 255, 255, 0.96);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.65),
+                0 1px 2px rgba(15, 23, 42, 0.03);
         }
 
         .quote-modal-field:focus {
             border-color: rgba(6, 182, 212, 0.95);
             box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.12);
-        }
-
-        .quote-modal-chip {
-            border: 1px solid rgba(255, 255, 255, 0.14);
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(8px);
         }
 
         @media (max-width: 767px) {
@@ -352,38 +341,25 @@
             <button
                 type="button"
                 x-ref="requestQuoteClose"
-                class="absolute right-4 top-4 z-20 inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-white/85 text-slate-500 shadow-lg shadow-slate-900/10 backdrop-blur transition hover:-translate-y-0.5 hover:border-cyan-400 hover:text-cyan-600"
+                class="absolute right-4 top-4 z-20 inline-flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-500 shadow-lg shadow-slate-900/10 transition hover:-translate-y-0.5 hover:border-cyan-400 hover:text-cyan-600"
                 @click="closeRequestQuote()"
                 aria-label="Close request quote form"
             >
                 <i class="fa-solid fa-xmark"></i>
             </button>
 
-            <div class="quote-modal-hero relative overflow-hidden px-5 pb-6 pt-16 text-white sm:px-6 md:px-8 md:pb-7 md:pt-10">
-                <div class="absolute inset-x-5 top-6 h-px bg-gradient-to-r from-cyan-300/0 via-cyan-300/80 to-cyan-300/0 sm:inset-x-6 md:inset-x-8 md:top-7"></div>
-                <div class="absolute -left-10 top-10 h-32 w-32 rounded-full bg-cyan-300/12 blur-3xl"></div>
-                <div class="absolute right-0 top-0 h-36 w-36 rounded-full bg-sky-400/10 blur-3xl"></div>
-
-                <div class="relative pr-12">
-                    <p class="text-xs font-black uppercase tracking-[0.32em] text-cyan-200">Request Quote</p>
-                    <h2 id="request-quote-title" class="mt-4 max-w-2xl text-3xl font-black leading-tight tracking-tight md:text-[2.4rem]">
-                        Tell us what you need. We will turn it into a practical proposal.
-                    </h2>
-                    <p class="mt-4 max-w-3xl text-sm leading-7 text-slate-200/90 md:text-[0.95rem]">
-                        Keep it simple: project goal, service area, timing, and anything important we should know.
-                    </p>
-                </div>
-            </div>
-
-            <div class="quote-modal-scroll overflow-y-auto px-5 pb-6 pt-5 sm:px-6 md:px-8 md:pb-8 md:pt-6">
-                <div class="flex flex-col gap-3 border-b border-slate-200 pb-5 sm:flex-row sm:items-end sm:justify-between">
+            <div class="quote-modal-scroll overflow-y-auto px-5 pb-6 pt-16 sm:px-6 md:px-8 md:pb-8 md:pt-8">
+                <div class="flex flex-col gap-4 border-b border-slate-200 pb-6 sm:flex-row sm:items-end sm:justify-between">
                     <div>
-                        <p class="text-xs font-black uppercase tracking-[0.28em] text-cyan-600">Project Intake</p>
-                        <p class="mt-2 max-w-2xl text-sm leading-7 text-slate-600">
-                            Fill the essentials and we can qualify scope, timing, and budget direction properly.
+                        <p class="text-xs font-black uppercase tracking-[0.28em] text-cyan-600">Request Quote</p>
+                        <h2 id="request-quote-title" class="mt-3 max-w-2xl text-3xl font-black tracking-tight text-slate-950 md:text-[2.2rem]">
+                            Tell us what you need.
+                        </h2>
+                        <p class="mt-3 max-w-2xl text-sm leading-7 text-slate-600">
+                            Share the project goal, service area, budget direction, and timeline. We will respond with the right next step.
                         </p>
                     </div>
-                    <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">Usually takes 2 minutes</p>
+                    <p class="rounded-full border border-slate-200 bg-slate-50 px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">2 min form</p>
                 </div>
 
                 <div
@@ -495,20 +471,29 @@
                         </label>
                     </div>
 
-                    <label class="grid gap-2 text-sm font-bold text-slate-800">
-                        Project Timeline
-                        <select
-                            name="project_timeline"
-                            class="quote-modal-field rounded-[1.35rem] px-4 py-3.5 font-medium text-slate-900 outline-none transition"
-                        >
-                            <option value="">Select a timeline</option>
-                            <option value="urgent">Urgent</option>
-                            <option value="this_month">This month</option>
-                            <option value="next_30_60_days">Next 30 to 60 days</option>
-                            <option value="this_quarter">This quarter</option>
-                            <option value="flexible">Flexible</option>
-                        </select>
-                    </label>
+                    <div class="grid gap-5 sm:grid-cols-[0.9fr_1.1fr]">
+                        <label class="grid gap-2 text-sm font-bold text-slate-800">
+                            Project Timeline
+                            <select
+                                name="project_timeline"
+                                class="quote-modal-field rounded-[1.35rem] px-4 py-3.5 font-medium text-slate-900 outline-none transition"
+                            >
+                                <option value="">Select a timeline</option>
+                                <option value="urgent">Urgent</option>
+                                <option value="this_month">This month</option>
+                                <option value="next_30_60_days">Next 30 to 60 days</option>
+                                <option value="this_quarter">This quarter</option>
+                                <option value="flexible">Flexible</option>
+                            </select>
+                        </label>
+
+                        <div class="rounded-[1.5rem] border border-slate-200 bg-slate-50 px-5 py-4">
+                            <p class="text-xs font-black uppercase tracking-[0.22em] text-cyan-600">Best Results</p>
+                            <p class="mt-2 text-sm leading-6 text-slate-600">
+                                A short summary with goals, constraints, and references is enough. No need for a long brief.
+                            </p>
+                        </div>
+                    </div>
 
                     <label class="grid gap-2 text-sm font-bold text-slate-800">
                         Project Details
@@ -525,7 +510,7 @@
 
                     <div class="flex flex-col gap-4 border-t border-slate-200/80 pt-4 sm:flex-row sm:items-center sm:justify-between">
                         <p class="max-w-md text-xs leading-6 text-slate-500">
-                            This request goes directly into the same dashboard workflow as the main contact form.
+                            Your request goes directly into our project intake workflow.
                         </p>
                         <button
                             type="submit"
