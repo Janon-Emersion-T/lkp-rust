@@ -9,6 +9,7 @@ pub mod newsletter;
 pub mod portfolio;
 pub mod public;
 pub mod render;
+pub mod service_area_content;
 pub mod service_content;
 pub mod services;
 pub mod templates;

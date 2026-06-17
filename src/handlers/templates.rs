@@ -102,6 +102,51 @@ pub struct SitemapSectionView {
     pub links: Vec<SitemapLinkView>,
 }
 
+#[derive(Debug, Clone)]
+pub struct ServiceAreaCardView {
+    pub region: String,
+    pub title: String,
+    pub path: String,
+    pub summary: String,
+}
+
+#[derive(Debug, Clone)]
+pub struct ServiceAreaGroupView {
+    pub title: String,
+    pub description: String,
+    pub areas: Vec<ServiceAreaCardView>,
+}
+
+#[derive(Debug, Clone)]
+pub struct ServiceAreaDetailPointView {
+    pub title: String,
+    pub description: String,
+}
+
+#[derive(Debug, Clone)]
+pub struct ServiceAreaDetailFaqView {
+    pub question: String,
+    pub answer: String,
+}
+
+#[derive(Debug, Clone)]
+pub struct ServiceAreaPageView {
+    pub city: String,
+    pub region: String,
+    pub title: String,
+    pub canonical_path: String,
+    pub meta_title: String,
+    pub meta_description: String,
+    pub hero_title: String,
+    pub hero_description: String,
+    pub positioning: String,
+    pub timezone_note: String,
+    pub nearby_markets: Vec<String>,
+    pub buyer_points: Vec<ServiceAreaDetailPointView>,
+    pub service_points: Vec<ServiceAreaDetailPointView>,
+    pub faqs: Vec<ServiceAreaDetailFaqView>,
+}
+
 #[derive(Template)]
 #[template(path = "pages/careers.html")]
 pub struct CareersTemplate {
@@ -119,6 +164,21 @@ pub struct ContactTemplate {
     pub success: bool,
 }
 page!(RequestQuoteTemplate, "pages/requestquote.html");
+#[derive(Template)]
+#[template(path = "pages/service-areas.html")]
+pub struct ServiceAreasTemplate {
+    pub groups: Vec<ServiceAreaGroupView>,
+    pub all_areas: Vec<ServiceAreaCardView>,
+    pub total_areas: usize,
+    pub featured_services: Vec<ServiceCard>,
+}
+#[derive(Template)]
+#[template(path = "pages/service-areas/detail.html")]
+pub struct ServiceAreaDetailTemplate {
+    pub page: ServiceAreaPageView,
+    pub related_areas: Vec<ServiceAreaCardView>,
+    pub featured_services: Vec<ServiceCard>,
+}
 #[derive(Template)]
 #[template(path = "pages/sitemap.html")]
 pub struct SitemapTemplate {

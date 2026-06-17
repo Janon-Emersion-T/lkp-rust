@@ -8,6 +8,7 @@ use sqlx::FromRow;
 use crate::{
     handlers::{
         render::render,
+        service_area_content::service_area_sitemap_entries,
         templates::{SitemapLinkView, SitemapSectionView, SitemapTemplate},
     },
     state::AppState,
@@ -80,6 +81,7 @@ XML sitemap: {SITE_URL}/sitemap.xml
 - Home: {SITE_URL}/
 - About: {SITE_URL}/about
 - Services: {SITE_URL}/services
+- Service Areas: {SITE_URL}/service-areas
 - Contact: {SITE_URL}/contact
 - FAQ: {SITE_URL}/faq
 - Request Quote: {SITE_URL}/request-quote
@@ -186,6 +188,27 @@ async fn build_sitemap_sections(state: &AppState) -> Vec<SitemapSectionView> {
         });
     }
 
+    let service_area_links = service_area_sitemap_entries()
+        .into_iter()
+        .map(|entry| SitemapLinkView {
+            title: entry.title.to_string(),
+            url: format!("{SITE_URL}{}", entry.path),
+            description: entry.description.to_string(),
+            has_lastmod: false,
+            lastmod: None,
+            lastmod_label: String::new(),
+        })
+        .collect::<Vec<_>>();
+
+    sections.push(SitemapSectionView {
+        title: String::from("Service Areas"),
+        description: String::from(
+            "City-focused landing pages for LKProfessionals delivery markets.",
+        ),
+        link_count: service_area_links.len(),
+        links: service_area_links,
+    });
+
     sections.push(SitemapSectionView {
         title: String::from("Legal and Discovery"),
         description: String::from("Policies and machine-readable discovery endpoints."),
@@ -255,14 +278,14 @@ fn static_sitemap_pages() -> &'static [StaticSitemapPage] {
             description: "Service overview covering software, SEO, cloud, and automation.",
         },
         StaticSitemapPage {
-            title: "Industries",
-            path: "/industries",
-            description: "Industries and business environments LKProfessionals supports.",
-        },
-        StaticSitemapPage {
             title: "Case Studies",
             path: "/case-studies",
             description: "Project delivery examples and portfolio outcomes.",
+        },
+        StaticSitemapPage {
+            title: "Industries",
+            path: "/industries",
+            description: "Industries and business environments LKProfessionals supports.",
         },
         StaticSitemapPage {
             title: "Insights",

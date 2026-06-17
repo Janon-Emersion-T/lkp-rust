@@ -1,0 +1,206 @@
+{% extends "base.html" %}
+
+{% block title %}{{ page.meta_title }}{% endblock %}
+{% block meta_description %}{{ page.meta_description }}{% endblock %}
+{% block canonical %}https://lkprofessionals.com{{ page.canonical_path }}{% endblock %}
+{% block og_title %}{{ page.meta_title }}{% endblock %}
+{% block og_description %}{{ page.meta_description }}{% endblock %}
+{% block og_url %}https://lkprofessionals.com{{ page.canonical_path }}{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://lkprofessionals.com/"
+        },
+        {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Service Areas",
+            "item": "https://lkprofessionals.com/service-areas"
+        },
+        {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "{{ page.title }}",
+            "item": "https://lkprofessionals.com{{ page.canonical_path }}"
+        }
+    ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": "Software Development Services for {{ page.title }}",
+    "provider": {
+        "@type": "Organization",
+        "name": "LKProfessionals (Pvt) Ltd.",
+        "url": "https://lkprofessionals.com"
+    },
+    "areaServed": {
+        "@type": "City",
+        "name": "{{ page.city }}"
+    },
+    "serviceType": [
+        "Custom Software Development",
+        "Web Development",
+        "SEO",
+        "AI Automation",
+        "Digital Transformation"
+    ],
+    "url": "https://lkprofessionals.com{{ page.canonical_path }}"
+}
+</script>
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+        {% for faq in page.faqs %}
+        {
+            "@type": "Question",
+            "name": "{{ faq.question }}",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "{{ faq.answer }}"
+            }
+        }{% if !loop.last %},{% endif %}
+        {% endfor %}
+    ]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<section class="relative overflow-hidden bg-slate-950 px-6 py-24 text-white">
+    <div class="absolute inset-0 opacity-30">
+        <div class="absolute -top-24 left-10 h-80 w-80 rounded-full bg-cyan-500 blur-3xl"></div>
+        <div class="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-blue-600 blur-3xl"></div>
+    </div>
+
+    <div class="relative mx-auto grid max-w-7xl gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-start">
+        <div>
+            <a href="/service-areas" class="inline-flex items-center gap-2 text-sm font-semibold text-cyan-300 transition hover:text-white">
+                <i class="fa-solid fa-arrow-left"></i>
+                All service areas
+            </a>
+            <p class="mt-6 text-sm font-black uppercase tracking-[0.24em] text-cyan-300">{{ page.region }}</p>
+            <h1 class="mt-4 max-w-4xl text-4xl font-black tracking-tight md:text-6xl">{{ page.hero_title }}</h1>
+            <p class="mt-6 max-w-3xl text-lg leading-8 text-slate-300">{{ page.hero_description }}</p>
+        </div>
+
+        <div class="rounded-[2rem] border border-white/10 bg-white/8 p-8 backdrop-blur-sm">
+            <p class="text-sm font-black uppercase tracking-[0.22em] text-cyan-300">Delivery Positioning</p>
+            <p class="mt-4 text-sm leading-7 text-slate-200">{{ page.positioning }}</p>
+            <p class="mt-4 text-sm leading-7 text-slate-300">{{ page.timezone_note }}</p>
+
+            <div class="mt-6 flex flex-wrap gap-3">
+                {% for market in page.nearby_markets %}
+                <span class="rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm font-semibold text-slate-100">{{ market }}</span>
+                {% endfor %}
+            </div>
+
+            <div class="mt-8 flex flex-wrap gap-4">
+                <a href="/request-quote" class="rounded-full bg-cyan-400 px-6 py-3 text-sm font-black uppercase tracking-[0.16em] text-slate-950 transition hover:bg-white">
+                    Request Quote
+                </a>
+                <a href="/contact" class="rounded-full border border-white/20 px-6 py-3 text-sm font-black uppercase tracking-[0.16em] text-white transition hover:border-cyan-300 hover:text-cyan-300">
+                    Talk to LKP
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-white px-6 py-20">
+    <div class="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1fr_1fr]">
+        <div class="rounded-[2rem] border border-slate-200 bg-slate-50 p-8">
+            <p class="text-sm font-black uppercase tracking-[0.24em] text-cyan-600">Why This Page Exists</p>
+            <h2 class="mt-4 text-3xl font-black tracking-tight text-slate-950">Relevant for buyers in {{ page.city }}</h2>
+            <div class="mt-6 grid gap-4">
+                {% for point in page.buyer_points %}
+                <div class="rounded-[1.5rem] border border-slate-200 bg-white p-5">
+                    <h3 class="text-lg font-black tracking-tight text-slate-950">{{ point.title }}</h3>
+                    <p class="mt-3 text-sm leading-7 text-slate-600">{{ point.description }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="rounded-[2rem] border border-slate-200 bg-slate-50 p-8">
+            <p class="text-sm font-black uppercase tracking-[0.24em] text-cyan-600">What We Can Deliver</p>
+            <h2 class="mt-4 text-3xl font-black tracking-tight text-slate-950">Service focus for {{ page.title }}</h2>
+            <div class="mt-6 grid gap-4">
+                {% for point in page.service_points %}
+                <div class="rounded-[1.5rem] border border-slate-200 bg-white p-5">
+                    <h3 class="text-lg font-black tracking-tight text-slate-950">{{ point.title }}</h3>
+                    <p class="mt-3 text-sm leading-7 text-slate-600">{{ point.description }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-slate-50 px-6 py-20">
+    <div class="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1fr_0.95fr]">
+        <div class="rounded-[2rem] border border-slate-200 bg-white p-8 shadow-[0_20px_50px_rgba(15,23,42,0.06)]">
+            <p class="text-sm font-black uppercase tracking-[0.24em] text-cyan-600">Relevant Services</p>
+            <h2 class="mt-4 text-3xl font-black tracking-tight text-slate-950">Capability areas often paired with this market</h2>
+            <div class="mt-6 grid gap-4 sm:grid-cols-2">
+                {% for service in featured_services %}
+                <a href="{{ service.slug }}" class="rounded-[1.5rem] border border-slate-200 bg-slate-50 p-5 transition hover:border-cyan-300 hover:bg-cyan-50">
+                    <p class="text-xs font-black uppercase tracking-[0.2em] text-cyan-600">{{ service.category }}</p>
+                    <h3 class="mt-3 text-lg font-black tracking-tight text-slate-950">{{ service.short_title }}</h3>
+                    <p class="mt-3 text-sm leading-7 text-slate-600">{{ service.summary }}</p>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="rounded-[2rem] border border-slate-200 bg-white p-8 shadow-[0_20px_50px_rgba(15,23,42,0.06)]">
+            <p class="text-sm font-black uppercase tracking-[0.24em] text-cyan-600">FAQ</p>
+            <h2 class="mt-4 text-3xl font-black tracking-tight text-slate-950">Questions buyers may ask</h2>
+            <div class="mt-6 space-y-4">
+                {% for faq in page.faqs %}
+                <details class="rounded-[1.4rem] border border-slate-200 bg-slate-50 p-5">
+                    <summary class="cursor-pointer text-base font-black text-slate-950">{{ faq.question }}</summary>
+                    <p class="mt-3 text-sm leading-7 text-slate-600">{{ faq.answer }}</p>
+                </details>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-white px-6 pb-20">
+    <div class="mx-auto max-w-7xl rounded-[2rem] border border-slate-200 bg-slate-50 p-8">
+        <div class="flex flex-col gap-4 border-b border-slate-200 pb-6 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+                <p class="text-sm font-black uppercase tracking-[0.24em] text-cyan-600">Related Markets</p>
+                <h2 class="mt-3 text-3xl font-black tracking-tight text-slate-950">Other service area pages</h2>
+            </div>
+            <a href="/service-areas" class="text-sm font-bold text-cyan-700 transition hover:text-slate-950">Browse all service areas</a>
+        </div>
+
+        <div class="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            {% for area in related_areas %}
+            <a href="{{ area.path }}" class="rounded-[1.5rem] border border-slate-200 bg-white p-5 transition hover:-translate-y-0.5 hover:border-cyan-300">
+                <h3 class="text-lg font-black tracking-tight text-slate-950">{{ area.title }}</h3>
+                <p class="mt-2 text-sm font-semibold text-slate-500">{{ area.region }}</p>
+                <p class="mt-3 text-sm leading-7 text-slate-600">{{ area.summary }}</p>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

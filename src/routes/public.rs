@@ -7,8 +7,9 @@ use crate::{
     handlers::{
         about, career_apply, career_single, careers, case_studies, case_study_single, contact, faq,
         home, industries, insight_single, insights, llmo_txt, llms_txt, request_quote, robot_txt,
-        robots_txt, services, sitemap_html, sitemap_xml, submit_career_application,
-        submit_contact_message, submit_request_quote, subscribe_newsletter, why_work,
+        robots_txt, service_area_single, service_areas, services, sitemap_html, sitemap_xml,
+        submit_career_application, submit_contact_message, submit_request_quote,
+        subscribe_newsletter, why_work,
     },
     state::AppState,
 };
@@ -24,6 +25,10 @@ pub fn public_routes() -> Router<AppState> {
         .route("/", get(home))
         .route("/about", get(about))
         .route("/services", get(services))
+        .route("/service-area", get(service_areas))
+        .route("/service-areas", get(service_areas))
+        .route("/service-area/{slug}", get(service_area_single))
+        .route("/service-areas/{slug}", get(service_area_single))
         .route("/industries", get(industries))
         .route("/portfolio", get(case_studies))
         .route("/portfolio/{slug}", get(case_study_single))

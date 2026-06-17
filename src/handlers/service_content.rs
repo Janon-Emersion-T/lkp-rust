@@ -72,7 +72,7 @@ pub struct ServicePageContext {
 
 pub fn services_overview_context() -> ServiceOverviewContext {
     ServiceOverviewContext {
-        services: service_cards(),
+        services: all_service_cards(),
         proof_points: vec![
             ServicePoint {
                 title: "Business-first scoping",
@@ -1203,7 +1203,7 @@ pub fn service_page_context(slug: &str) -> ServicePageContext {
     }
 }
 
-fn service_cards() -> Vec<ServiceCard> {
+pub fn all_service_cards() -> Vec<ServiceCard> {
     vec![
         ServiceCard {
             slug: "/services/web-development",
@@ -1281,7 +1281,7 @@ fn service_cards() -> Vec<ServiceCard> {
 }
 
 fn related_services(slugs: &[&str]) -> Vec<ServiceCard> {
-    service_cards()
+    all_service_cards()
         .into_iter()
         .filter(|service| {
             let route_slug = service.slug.trim_start_matches("/services/");
