@@ -40,7 +40,7 @@
             </div>
 
             <div class="overflow-hidden rounded-[2rem] border border-white/10 shadow-[0_28px_70px_rgba(2,6,23,0.36)]">
-                <img src="{{ portfolio.cover_image_url }}" alt="Cover image for {{ portfolio.title }} case study" decoding="async" class="h-full min-h-[22rem] w-full object-cover" />
+                <img src="{{ portfolio.cover_image_url }}" alt="Cover image for {{ portfolio.title }} case study" loading="eager" fetchpriority="high" decoding="async" class="h-full min-h-[22rem] w-full object-cover" />
             </div>
         </div>
     </div>

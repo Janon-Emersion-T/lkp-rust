@@ -45,7 +45,10 @@
       background-image:
         linear-gradient(90deg, rgba(2, 6, 23, 0.92) 0%, rgba(2, 6, 23, 0.84) 36%, rgba(2, 6, 23, 0.64) 60%, rgba(2, 6, 23, 0.8) 100%),
         linear-gradient(180deg, rgba(2, 6, 23, 0.22), rgba(2, 6, 23, 0.9)),
-        url("/static/images/hero-coding-bg-cleaner.png");
+        image-set(
+          url("/static/images/hero-coding-bg-cleaner.webp") type("image/webp"),
+          url("/static/images/hero-coding-bg-cleaner.png") type("image/png")
+        );
       background-position: center, center, center;
       background-size: cover, cover, cover;
       background-repeat: no-repeat;

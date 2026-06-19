@@ -144,7 +144,7 @@
           <button type="submit" class="rounded-full bg-cyan-400 px-5 py-3 text-center text-sm font-bold text-slate-950 transition hover:bg-white">
             Subscribe
           </button>
-          <p class="hidden rounded-2xl border px-4 py-3 text-sm font-semibold" data-newsletter-message></p>
+          <p hidden class="rounded-2xl border px-4 py-3 text-sm font-semibold" data-newsletter-message></p>
         </form>
 
         <a href="/insights" class="mt-4 inline-flex text-sm font-bold text-cyan-300 transition hover:text-white">
@@ -181,50 +181,3 @@
     </div>
   </div>
 </footer>
-
-<script>
-  (() => {
-    const forms = document.querySelectorAll("[data-newsletter-form]");
-
-    for (const form of forms) {
-      const message = form.querySelector("[data-newsletter-message]");
-
-      form.addEventListener("submit", async (event) => {
-        event.preventDefault();
-
-        const formData = new FormData(form);
-        const body = new URLSearchParams();
-
-        for (const [key, value] of formData.entries()) {
-          body.append(key, value.toString());
-        }
-
-        try {
-          const response = await fetch("/newsletter/subscribe", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded",
-              "Accept": "application/json"
-            },
-            body
-          });
-
-          const payload = await response.json();
-          message.textContent = payload.message;
-          message.classList.remove("hidden", "border-emerald-300", "bg-emerald-50", "text-emerald-800", "border-rose-300", "bg-rose-50", "text-rose-800");
-
-          if (response.ok && payload.success) {
-            message.classList.add("border-emerald-300", "bg-emerald-50", "text-emerald-800");
-            form.reset();
-          } else {
-            message.classList.add("border-rose-300", "bg-rose-50", "text-rose-800");
-          }
-        } catch (error) {
-          message.textContent = "Subscription failed. Please try again.";
-          message.classList.remove("hidden");
-          message.classList.add("border-rose-300", "bg-rose-50", "text-rose-800");
-        }
-      });
-    }
-  })();
-</script>

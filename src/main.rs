@@ -11,6 +11,7 @@ use routes::app_routes;
 use services::newsletter::start_newsletter_worker;
 use state::AppState;
 use std::env;
+use tower_http::compression::CompressionLayer;
 use tower_sessions::{MemoryStore, SessionManagerLayer};
 
 #[tokio::main]
@@ -90,7 +91,8 @@ async fn main() {
     // App
     let app = app_routes(state)
         .layer(axum::extract::DefaultBodyLimit::max(1024 * 1024))
-        .layer(axum::middleware::map_response(set_security_headers))
+        .layer(CompressionLayer::new())
+        .layer(axum::middleware::from_fn(set_response_headers))
         .layer(session_layer);
 
     // Server
@@ -123,25 +125,66 @@ fn env_flag(name: &str, default: bool) -> bool {
     }
 }
 
-async fn set_security_headers(mut response: axum::response::Response) -> axum::response::Response {
-    use axum::http::header::{HeaderName, HeaderValue};
+async fn set_response_headers(
+    request: axum::extract::Request,
+    next: axum::middleware::Next,
+) -> axum::response::Response {
+    use axum::http::header::{
+        CACHE_CONTROL, HeaderName, HeaderValue, VARY, X_CONTENT_TYPE_OPTIONS,
+    };
 
-    response.headers_mut().insert(
-        HeaderName::from_static("x-content-type-options"),
-        HeaderValue::from_static("nosniff"),
-    );
-    response.headers_mut().insert(
+    let path = request.uri().path().to_owned();
+    let mut response = next.run(request).await;
+    let headers = response.headers_mut();
+
+    headers.insert(X_CONTENT_TYPE_OPTIONS, HeaderValue::from_static("nosniff"));
+    headers.insert(
         HeaderName::from_static("x-frame-options"),
         HeaderValue::from_static("DENY"),
     );
-    response.headers_mut().insert(
+    headers.insert(
         HeaderName::from_static("referrer-policy"),
         HeaderValue::from_static("strict-origin-when-cross-origin"),
     );
-    response.headers_mut().insert(
+    headers.insert(
         HeaderName::from_static("permissions-policy"),
         HeaderValue::from_static("camera=(), microphone=(), geolocation=()"),
     );
+    headers.insert(VARY, HeaderValue::from_static("Accept-Encoding"));
+
+    if !headers.contains_key(CACHE_CONTROL) {
+        headers.insert(
+            CACHE_CONTROL,
+            HeaderValue::from_static(cache_control_value(&path)),
+        );
+    }
 
     response
+}
+
+fn cache_control_value(path: &str) -> &'static str {
+    if path.starts_with("/static/") {
+        if has_extension(path, &["png", "jpg", "jpeg", "webp", "avif", "svg", "ico"]) {
+            "public, max-age=2592000, stale-while-revalidate=604800"
+        } else if has_extension(path, &["css", "js"]) {
+            "public, max-age=604800, stale-while-revalidate=86400"
+        } else {
+            "public, max-age=86400, stale-while-revalidate=43200"
+        }
+    } else if matches!(path, "/robots.txt" | "/llms.txt" | "/sitemap.xml") {
+        "public, max-age=3600, stale-while-revalidate=86400"
+    } else {
+        "public, max-age=300, stale-while-revalidate=3600"
+    }
+}
+
+fn has_extension(path: &str, extensions: &[&str]) -> bool {
+    path.rsplit('.')
+        .next()
+        .map(|extension| {
+            extensions
+                .iter()
+                .any(|candidate| extension.eq_ignore_ascii_case(candidate))
+        })
+        .unwrap_or(false)
 }
