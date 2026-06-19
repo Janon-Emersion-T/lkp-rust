@@ -50,7 +50,7 @@
                     </span>
                 </a>
 
-                <nav class="hidden items-center gap-2 lg:flex">
+                <nav aria-label="Primary" class="hidden items-center gap-2 lg:flex">
                     <a href="/" class="site-nav-link" :class="{ 'site-nav-link-active': isActive('/') }">Home</a>
                     <a href="/about" class="site-nav-link" :class="{ 'site-nav-link-active': isActive('/about') }">About</a>
 
@@ -136,6 +136,7 @@
                         @click="mobileOpen = !mobileOpen"
                         :aria-expanded="mobileOpen.toString()"
                         aria-label="Toggle navigation"
+                        aria-controls="mobile-site-navigation"
                     >
                         <span></span>
                         <span></span>
@@ -156,7 +157,7 @@
                 class="lg:hidden"
             >
                 <div class="site-mobile-panel">
-                    <nav class="flex flex-col gap-2">
+                    <nav id="mobile-site-navigation" aria-label="Mobile" class="flex flex-col gap-2">
                         <a href="/" class="site-mobile-link" :class="{ 'site-mobile-link-active': isActive('/') }">Home</a>
                         <a href="/about" class="site-mobile-link" :class="{ 'site-mobile-link-active': isActive('/about') }">About</a>
 

@@ -19,7 +19,7 @@
 <script type="application/ld+json">
 {
     "@context": "https://schema.org",
-    "@type": "Article",
+    "@type": "CreativeWork",
     "headline": "{{ portfolio.title }}",
     "description": "{{ portfolio.meta_description }}",
     "image": "{{ portfolio.og_image_url }}",
@@ -40,6 +40,27 @@
     "mainEntityOfPage": "{{ portfolio.canonical_url }}"
 }
 </script>
+{% if let Some(quote) = portfolio.testimonial_quote %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Review",
+    "itemReviewed": {
+        "@type": "CreativeWork",
+        "name": "{{ portfolio.title }}"
+    },
+    "reviewBody": "{{ quote }}",
+    "author": {
+        "@type": "Person",
+        "name": "{% match portfolio.testimonial_author %}{% when Some with (author) %}{{ author }}{% when None %}Client{% endmatch %}"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "LKProfessionals (Pvt) Ltd."
+    }
+}
+</script>
+{% endif %}
 
 <script type="application/ld+json">
 {
@@ -71,6 +92,7 @@
 
 {% block content %}
 {% include "components/portfolio/detail-hero.html" %}
+{% include "components/portfolio/detail-summary.html" %}
 {% include "components/portfolio/detail-story.html" %}
 {% include "components/portfolio/detail-related.html" %}
 {% endblock %}

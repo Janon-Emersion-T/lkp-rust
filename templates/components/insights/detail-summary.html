@@ -1,0 +1,31 @@
+<section class="bg-white px-6 py-10 text-slate-950">
+    <div class="mx-auto grid max-w-7xl gap-6 lg:grid-cols-[1.05fr_0.95fr]">
+        <article class="rounded-[2rem] border border-slate-200 bg-slate-50 p-8">
+            <p class="text-sm font-black uppercase tracking-[0.22em] text-cyan-700">Direct Answer</p>
+            <h2 class="mt-4 text-3xl font-black tracking-tight md:text-4xl">
+                What is the short answer?
+            </h2>
+            <p class="mt-4 text-base leading-8 text-slate-700">
+                {{ insight.excerpt }}
+            </p>
+        </article>
+
+        <aside class="rounded-[2rem] border border-slate-200 bg-white p-8 shadow-[0_18px_48px_rgba(15,23,42,0.05)]">
+            <p class="text-sm font-black uppercase tracking-[0.22em] text-cyan-700">Article Facts</p>
+            <dl class="mt-5 grid gap-4">
+                <div class="rounded-[1.4rem] bg-slate-50 px-5 py-4">
+                    <dt class="text-xs font-black uppercase tracking-[0.18em] text-slate-500">Author</dt>
+                    <dd class="mt-2 text-sm font-bold text-slate-950">{{ insight.author }}</dd>
+                </div>
+                <div class="rounded-[1.4rem] bg-slate-50 px-5 py-4">
+                    <dt class="text-xs font-black uppercase tracking-[0.18em] text-slate-500">Published</dt>
+                    <dd class="mt-2 text-sm font-bold text-slate-950">{{ insight.published_date_label }}</dd>
+                </div>
+                <div class="rounded-[1.4rem] bg-slate-50 px-5 py-4">
+                    <dt class="text-xs font-black uppercase tracking-[0.18em] text-slate-500">Reading Time</dt>
+                    <dd class="mt-2 text-sm font-bold text-slate-950">{{ insight.reading_time_label }}</dd>
+                </div>
+            </dl>
+        </aside>
+    </div>
+</section>

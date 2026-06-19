@@ -7,10 +7,15 @@
     <div class="relative mx-auto max-w-7xl">
         <div class="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
             <div>
-                <a href="/services" class="inline-flex items-center gap-2 text-sm font-bold text-slate-300 transition hover:text-white">
-                    <i class="fa-solid fa-arrow-left text-xs"></i>
-                    Back to all services
-                </a>
+                <nav aria-label="Breadcrumb" class="text-sm text-slate-300">
+                    <ol class="flex flex-wrap items-center gap-2">
+                        <li><a href="/" class="transition hover:text-white">Home</a></li>
+                        <li aria-hidden="true" class="text-slate-500">/</li>
+                        <li><a href="/services" class="transition hover:text-white">Services</a></li>
+                        <li aria-hidden="true" class="text-slate-500">/</li>
+                        <li aria-current="page" class="font-bold text-white">{{ page.title }}</li>
+                    </ol>
+                </nav>
                 <p class="service-pill mt-6">{{ page.eyebrow }}</p>
                 <h1 class="mt-6 max-w-4xl text-4xl font-black tracking-tight md:text-6xl">
                     {{ page.hero_title }}

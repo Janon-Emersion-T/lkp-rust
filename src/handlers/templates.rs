@@ -114,6 +114,8 @@ pub struct SitemapLinkView {
     pub has_lastmod: bool,
     pub lastmod: Option<String>,
     pub lastmod_label: String,
+    pub changefreq: String,
+    pub priority: String,
 }
 
 #[derive(Debug, Clone)]

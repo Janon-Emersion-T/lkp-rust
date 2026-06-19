@@ -5,10 +5,15 @@
     </div>
 
     <div class="relative mx-auto max-w-7xl">
-        <a href="/insights" class="inline-flex items-center gap-2 text-sm font-bold text-slate-300 transition hover:text-white">
-            <i class="fa-solid fa-arrow-left text-xs"></i>
-            Back to all insights
-        </a>
+        <nav aria-label="Breadcrumb" class="text-sm text-slate-300">
+            <ol class="flex flex-wrap items-center gap-2">
+                <li><a href="/" class="transition hover:text-white">Home</a></li>
+                <li aria-hidden="true" class="text-slate-500">/</li>
+                <li><a href="/insights" class="transition hover:text-white">Insights</a></li>
+                <li aria-hidden="true" class="text-slate-500">/</li>
+                <li aria-current="page" class="font-bold text-white">{{ insight.title }}</li>
+            </ol>
+        </nav>
 
         <div class="mt-8 grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
             <div>
@@ -27,7 +32,7 @@
             </div>
 
             <div class="overflow-hidden rounded-[2rem] border border-white/10 shadow-[0_28px_70px_rgba(2,6,23,0.36)]">
-                <img src="{{ insight.cover_image_url }}" alt="{{ insight.title }}" decoding="async" class="h-full min-h-[22rem] w-full object-cover" />
+                <img src="{{ insight.cover_image_url }}" alt="Cover image for {{ insight.title }}" decoding="async" class="h-full min-h-[22rem] w-full object-cover" />
             </div>
         </div>
     </div>

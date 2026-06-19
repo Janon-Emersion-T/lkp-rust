@@ -74,6 +74,20 @@
                         {% endif %}
                     </div>
                 </div>
+
+                {% if let Some(quote) = portfolio.testimonial_quote %}
+                <div class="rounded-[2rem] border border-cyan-200 bg-cyan-50 p-8">
+                    <p class="text-sm font-black uppercase tracking-[0.24em] text-cyan-700">Client Perspective</p>
+                    <blockquote class="mt-4 text-lg font-bold leading-8 text-slate-950">
+                        "{{ quote }}"
+                    </blockquote>
+                    {% if let Some(author) = portfolio.testimonial_author %}
+                    <p class="mt-4 text-sm font-black uppercase tracking-[0.18em] text-slate-600">
+                        {{ author }}{% if let Some(role) = portfolio.testimonial_author_role %} · {{ role }}{% endif %}
+                    </p>
+                    {% endif %}
+                </div>
+                {% endif %}
             </div>
         </div>
     </div>

@@ -1,0 +1,28 @@
+<section class="bg-white px-6 py-10 text-slate-950">
+    <div class="mx-auto grid max-w-7xl gap-6 lg:grid-cols-[1.05fr_0.95fr]">
+        <article class="rounded-[2rem] border border-slate-200 bg-slate-50 p-8">
+            <p class="text-sm font-black uppercase tracking-[0.22em] text-cyan-700">Direct Answer</p>
+            <h2 class="mt-4 text-3xl font-black tracking-tight md:text-4xl">
+                What does {{ page.title | lower }} help a business achieve?
+            </h2>
+            <p class="mt-4 text-base leading-8 text-slate-700">
+                {{ page.meta_description }}
+            </p>
+            <p class="mt-4 text-sm leading-7 text-slate-600">
+                This service is most effective when a business needs a practical delivery path, clear commercial positioning, and a system that can keep improving after launch.
+            </p>
+        </article>
+
+        <aside class="rounded-[2rem] border border-cyan-200 bg-cyan-50 p-8">
+            <p class="text-sm font-black uppercase tracking-[0.22em] text-cyan-700">Typical Delivery Flow</p>
+            <ol class="mt-5 grid gap-4">
+                {% for step in page.process %}
+                <li class="rounded-[1.4rem] border border-cyan-100 bg-white px-5 py-4">
+                    <p class="text-sm font-black text-slate-950">{{ loop.index }}. {{ step.title }}</p>
+                    <p class="mt-2 text-sm leading-7 text-slate-600">{{ step.description }}</p>
+                </li>
+                {% endfor %}
+            </ol>
+        </aside>
+    </div>
+</section>

@@ -38,6 +38,9 @@ pub struct PortfolioForm {
     pub results: Option<String>,
     pub impact_metrics: Option<String>,
     pub technologies: Option<String>,
+    pub testimonial_quote: Option<String>,
+    pub testimonial_author: Option<String>,
+    pub testimonial_author_role: Option<String>,
     pub cover_image_url: Option<String>,
     pub live_url: Option<String>,
     pub sort_order: Option<i32>,
@@ -107,6 +110,24 @@ fn build_editor_view(form: &PortfolioForm) -> PortfolioEditorView {
             .to_string(),
         technologies: form
             .technologies
+            .as_deref()
+            .unwrap_or_default()
+            .trim()
+            .to_string(),
+        testimonial_quote: form
+            .testimonial_quote
+            .as_deref()
+            .unwrap_or_default()
+            .trim()
+            .to_string(),
+        testimonial_author: form
+            .testimonial_author
+            .as_deref()
+            .unwrap_or_default()
+            .trim()
+            .to_string(),
+        testimonial_author_role: form
+            .testimonial_author_role
             .as_deref()
             .unwrap_or_default()
             .trim()
@@ -432,6 +453,9 @@ pub async fn dashboard_portfolio_store(
             results,
             impact_metrics,
             technologies,
+            testimonial_quote,
+            testimonial_author,
+            testimonial_author_role,
             cover_image_url,
             live_url,
             featured,
@@ -446,7 +470,7 @@ pub async fn dashboard_portfolio_store(
         VALUES
         (
             $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16,
-            $17, $18, $19, $20, $21, $22
+            $17, $18, $19, $20, $21, $22, $23, $24, $25
         )
         RETURNING id, slug
         "#,
@@ -463,6 +487,9 @@ pub async fn dashboard_portfolio_store(
     .bind(clean_optional(&form.results))
     .bind(clean_optional(&form.impact_metrics))
     .bind(clean_optional(&form.technologies))
+    .bind(clean_optional(&form.testimonial_quote))
+    .bind(clean_optional(&form.testimonial_author))
+    .bind(clean_optional(&form.testimonial_author_role))
     .bind(clean_optional(&form.cover_image_url))
     .bind(clean_optional(&form.live_url))
     .bind(view.featured)
@@ -577,16 +604,19 @@ pub async fn dashboard_portfolio_update(
             results = $11,
             impact_metrics = $12,
             technologies = $13,
-            cover_image_url = $14,
-            live_url = $15,
-            featured = $16,
-            published = $17,
-            sort_order = $18,
-            meta_title = $19,
-            meta_description = $20,
-            canonical_url = $21,
-            og_image_url = $22,
-            published_at = $23,
+            testimonial_quote = $14,
+            testimonial_author = $15,
+            testimonial_author_role = $16,
+            cover_image_url = $17,
+            live_url = $18,
+            featured = $19,
+            published = $20,
+            sort_order = $21,
+            meta_title = $22,
+            meta_description = $23,
+            canonical_url = $24,
+            og_image_url = $25,
+            published_at = $26,
             updated_at = NOW()
         WHERE id = $1
         "#,
@@ -604,6 +634,9 @@ pub async fn dashboard_portfolio_update(
     .bind(clean_optional(&form.results))
     .bind(clean_optional(&form.impact_metrics))
     .bind(clean_optional(&form.technologies))
+    .bind(clean_optional(&form.testimonial_quote))
+    .bind(clean_optional(&form.testimonial_author))
+    .bind(clean_optional(&form.testimonial_author_role))
     .bind(clean_optional(&form.cover_image_url))
     .bind(clean_optional(&form.live_url))
     .bind(view.featured)

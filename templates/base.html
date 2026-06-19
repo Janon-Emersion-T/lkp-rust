@@ -13,13 +13,22 @@
     <meta name="application-name" content="LKProfessionals">
     <meta name="format-detection" content="telephone=no">
     <meta name="theme-color" content="#050b18">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
 
     <link rel="canonical" href="{% block canonical %}https://lkprofessionals.com/{% endblock %}">
+    <link rel="alternate" hreflang="en-lk" href="{% block hreflang_en_lk %}https://lkprofessionals.com/{% endblock %}">
+    <link rel="alternate" hreflang="en" href="{% block hreflang_en %}https://lkprofessionals.com/{% endblock %}">
+    <link rel="alternate" hreflang="x-default" href="{% block hreflang_default %}https://lkprofessionals.com/{% endblock %}">
     <link rel="alternate" type="application/xml" title="Sitemap" href="https://lkprofessionals.com/sitemap.xml">
     <link rel="alternate" type="text/plain" title="LLMs" href="https://lkprofessionals.com/llms.txt">
+    <link rel="dns-prefetch" href="//images.unsplash.com">
+    <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
     <link rel="preconnect" href="https://images.unsplash.com">
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="preload" href="/static/css/app.css" as="style">
+    {% block preload_assets %}{% endblock %}
 
     <meta property="og:site_name" content="LKProfessionals (Pvt) Ltd.">
     <meta property="og:locale" content="en_LK">
@@ -29,8 +38,12 @@
     <meta property="og:url" content="{% block og_url %}https://lkprofessionals.com/{% endblock %}">
     <meta property="og:image" content="{% block og_image %}https://lkprofessionals.com/static/images/LKProfessionals.png{% endblock %}">
     <meta property="og:image:alt" content="{% block og_image_alt %}LKProfessionals digital services, software, SEO, and automation company{% endblock %}">
+    <meta property="og:image:width" content="{% block og_image_width %}1200{% endblock %}">
+    <meta property="og:image:height" content="{% block og_image_height %}630{% endblock %}">
 
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@lkprofessionals">
+    <meta name="twitter:creator" content="@lkprofessionals">
     <meta name="twitter:title" content="{% block twitter_title %}LKProfessionals (Pvt) Ltd. | IT Services Company in Sri Lanka{% endblock %}">
     <meta name="twitter:description" content="{% block twitter_description %}Web development, custom software, SEO, digital marketing, hosting, domain, and IT consultation services by LKProfessionals.{% endblock %}">
     <meta name="twitter:image" content="{% block twitter_image %}https://lkprofessionals.com/static/images/LKProfessionals.png{% endblock %}">
@@ -51,11 +64,20 @@
           "url": "https://lkprofessionals.com/",
           "logo": "https://lkprofessionals.com/static/images/logo.png",
           "description": "LKProfessionals provides web development, custom software, SEO, digital marketing, hosting, domain, automation, and IT consulting services.",
+          "email": "info@lkprofessionals.com",
+          "telephone": "+94 76 123 4321",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "41/1, Eachchamoddai Road",
+            "addressLocality": "Jaffna",
+            "addressCountry": "LK"
+          },
           "sameAs": [
             "https://www.linkedin.com/company/lkprofessionals",
             "https://www.facebook.com/lkprofessionals",
             "https://www.instagram.com/lkprofessionals",
-            "https://x.com/lkprofessionals"
+            "https://x.com/lkprofessionals",
+            "https://www.youtube.com/@lkprofessionals"
           ],
           "contactPoint": [
             {
@@ -73,26 +95,37 @@
           "@id": "https://lkprofessionals.com/#website",
           "url": "https://lkprofessionals.com/",
           "name": "LKProfessionals",
+          "description": "High-performance websites, software systems, SEO, automation, and digital growth support from Jaffna, Sri Lanka.",
           "publisher": {
             "@id": "https://lkprofessionals.com/#organization"
           },
           "inLanguage": "en-LK"
         },
         {
-          "@type": "ProfessionalService",
+          "@type": "LocalBusiness",
           "@id": "https://lkprofessionals.com/#business",
           "name": "LKProfessionals (Pvt) Ltd.",
           "url": "https://lkprofessionals.com/",
           "image": "https://lkprofessionals.com/static/images/LKProfessionals.png",
           "description": "Digital delivery company in Jaffna, Sri Lanka offering websites, software, SEO, automation, hosting, and IT consulting.",
+          "priceRange": "$$",
           "areaServed": ["Sri Lanka", "Jaffna", "International"],
           "address": {
             "@type": "PostalAddress",
+            "streetAddress": "41/1, Eachchamoddai Road",
             "addressLocality": "Jaffna",
             "addressCountry": "LK"
           },
           "telephone": "+94 76 123 4321",
           "email": "info@lkprofessionals.com",
+          "openingHoursSpecification": [
+            {
+              "@type": "OpeningHoursSpecification",
+              "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+              "opens": "09:00",
+              "closes": "18:00"
+            }
+          ],
           "brand": {
             "@id": "https://lkprofessionals.com/#organization"
           }
@@ -312,7 +345,7 @@
 
     {% include "partials/header.html" %}
 
-    <main id="main-content">
+    <main id="main-content" tabindex="-1">
         {% block content %}{% endblock %}
     </main>
 
