@@ -193,7 +193,7 @@
         <p id="insights-results-count" class="text-sm font-semibold text-slate-500">Showing all {{ insights.len() }} entries</p>
     </div>
 
-    <div class="mt-8 grid gap-5" id="insights-list">
+    <div class="mt-8 grid gap-5" id="insights-list" data-insights-list>
         {% if insights.len() == 0 %}
         <div class="rounded-[1.75rem] border border-dashed border-slate-300 bg-slate-50 px-6 py-12 text-center">
             <h3 class="text-xl font-black text-slate-950">No insights yet</h3>
@@ -206,6 +206,7 @@
         {% for insight in insights %}
         <article
             class="insight-row rounded-[1.75rem] border border-slate-200 bg-slate-50 p-5 transition hover:border-cyan-200 hover:bg-white"
+            data-insight-row
             data-search="{{ insight.title|lower }} {{ insight.author|lower }} {{ insight.category_label()|lower }} {{ insight.slug|lower }}"
             data-status="{% if insight.published %}published{% else %}draft{% endif %}"
             data-featured="{% if insight.featured %}true{% else %}false{% endif %}"
@@ -276,49 +277,4 @@
         </p>
     </div>
 </section>
-
-<script>
-    (() => {
-        const searchInput = document.getElementById("insights-search");
-        const statusFilter = document.getElementById("insights-status-filter");
-        const categoryFilter = document.getElementById("insights-category-filter");
-        const rows = [...document.querySelectorAll(".insight-row")];
-        const emptyState = document.getElementById("insights-empty-state");
-        const resultsCount = document.getElementById("insights-results-count");
-
-        if (!searchInput || !statusFilter || !categoryFilter || !resultsCount) {
-            return;
-        }
-
-        const applyFilters = () => {
-            const search = searchInput.value.trim().toLowerCase();
-            const status = statusFilter.value;
-            const category = categoryFilter.value;
-            let visibleCount = 0;
-
-            for (const row of rows) {
-                const matchesSearch = !search || row.dataset.search.includes(search);
-                const matchesCategory = category === "all" || row.dataset.category === category;
-                const matchesStatus = status === "all"
-                    || row.dataset.status === status
-                    || (status === "featured" && row.dataset.featured === "true");
-
-                const visible = matchesSearch && matchesCategory && matchesStatus;
-                row.classList.toggle("hidden", !visible);
-
-                if (visible) {
-                    visibleCount += 1;
-                }
-            }
-
-            resultsCount.textContent = `Showing ${visibleCount} of ${rows.length} entries`;
-            emptyState?.classList.toggle("hidden", visibleCount !== 0);
-        };
-
-        searchInput.addEventListener("input", applyFilters);
-        statusFilter.addEventListener("change", applyFilters);
-        categoryFilter.addEventListener("change", applyFilters);
-        applyFilters();
-    })();
-</script>
 {% endblock %}

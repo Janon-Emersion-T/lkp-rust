@@ -11,6 +11,7 @@
     </title>
 
     <link rel="stylesheet" href="/static/css/app.css">
+    <script defer src="/static/js/dashboard.js"></script>
 </head>
 
 <body class="min-h-screen overflow-x-hidden bg-slate-100 text-slate-900">
@@ -42,66 +43,5 @@
         </div>
 
     </div>
-
-    <script>
-        (() => {
-            const currentPath = window.location.pathname.replace(/\/+$/, "") || "/";
-            const links = document.querySelectorAll("[data-nav-match]");
-            const sidebar = document.getElementById("dashboard-sidebar");
-            const backdrop = document.getElementById("dashboard-sidebar-backdrop");
-            const openButton = document.getElementById("dashboard-sidebar-open");
-            const closeButton = document.getElementById("dashboard-sidebar-close");
-
-            const setSidebarState = (open) => {
-                if (!sidebar || !backdrop) {
-                    return;
-                }
-
-                sidebar.classList.toggle("translate-x-0", open);
-                sidebar.classList.toggle("translate-x-[-110%]", !open);
-                backdrop.classList.toggle("opacity-100", open);
-                backdrop.classList.toggle("pointer-events-auto", open);
-                backdrop.classList.toggle("opacity-0", !open);
-                backdrop.classList.toggle("pointer-events-none", !open);
-                document.body.classList.toggle("overflow-hidden", open);
-            };
-
-            openButton?.addEventListener("click", () => setSidebarState(true));
-            closeButton?.addEventListener("click", () => setSidebarState(false));
-            backdrop?.addEventListener("click", () => setSidebarState(false));
-
-            window.addEventListener("resize", () => {
-                if (window.innerWidth >= 1024) {
-                    setSidebarState(false);
-                }
-            });
-
-            window.addEventListener("keydown", (event) => {
-                if (event.key === "Escape") {
-                    setSidebarState(false);
-                }
-            });
-
-            for (const link of links) {
-                const href = (link.getAttribute("href") || "").replace(/\/+$/, "") || "/";
-                const mode = link.getAttribute("data-nav-match");
-
-                const isActive = mode === "exact"
-                    ? currentPath === href
-                    : currentPath === href || currentPath.startsWith(`${href}/`);
-
-                if (isActive) {
-                    link.classList.add("dashboard-nav-link-active");
-                    link.setAttribute("aria-current", "page");
-                }
-
-                link.addEventListener("click", () => {
-                    if (window.innerWidth < 1024) {
-                        setSidebarState(false);
-                    }
-                });
-            }
-        })();
-    </script>
 </body>
 </html>
