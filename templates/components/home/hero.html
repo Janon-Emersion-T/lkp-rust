@@ -17,11 +17,13 @@
     "@type": "Service",
     "name": "Web Development, Custom Software, SEO, and Automation Services",
     "serviceType": [
-      "Web Development",
-      "Custom Software Development",
-      "SEO / Search Growth",
-      "AI Automation",
-      "Hosting and Infrastructure Support"
+      "Custom Web Development",
+      "POS Systems",
+      "E-commerce Platforms",
+      "SaaS Applications",
+      "Digital Marketing",
+      "SEO",
+      "IT Consultation"
     ],
     "provider": {
       "@type": "Organization",
@@ -30,6 +32,7 @@
     },
     "areaServed": [
       "Jaffna",
+      "Colombo",
       "Sri Lanka",
       "International"
     ],
@@ -37,35 +40,131 @@
   }
   </script>
 
-  <div class="pointer-events-none absolute inset-0">
-    <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.18),transparent_32%),radial-gradient(circle_at_80%_20%,rgba(59,130,246,0.16),transparent_28%),linear-gradient(180deg,rgba(2,6,23,0.86),rgba(2,6,23,0.98))]"></div>
-    <div class="absolute inset-0 bg-[linear-gradient(rgba(148,163,184,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.08)_1px,transparent_1px)] bg-[size:4.75rem_4.75rem] opacity-20"></div>
+  <style>
+    .hero-lkp-bg {
+      background-image:
+        linear-gradient(90deg, rgba(2, 6, 23, 0.92) 0%, rgba(2, 6, 23, 0.84) 36%, rgba(2, 6, 23, 0.64) 60%, rgba(2, 6, 23, 0.8) 100%),
+        linear-gradient(180deg, rgba(2, 6, 23, 0.22), rgba(2, 6, 23, 0.9)),
+        url("/static/images/hero-coding-bg-cleaner.png");
+      background-position: center, center, center;
+      background-size: cover, cover, cover;
+      background-repeat: no-repeat;
+      transform: scale(1.04);
+      animation: heroBgFloat 18s ease-in-out infinite alternate;
+    }
+
+    .hero-lkp-grid {
+      background-image:
+        linear-gradient(rgba(148, 163, 184, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(148, 163, 184, 0.1) 1px, transparent 1px);
+      background-size: 5rem 5rem;
+      mask-image: radial-gradient(circle at center, black 30%, transparent 88%);
+    }
+
+    .hero-lkp-orb {
+      filter: blur(70px);
+      animation: heroOrbFloat 14s ease-in-out infinite;
+    }
+
+    .hero-lkp-orb-delay {
+      animation-delay: 2.2s;
+      animation-duration: 17s;
+    }
+
+    .hero-lkp-card {
+      animation: heroCardRise 800ms ease-out both;
+    }
+
+    .hero-lkp-card-delay-1 { animation-delay: 120ms; }
+    .hero-lkp-card-delay-2 { animation-delay: 220ms; }
+    .hero-lkp-card-delay-3 { animation-delay: 320ms; }
+    .hero-lkp-card-delay-4 { animation-delay: 420ms; }
+
+    .hero-lkp-glow-line {
+      animation: heroLinePulse 3.8s ease-in-out infinite;
+    }
+
+    .hero-lkp-tag {
+      animation: heroBadgePulse 4.5s ease-in-out infinite;
+    }
+
+    @keyframes heroBgFloat {
+      from { transform: scale(1.04) translate3d(0, 0, 0); }
+      to { transform: scale(1.09) translate3d(-1.5%, -1%, 0); }
+    }
+
+    @keyframes heroOrbFloat {
+      0% { transform: translate3d(0, 0, 0) scale(1); }
+      50% { transform: translate3d(10px, -18px, 0) scale(1.08); }
+      100% { transform: translate3d(-8px, 12px, 0) scale(0.98); }
+    }
+
+    @keyframes heroCardRise {
+      from {
+        opacity: 0;
+        transform: translate3d(0, 24px, 0);
+      }
+      to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+      }
+    }
+
+    @keyframes heroLinePulse {
+      0%, 100% { box-shadow: 0 0 20px rgba(34, 211, 238, 0.48); opacity: 0.82; }
+      50% { box-shadow: 0 0 34px rgba(34, 211, 238, 0.75); opacity: 1; }
+    }
+
+    @keyframes heroBadgePulse {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-2px); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hero-lkp-bg,
+      .hero-lkp-orb,
+      .hero-lkp-card,
+      .hero-lkp-glow-line,
+      .hero-lkp-tag {
+        animation: none !important;
+      }
+    }
+  </style>
+
+  <div class="absolute inset-0">
+    <div class="hero-lkp-bg absolute inset-0" aria-hidden="true"></div>
+    <div class="hero-lkp-grid absolute inset-0 opacity-30" aria-hidden="true"></div>
+    <div class="hero-lkp-orb absolute -left-20 top-16 h-72 w-72 rounded-full bg-cyan-400/22" aria-hidden="true"></div>
+    <div class="hero-lkp-orb hero-lkp-orb-delay absolute right-0 top-10 h-80 w-80 rounded-full bg-blue-500/18" aria-hidden="true"></div>
+    <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(2,6,23,0.12),rgba(2,6,23,0.78)_72%,rgba(2,6,23,0.96))]" aria-hidden="true"></div>
   </div>
 
   <div class="relative mx-auto max-w-7xl px-6 pb-24 pt-16 sm:pb-28 sm:pt-20 lg:px-8 lg:pb-32 lg:pt-24">
-    <div class="grid items-center gap-12 lg:grid-cols-[minmax(0,1.05fr)_minmax(22rem,0.95fr)] lg:gap-14">
+    <div class="grid min-h-[calc(100vh-8rem)] items-center gap-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(22rem,0.9fr)] lg:gap-14">
       <div class="max-w-3xl">
-        <div class="inline-flex items-center gap-3 rounded-full border border-cyan-400/20 bg-white/8 px-4 py-2 text-xs font-black uppercase tracking-[0.22em] text-cyan-200 backdrop-blur">
-          <span class="h-2.5 w-2.5 rounded-full bg-cyan-300 shadow-[0_0_18px_rgba(103,232,249,0.9)]"></span>
-          High-Performance Digital Delivery From Jaffna
+        <div class="hero-lkp-card hero-lkp-card-delay-1 inline-flex items-center gap-3 rounded-full border border-cyan-300/20 bg-white/10 px-4 py-2.5 text-[11px] font-black uppercase tracking-[0.26em] text-cyan-100 backdrop-blur">
+          <span class="hero-lkp-tag h-2.5 w-2.5 rounded-full bg-cyan-300 shadow-[0_0_18px_rgba(103,232,249,0.95)]"></span>
+          Built In Jaffna For Growth-Focused Teams
         </div>
 
         <h1
           id="home-hero-title"
-          class="mt-6 max-w-4xl text-4xl font-black leading-[0.98] tracking-tight text-white sm:text-5xl lg:text-6xl xl:text-7xl"
+          class="hero-lkp-card hero-lkp-card-delay-2 mt-6 max-w-5xl text-4xl font-black leading-[0.95] tracking-tight text-white sm:text-5xl lg:text-6xl xl:text-7xl"
         >
-          Websites, software, and search systems built to
-          <span class="text-cyan-300">grow serious businesses.</span>
+          Digital systems that
+          <span class="block text-cyan-300">rank, convert, and scale.</span>
         </h1>
 
-        <p class="mt-6 max-w-2xl text-base leading-8 text-slate-200 sm:text-lg">
-          LKProfessionals designs fast websites, custom software, SEO-ready service pages, and automation workflows for companies that need clarity, speed, and commercial results.
+        <p class="hero-lkp-card hero-lkp-card-delay-3 mt-6 max-w-2xl text-base leading-8 text-slate-200 sm:text-lg">
+          LKProfessionals designs custom websites, software platforms, SEO structures, and automation workflows for businesses that want measurable digital growth without technical chaos.
         </p>
 
-        <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+        <div class="hero-lkp-card hero-lkp-card-delay-4 mt-7 h-1.5 w-28 rounded-full bg-cyan-300 hero-lkp-glow-line"></div>
+
+        <div class="hero-lkp-card hero-lkp-card-delay-4 mt-8 flex flex-col gap-3 sm:flex-row">
           <a
             href="/request-quote"
-            class="inline-flex min-h-14 items-center justify-center gap-3 rounded-2xl bg-cyan-400 px-6 py-4 text-sm font-black uppercase tracking-[0.16em] text-slate-950 shadow-[0_18px_48px_rgba(34,211,238,0.28)] transition hover:-translate-y-0.5 hover:bg-white"
+            class="inline-flex min-h-14 items-center justify-center gap-3 rounded-2xl bg-cyan-400 px-6 py-4 text-sm font-black uppercase tracking-[0.18em] text-slate-950 shadow-[0_18px_48px_rgba(34,211,238,0.3)] transition duration-300 hover:-translate-y-0.5 hover:bg-white"
           >
             Start Your Project
             <i class="fa-solid fa-arrow-right text-sm"></i>
@@ -75,82 +174,83 @@
             href="https://wa.me/94761234321"
             target="_blank"
             rel="noopener noreferrer"
-            class="inline-flex min-h-14 items-center justify-center gap-3 rounded-2xl border border-white/15 bg-white/8 px-6 py-4 text-sm font-black uppercase tracking-[0.16em] text-white backdrop-blur transition hover:-translate-y-0.5 hover:border-cyan-300/60 hover:bg-white/12"
+            class="inline-flex min-h-14 items-center justify-center gap-3 rounded-2xl border border-white/15 bg-white/10 px-6 py-4 text-sm font-black uppercase tracking-[0.18em] text-white backdrop-blur transition duration-300 hover:-translate-y-0.5 hover:border-cyan-300/60 hover:bg-white/15"
             aria-label="Chat with LKProfessionals on WhatsApp"
           >
             <i class="fa-brands fa-whatsapp text-lg text-cyan-300"></i>
-            Chat on WhatsApp
+            WhatsApp Us
           </a>
         </div>
 
-        <dl class="mt-8 grid gap-4 sm:grid-cols-3">
-          <div class="rounded-[1.6rem] border border-white/10 bg-white/6 px-5 py-5 backdrop-blur-sm">
-            <dt class="text-xs font-black uppercase tracking-[0.18em] text-cyan-300">Core Focus</dt>
-            <dd class="mt-3 text-sm leading-7 text-slate-200">Web development, custom software, SEO, and automation aligned to revenue and operations.</dd>
-          </div>
-          <div class="rounded-[1.6rem] border border-white/10 bg-white/6 px-5 py-5 backdrop-blur-sm">
-            <dt class="text-xs font-black uppercase tracking-[0.18em] text-cyan-300">Delivery Style</dt>
-            <dd class="mt-3 text-sm leading-7 text-slate-200">SSR-first, lightweight, crawlable, and built for long-term maintainability.</dd>
-          </div>
-          <div class="rounded-[1.6rem] border border-white/10 bg-white/6 px-5 py-5 backdrop-blur-sm">
-            <dt class="text-xs font-black uppercase tracking-[0.18em] text-cyan-300">Best Fit</dt>
-            <dd class="mt-3 text-sm leading-7 text-slate-200">Businesses that need stronger digital infrastructure, not another template site.</dd>
-          </div>
-        </dl>
+        <div class="mt-10 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          <article class="hero-lkp-card hero-lkp-card-delay-2 rounded-[1.7rem] border border-white/10 bg-white/10 px-5 py-5 backdrop-blur-md">
+            <p class="text-xs font-black uppercase tracking-[0.18em] text-cyan-300">Core Services</p>
+            <p class="mt-3 text-sm leading-7 text-slate-200">
+              Custom web development, POS systems, SaaS products, SEO, and IT consultation.
+            </p>
+          </article>
+
+          <article class="hero-lkp-card hero-lkp-card-delay-3 rounded-[1.7rem] border border-white/10 bg-white/10 px-5 py-5 backdrop-blur-md">
+            <p class="text-xs font-black uppercase tracking-[0.18em] text-cyan-300">Best Fit</p>
+            <p class="mt-3 text-sm leading-7 text-slate-200">
+              Companies that need a stronger online presence, better systems, and cleaner operations.
+            </p>
+          </article>
+
+          <article class="hero-lkp-card hero-lkp-card-delay-4 rounded-[1.7rem] border border-white/10 bg-white/10 px-5 py-5 backdrop-blur-md sm:col-span-2 xl:col-span-1">
+            <p class="text-xs font-black uppercase tracking-[0.18em] text-cyan-300">Delivery Angle</p>
+            <p class="mt-3 text-sm leading-7 text-slate-200">
+              Fast, crawlable, SEO-aware builds with long-term maintainability and commercial clarity.
+            </p>
+          </article>
+        </div>
       </div>
 
-      <div class="relative">
-        <div class="relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/6 p-3 shadow-[0_36px_90px_rgba(2,6,23,0.38)] backdrop-blur-sm">
-          <div class="relative overflow-hidden rounded-[1.5rem] border border-white/10 bg-slate-900">
-            <img
-              src="/static/images/hero-coding-bg-cleaner.png"
-              alt="LKProfessionals workspace scene representing web development, software engineering, and SEO delivery"
-              width="2644"
-              height="2645"
-              loading="lazy"
-              decoding="async"
-              class="hidden h-full min-h-[28rem] w-full object-cover opacity-80 lg:block"
-            />
-            <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(2,6,23,0.08),rgba(2,6,23,0.72))]"></div>
+      <aside class="relative">
+        <div class="hero-lkp-card hero-lkp-card-delay-2 rounded-[2rem] border border-white/10 bg-slate-950/50 p-4 shadow-[0_30px_90px_rgba(2,6,23,0.44)] backdrop-blur-xl">
+          <div class="rounded-[1.6rem] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.03))] p-5">
+            <p class="text-xs font-black uppercase tracking-[0.22em] text-cyan-300">Why Buyers Stay</p>
 
-            <div class="absolute left-4 top-4 right-4 flex flex-wrap items-center gap-3">
-              <span class="rounded-full border border-cyan-300/20 bg-slate-950/70 px-4 py-2 text-[11px] font-black uppercase tracking-[0.18em] text-cyan-200 backdrop-blur">
-                Search-ready architecture
-              </span>
-              <span class="rounded-full border border-white/10 bg-slate-950/70 px-4 py-2 text-[11px] font-black uppercase tracking-[0.18em] text-slate-200 backdrop-blur">
-                Fast-loading builds
-              </span>
+            <div class="mt-5 grid gap-4">
+              <div class="rounded-[1.35rem] border border-white/10 bg-white/6 p-4">
+                <p class="text-sm font-black uppercase tracking-[0.16em] text-white">Search-Ready Structure</p>
+                <p class="mt-2 text-sm leading-7 text-slate-300">
+                  Clear hierarchy, better internal linking paths, and pages designed for both ranking and answer retrieval.
+                </p>
+              </div>
+
+              <div class="rounded-[1.35rem] border border-white/10 bg-white/6 p-4">
+                <p class="text-sm font-black uppercase tracking-[0.16em] text-white">Custom Software Thinking</p>
+                <p class="mt-2 text-sm leading-7 text-slate-300">
+                  Websites, SaaS tools, portals, and internal systems built around real business workflows.
+                </p>
+              </div>
+
+              <div class="rounded-[1.35rem] border border-white/10 bg-white/6 p-4">
+                <p class="text-sm font-black uppercase tracking-[0.16em] text-white">Operational Clarity</p>
+                <p class="mt-2 text-sm leading-7 text-slate-300">
+                  Better scoping, faster launch paths, and delivery standards suited to serious commercial use.
+                </p>
+              </div>
             </div>
 
-            <div class="absolute bottom-4 left-4 right-4 grid gap-3 sm:grid-cols-2">
-              <div class="rounded-[1.4rem] border border-white/10 bg-slate-950/78 p-4 backdrop-blur">
-                <p class="text-xs font-black uppercase tracking-[0.18em] text-cyan-300">Primary Services</p>
-                <ul class="mt-3 space-y-2 text-sm font-bold text-white">
-                  <li>Web Development</li>
-                  <li>Custom Software</li>
-                  <li>SEO / Search Growth</li>
-                </ul>
-              </div>
-              <div class="rounded-[1.4rem] border border-white/10 bg-slate-950/78 p-4 backdrop-blur">
-                <p class="text-xs font-black uppercase tracking-[0.18em] text-cyan-300">Why It Works</p>
-                <ul class="mt-3 space-y-2 text-sm text-slate-200">
-                  <li>One H1-first, crawlable structure</li>
-                  <li>Conversion-focused content hierarchy</li>
-                  <li>Lean pages that scale operationally</li>
-                </ul>
-              </div>
+            <div class="mt-5 rounded-[1.35rem] border border-cyan-300/15 bg-cyan-400/10 p-4">
+              <p class="text-xs font-black uppercase tracking-[0.2em] text-cyan-300">Direct Answer</p>
+              <p class="mt-2 text-sm leading-7 text-slate-100">
+                If you need a website or software platform that looks credible, loads fast, ranks better, and supports real business growth, LKProfessionals is built for that exact problem.
+              </p>
             </div>
           </div>
         </div>
 
-        <div class="mt-4 hidden items-center justify-between gap-4 rounded-[1.6rem] border border-white/10 bg-white/6 px-5 py-4 text-sm text-slate-200 backdrop-blur lg:flex">
-          <p class="font-bold">Best for companies that want a cleaner digital system, not just a prettier homepage.</p>
+        <div class="hero-lkp-card hero-lkp-card-delay-4 mt-4 hidden rounded-[1.6rem] border border-white/10 bg-white/10 px-5 py-4 text-sm text-slate-100 backdrop-blur lg:flex lg:items-center lg:justify-between">
+          <span class="font-bold">Explore what we build across web, software, SEO, and automation.</span>
           <a href="/services" class="inline-flex items-center gap-2 font-black text-cyan-300 transition hover:text-white">
-            Explore Services
+            View Services
             <i class="fa-solid fa-arrow-right text-xs"></i>
           </a>
         </div>
-      </div>
+      </aside>
     </div>
   </div>
 
@@ -159,7 +259,7 @@
       href="https://wa.me/94761234321"
       target="_blank"
       rel="noopener noreferrer"
-      class="mx-auto flex max-w-md items-center justify-center gap-3 rounded-full border border-emerald-300/30 bg-emerald-500 px-5 py-4 text-sm font-black uppercase tracking-[0.16em] text-slate-950 shadow-[0_18px_48px_rgba(16,185,129,0.32)]"
+      class="mx-auto flex max-w-md items-center justify-center gap-3 rounded-full border border-emerald-300/30 bg-emerald-500 px-5 py-4 text-sm font-black uppercase tracking-[0.16em] text-slate-950 shadow-[0_18px_48px_rgba(16,185,129,0.34)]"
       aria-label="Chat with LKProfessionals on WhatsApp"
     >
       <i class="fa-brands fa-whatsapp text-lg"></i>

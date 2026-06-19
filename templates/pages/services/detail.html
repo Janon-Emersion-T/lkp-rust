@@ -82,9 +82,25 @@
 {% endblock %}
 
 {% block content %}
-{% include "components/services/detail-hero.html" %}
-{% include "components/services/detail-answer.html" %}
-{% include "components/services/detail-sections.html" %}
-{% include "components/services/detail-faq.html" %}
-{% include "components/services/detail-cta.html" %}
+<header>
+    {% include "components/services/detail-hero.html" %}
+</header>
+
+<main id="service-main-content">
+    <section aria-labelledby="service-direct-answer">
+        {% include "components/services/detail-answer.html" %}
+    </section>
+
+    <article aria-labelledby="service-delivery-structure">
+        {% include "components/services/detail-sections.html" %}
+    </article>
+
+    <section aria-labelledby="service-faqs">
+        {% include "components/services/detail-faq.html" %}
+    </section>
+</main>
+
+<footer>
+    {% include "components/services/detail-cta.html" %}
+</footer>
 {% endblock %}

@@ -13,43 +13,90 @@
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "Organization",
-  "name": "LKProfessionals (Pvt) Ltd.",
-  "url": "https://lkprofessionals.com",
-  "logo": "https://lkprofessionals.com/static/images/logo.png",
-  "description": "LKProfessionals provides web development, custom software, SEO, digital marketing, hosting, domain, automation, and IT consulting services.",
-  "sameAs": [
-    "https://www.linkedin.com/company/lkprofessionals",
-    "https://www.facebook.com/lkprofessionals",
-    "https://www.instagram.com/lkprofessionals",
-    "https://x.com/lkprofessionals"
+  "@graph": [
+    {
+      "@type": [
+        "ProfessionalService",
+        "Corporation"
+      ],
+      "@id": "https://lkprofessionals.com/#organization",
+      "name": "LKProfessionals (Pvt) Ltd.",
+      "url": "https://lkprofessionals.com/",
+      "logo": "https://lkprofessionals.com/static/images/logo.png",
+      "telephone": "+94761234321",
+      "email": "info@lkprofessionals.com",
+      "founder": {
+        "@type": "Person",
+        "name": "Mr. Janon Emersion T",
+        "jobTitle": "Founder & CEO"
+      },
+      "foundingLocation": {
+        "@type": "Place",
+        "name": "Jaffna, Sri Lanka"
+      },
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "6/7, Vidhan's Lane, Eachchamoddai",
+        "addressLocality": "Jaffna",
+        "postalCode": "40000",
+        "addressCountry": "LK"
+      },
+      "areaServed": [
+        "Jaffna",
+        "Colombo",
+        "Sri Lanka",
+        "International"
+      ],
+      "sameAs": [
+        "https://www.linkedin.com/company/your-linkedin-placeholder",
+        "https://techbehemoths.com/company/your-techbehemoths-placeholder",
+        "https://twitter.com/your-twitter-placeholder",
+        "https://www.facebook.com/your-facebook-placeholder"
+      ],
+      "knowsAbout": [
+        "Custom Web Development",
+        "POS Systems",
+        "E-commerce Platforms",
+        "SaaS Applications",
+        "Digital Marketing",
+        "SEO",
+        "IT Consultation"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://lkprofessionals.com/#website",
+      "name": "LKProfessionals",
+      "url": "https://lkprofessionals.com/",
+      "publisher": {
+        "@id": "https://lkprofessionals.com/#organization"
+      }
+    },
+    {
+      "@type": "Service",
+      "@id": "https://lkprofessionals.com/#primary-services",
+      "name": "Web Development, SaaS, SEO, and IT Consulting Services",
+      "provider": {
+        "@id": "https://lkprofessionals.com/#organization"
+      },
+      "areaServed": [
+        "Jaffna",
+        "Colombo",
+        "Sri Lanka",
+        "International"
+      ],
+      "serviceType": [
+        "Custom Web Development",
+        "POS Systems",
+        "E-commerce Platforms",
+        "SaaS Applications",
+        "Digital Marketing",
+        "SEO",
+        "IT Consultation"
+      ],
+      "url": "https://lkprofessionals.com/services"
+    }
   ]
-}
-</script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  "name": "LKProfessionals (Pvt) Ltd.",
-  "url": "https://lkprofessionals.com/",
-  "description": "Software development, web development, SEO, digital marketing, hosting, and automation services from Jaffna, Sri Lanka."
-}
-</script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "LocalBusiness",
-  "name": "LKProfessionals (Pvt) Ltd.",
-  "url": "https://lkprofessionals.com/",
-  "image": "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80",
-  "telephone": "+94 76 123 4321",
-  "email": "info@lkprofessionals.com",
-  "address": {
-    "@type": "PostalAddress",
-    "addressLocality": "Jaffna",
-    "addressCountry": "LK"
-  },
-  "areaServed": ["Jaffna", "Sri Lanka", "International"]
 }
 </script>
 <script type="application/ld+json">
@@ -59,26 +106,26 @@
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "Do you only work with clients in Jaffna?",
+      "name": "What services does LKProfessionals provide?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "No. LKProfessionals is based in Jaffna, Sri Lanka, and works with businesses across the country and with international clients."
+        "text": "LKProfessionals specializes in custom web development, POS and e-commerce platforms, SaaS applications, digital marketing, SEO, and IT consultation."
       }
     },
     {
       "@type": "Question",
-      "name": "Can LKProfessionals build ERP, POS, or other custom business systems?",
+      "name": "Where is LKProfessionals located?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes. LKProfessionals builds custom software including ERP workflows, POS systems, portals, dashboards, booking systems, and operational business tools."
+        "text": "LKProfessionals (Pvt) Ltd is founded and headquartered in Jaffna, Sri Lanka, with operational capabilities extending to Colombo."
       }
     },
     {
       "@type": "Question",
-      "name": "Do you handle both development and SEO?",
+      "name": "Who is the CEO of LKProfessionals?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes. LKProfessionals can combine web development, technical SEO, content structure, digital marketing support, hosting, and long-term optimization into one delivery plan."
+        "text": "LKProfessionals was founded by Mr. Janon Emersion T, who currently serves as the Founder and Chief Executive Officer."
       }
     }
   ]

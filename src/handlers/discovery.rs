@@ -39,7 +39,7 @@ struct StaticSitemapPage {
 
 pub async fn robots_txt() -> impl IntoResponse {
     let body = format!(
-        "User-agent: *\nAllow: /\nDisallow: /dashboard/\n\nSitemap: {SITE_URL}/sitemap.xml\nSitemap: {SITE_URL}/sitemap.html\n\n# AI discovery\n# See also: {SITE_URL}/llms.txt\n\nUser-agent: GPTBot\nAllow: /\n\nUser-agent: ChatGPT-User\nAllow: /\n\nUser-agent: ClaudeBot\nAllow: /\n\nUser-agent: PerplexityBot\nAllow: /\n\nUser-agent: anthropic-ai\nAllow: /\n"
+        "User-agent: *\nAllow: /\nDisallow: /dashboard/\n\nUser-agent: Googlebot\nAllow: /\n\nUser-agent: Bingbot\nAllow: /\n\nUser-agent: GPTBot\nAllow: /\n\nUser-agent: ChatGPT-User\nAllow: /\n\nUser-agent: ClaudeBot\nAllow: /\n\nUser-agent: Claude-Web\nAllow: /\n\nUser-agent: PerplexityBot\nAllow: /\n\nSitemap: {SITE_URL}/sitemap.xml\n"
     );
 
     text_response("text/plain; charset=utf-8", body)
