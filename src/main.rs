@@ -60,6 +60,10 @@ async fn main() {
             eprintln!("Failed to seed default insights: {error}");
         }
 
+        if let Err(error) = seeds::portfolios::seed_default_portfolios(&db).await {
+            eprintln!("Failed to seed default portfolios: {error}");
+        }
+
         if let Err(error) =
             seeds::newsletter_subscribers::seed_default_newsletter_subscribers(&db).await
         {
