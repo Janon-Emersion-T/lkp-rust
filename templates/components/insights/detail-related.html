@@ -12,7 +12,7 @@
             {% for item in related %}
             <article class="service-card group bg-white">
                 <div class="overflow-hidden rounded-[1.5rem]">
-                    <img src="{{ item.cover_image_url }}" alt="{{ item.title }}" loading="lazy" decoding="async" class="h-52 w-full object-cover transition duration-500 group-hover:scale-105" />
+                    <img src="{{ item.cover_image_url }}" alt="{{ item.title }}" loading="lazy" decoding="async" width="1200" height="720" class="h-52 w-full object-cover transition duration-500 group-hover:scale-105" />
                 </div>
                 <p class="mt-6 text-xs font-black uppercase tracking-[0.22em] text-cyan-700">{{ item.category }}</p>
                 <h3 class="mt-3 text-2xl font-black tracking-tight text-slate-950">{{ item.title }}</h3>

@@ -1,4 +1,12 @@
 (() => {
+  const initDeferredStyles = () => {
+    for (const link of document.querySelectorAll("[data-deferred-stylesheet]")) {
+      if (link.rel !== "stylesheet") {
+        link.rel = "stylesheet";
+      }
+    }
+  };
+
   const normalizePath = (value) => {
     const normalized = (value || "/").replace(/\/+$/, "");
     return normalized === "" ? "/" : normalized;
@@ -324,6 +332,7 @@
   };
 
   document.addEventListener("DOMContentLoaded", () => {
+    initDeferredStyles();
     initHeader();
     initRequestQuoteModal();
     initNewsletterForms();

@@ -21,7 +21,7 @@
             {% for insight in insights %}
             <article class="service-card group bg-white">
                 <div class="overflow-hidden rounded-[1.5rem]">
-                    <img src="{{ insight.cover_image_url }}" alt="{{ insight.title }}" loading="lazy" decoding="async" class="h-56 w-full object-cover transition duration-500 group-hover:scale-105" />
+                    <img src="{{ insight.cover_image_url }}" alt="{{ insight.title }}" loading="lazy" decoding="async" width="1200" height="720" class="h-56 w-full object-cover transition duration-500 group-hover:scale-105" />
                 </div>
                 <div class="mt-6 flex flex-wrap items-center gap-3 text-xs font-black uppercase tracking-[0.18em] text-cyan-700">
                     <span>{{ insight.category }}</span>

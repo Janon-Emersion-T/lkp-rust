@@ -130,7 +130,8 @@ async fn set_response_headers(
     next: axum::middleware::Next,
 ) -> axum::response::Response {
     use axum::http::header::{
-        CACHE_CONTROL, HeaderName, HeaderValue, VARY, X_CONTENT_TYPE_OPTIONS,
+        CACHE_CONTROL, CONTENT_SECURITY_POLICY, HeaderName, HeaderValue, STRICT_TRANSPORT_SECURITY,
+        VARY, X_CONTENT_TYPE_OPTIONS,
     };
 
     let path = request.uri().path().to_owned();
@@ -150,6 +151,28 @@ async fn set_response_headers(
         HeaderName::from_static("permissions-policy"),
         HeaderValue::from_static("camera=(), microphone=(), geolocation=()"),
     );
+    headers.insert(
+        HeaderName::from_static("cross-origin-opener-policy"),
+        HeaderValue::from_static("same-origin"),
+    );
+    headers.insert(
+        HeaderName::from_static("cross-origin-resource-policy"),
+        HeaderValue::from_static("same-site"),
+    );
+    headers.insert(
+        HeaderName::from_static("origin-agent-cluster"),
+        HeaderValue::from_static("?1"),
+    );
+    headers.insert(
+        STRICT_TRANSPORT_SECURITY,
+        HeaderValue::from_static("max-age=63072000; includeSubDomains; preload"),
+    );
+    headers.insert(
+        CONTENT_SECURITY_POLICY,
+        HeaderValue::from_static(
+            "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; connect-src 'self'; img-src 'self' data: https://images.unsplash.com https://lkprofessionals.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com; script-src 'self'; worker-src 'self'; manifest-src 'self'; upgrade-insecure-requests; require-trusted-types-for 'script'; trusted-types default;",
+        ),
+    );
     headers.insert(VARY, HeaderValue::from_static("Accept-Encoding"));
 
     if !headers.contains_key(CACHE_CONTROL) {
@@ -167,14 +190,14 @@ fn cache_control_value(path: &str) -> &'static str {
         if has_extension(path, &["png", "jpg", "jpeg", "webp", "avif", "svg", "ico"]) {
             "public, max-age=2592000, stale-while-revalidate=604800"
         } else if has_extension(path, &["css", "js"]) {
-            "public, max-age=604800, stale-while-revalidate=86400"
+            "public, max-age=2592000, stale-while-revalidate=604800"
         } else {
-            "public, max-age=86400, stale-while-revalidate=43200"
+            "public, max-age=604800, stale-while-revalidate=86400"
         }
     } else if matches!(path, "/robots.txt" | "/llms.txt" | "/sitemap.xml") {
-        "public, max-age=3600, stale-while-revalidate=86400"
+        "public, max-age=86400, stale-while-revalidate=604800"
     } else {
-        "public, max-age=300, stale-while-revalidate=3600"
+        "public, max-age=600, stale-while-revalidate=3600"
     }
 }
 

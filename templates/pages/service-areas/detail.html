@@ -127,7 +127,7 @@
     <div class="mx-auto mb-10 grid max-w-7xl gap-4 md:grid-cols-3">
         {% for image_url in page.image_gallery %}
         <div class="overflow-hidden rounded-[1.8rem] border border-slate-200 bg-slate-100 shadow-[0_18px_40px_rgba(15,23,42,0.06)]">
-            <img src="{{ image_url }}" alt="{{ page.title }} service area image {{ loop.index }}" class="h-72 w-full object-cover" loading="lazy" decoding="async">
+            <img src="{{ image_url }}" alt="{{ page.title }} service area image {{ loop.index }}" class="h-72 w-full object-cover" loading="lazy" decoding="async" width="1200" height="720">
         </div>
         {% endfor %}
     </div>

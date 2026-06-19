@@ -14,11 +14,11 @@
             {% for portfolio in featured_portfolios %}
             <article class="service-card group">
                 <div class="overflow-hidden rounded-[1.5rem]">
-                    <img src="{{ portfolio.cover_image_url }}" alt="{{ portfolio.title }}" loading="lazy" decoding="async" class="h-60 w-full object-cover transition duration-500 group-hover:scale-105" />
+                    <img src="{{ portfolio.cover_image_url }}" alt="{{ portfolio.title }}" loading="lazy" decoding="async" width="1200" height="720" class="h-60 w-full object-cover transition duration-500 group-hover:scale-105" />
                 </div>
                 <div class="mt-6 flex flex-wrap items-center gap-3">
                     <span class="rounded-full bg-cyan-50 px-3 py-1 text-[11px] font-black uppercase tracking-[0.16em] text-cyan-700">{{ portfolio.service_category }}</span>
-                    <span class="text-xs font-bold uppercase tracking-[0.18em] text-slate-400">{{ portfolio.industry }}</span>
+                    <span class="text-xs font-bold uppercase tracking-[0.18em] text-slate-500">{{ portfolio.industry }}</span>
                 </div>
                 <h3 class="mt-4 text-2xl font-black tracking-tight text-slate-950">{{ portfolio.title }}</h3>
                 <p class="mt-2 text-sm font-semibold text-slate-500">{{ portfolio.client_name }}</p>
