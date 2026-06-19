@@ -6,10 +6,10 @@ use axum::{
 use crate::{
     handlers::{
         about, career_apply, career_single, careers, case_studies, case_study_single, contact, faq,
-        founder_portfolio, home, industries, insight_single, insights, llmo_txt, llms_txt,
-        request_quote, robot_txt, robots_txt, service_area_single, service_areas, services,
-        sitemap_html, sitemap_xml, submit_career_application, submit_contact_message,
-        submit_request_quote, subscribe_newsletter, why_work,
+        founder_portfolio, home, industries, insight_single, insights, insights_by_category,
+        llmo_txt, llms_txt, request_quote, robot_txt, robots_txt, service_area_single,
+        service_areas, services, sitemap_html, sitemap_xml, submit_career_application,
+        submit_contact_message, submit_request_quote, subscribe_newsletter, why_work,
     },
     state::AppState,
 };
@@ -36,6 +36,7 @@ pub fn public_routes() -> Router<AppState> {
         .route("/case-studies", get(case_studies))
         .route("/case-studies/{slug}", get(case_study_single))
         .route("/insights", get(insights))
+        .route("/insights/category/{slug}", get(insights_by_category))
         .route("/insights/{slug}", get(insight_single))
         .route("/newsletter/subscribe", post(subscribe_newsletter))
         .route("/careers", get(careers))

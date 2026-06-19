@@ -5,12 +5,14 @@ use axum::{
     http::StatusCode,
     response::{IntoResponse, Redirect},
 };
-use chrono::Utc;
+use chrono::TimeZone;
+use chrono::{DateTime, FixedOffset, NaiveDateTime, Utc};
 use serde::Deserialize;
 use sqlx::Row;
 use uuid::Uuid;
 
 use crate::{
+    models::shared::slugify,
     models::{InsightCardView, InsightEditorView, InsightRecord},
     services::newsletter::queue_insight_campaign,
     state::AppState,
@@ -21,8 +23,8 @@ use super::{
     templates::{
         DashboardInsightCategoryView, DashboardInsightCreateTemplate, DashboardInsightEditTemplate,
         DashboardInsightMetric, DashboardInsightTimelineView, DashboardInsightsTemplate,
-        InsightSingleTemplate, InsightSnapshotMetric, InsightsTemplate, PaginationLink,
-        PaginationView,
+        InsightCategoryLink, InsightSingleTemplate, InsightSnapshotMetric, InsightsTemplate,
+        PaginationLink, PaginationView,
     },
 };
 
@@ -37,6 +39,7 @@ pub struct InsightForm {
     pub author: Option<String>,
     pub category: Option<String>,
     pub cover_image_url: Option<String>,
+    pub published_at: Option<String>,
     pub reading_time_minutes: Option<i32>,
     pub meta_title: Option<String>,
     pub meta_description: Option<String>,
@@ -103,6 +106,12 @@ fn build_editor_view(form: &InsightForm) -> InsightEditorView {
             .unwrap_or_default()
             .trim()
             .to_string(),
+        published_at_local: form
+            .published_at
+            .as_deref()
+            .unwrap_or_default()
+            .trim()
+            .to_string(),
         featured: form.featured.is_some(),
         published: form.published.is_some(),
     }
@@ -118,6 +127,44 @@ fn validate_insight_form(view: &InsightEditorView) -> Result<(), &'static str> {
     }
 
     Ok(())
+}
+
+fn parse_optional_publish_at(
+    value: &Option<String>,
+) -> Result<Option<DateTime<Utc>>, &'static str> {
+    let Some(raw_value) = value
+        .as_deref()
+        .map(str::trim)
+        .filter(|value| !value.is_empty())
+    else {
+        return Ok(None);
+    };
+
+    let naive = NaiveDateTime::parse_from_str(raw_value, "%Y-%m-%dT%H:%M")
+        .map_err(|_| "Please provide a valid publish date and time.")?;
+    let sri_lanka_offset =
+        FixedOffset::east_opt(5 * 3600 + 30 * 60).ok_or("Failed to parse timezone.")?;
+    let local_datetime = sri_lanka_offset
+        .from_local_datetime(&naive)
+        .single()
+        .ok_or("Please provide a valid publish date and time.")?;
+
+    Ok(Some(local_datetime.with_timezone(&Utc)))
+}
+
+fn resolve_publish_state(
+    should_publish: bool,
+    requested_publish_at: Option<DateTime<Utc>>,
+    existing_publish_at: Option<DateTime<Utc>>,
+) -> (bool, Option<DateTime<Utc>>) {
+    if !should_publish {
+        return (false, None);
+    }
+
+    let now = Utc::now();
+    let publish_at = requested_publish_at.or(existing_publish_at).unwrap_or(now);
+
+    (publish_at <= now, Some(publish_at))
 }
 
 pub async fn fetch_home_featured_insights(state: &AppState) -> Vec<InsightCardView> {
@@ -150,6 +197,7 @@ async fn fetch_public_insights(state: &AppState) -> Result<Vec<InsightRecord>, s
         SELECT *
         FROM insights
         WHERE published = TRUE
+          AND (published_at IS NULL OR published_at <= NOW())
         ORDER BY featured DESC, published_at DESC NULLS LAST, created_at DESC
         "#,
     )
@@ -167,6 +215,7 @@ async fn fetch_public_insights_page(
         SELECT *
         FROM insights
         WHERE published = TRUE
+          AND (published_at IS NULL OR published_at <= NOW())
         ORDER BY featured DESC, published_at DESC NULLS LAST, created_at DESC
         LIMIT $1 OFFSET $2
         "#,
@@ -183,6 +232,7 @@ async fn fetch_public_insight_count(state: &AppState) -> Result<i64, sqlx::Error
         SELECT COUNT(*)
         FROM insights
         WHERE published = TRUE
+          AND (published_at IS NULL OR published_at <= NOW())
         "#,
     )
     .fetch_one(&state.db)
@@ -197,6 +247,7 @@ async fn fetch_public_featured_insights(
         SELECT *
         FROM insights
         WHERE published = TRUE
+          AND (published_at IS NULL OR published_at <= NOW())
           AND featured = TRUE
         ORDER BY published_at DESC NULLS LAST, created_at DESC
         LIMIT 3
@@ -253,15 +304,26 @@ fn build_insights_page_url(page: usize) -> String {
     }
 }
 
-fn build_pagination_view(current_page: usize, total_pages: usize) -> PaginationView {
-    let previous_page_url = (current_page > 1).then(|| build_insights_page_url(current_page - 1));
-    let next_page_url =
-        (current_page < total_pages).then(|| build_insights_page_url(current_page + 1));
+fn build_insight_category_page_url(category_slug: &str, page: usize) -> String {
+    if page <= 1 {
+        format!("/insights/category/{category_slug}")
+    } else {
+        format!("/insights/category/{category_slug}?page={page}")
+    }
+}
+
+fn build_pagination_view(
+    current_page: usize,
+    total_pages: usize,
+    page_url: impl Fn(usize) -> String,
+) -> PaginationView {
+    let previous_page_url = (current_page > 1).then(|| page_url(current_page - 1));
+    let next_page_url = (current_page < total_pages).then(|| page_url(current_page + 1));
 
     let page_links = (1..=total_pages)
         .map(|page| PaginationLink {
             label: page.to_string(),
-            url: build_insights_page_url(page),
+            url: page_url(page),
             active: page == current_page,
         })
         .collect();
@@ -272,6 +334,117 @@ fn build_pagination_view(current_page: usize, total_pages: usize) -> PaginationV
         previous_page_url,
         next_page_url,
         page_links,
+    }
+}
+
+fn build_insight_category_links(
+    all_records: &[InsightRecord],
+    active_category: Option<&str>,
+) -> Vec<InsightCategoryLink> {
+    all_records
+        .iter()
+        .map(|record| record.category_label().to_string())
+        .collect::<BTreeSet<_>>()
+        .into_iter()
+        .map(|label| InsightCategoryLink {
+            url: format!("/insights/category/{}", slugify(&label)),
+            active: active_category.is_some_and(|current| current == label),
+            label,
+        })
+        .collect()
+}
+
+fn build_insights_template(
+    insights: Vec<InsightCardView>,
+    featured_insights: Vec<InsightCardView>,
+    categories: Vec<InsightCategoryLink>,
+    snapshot_metrics: Vec<InsightSnapshotMetric>,
+    pagination: PaginationView,
+    active_category: Option<String>,
+) -> InsightsTemplate {
+    let category_name = active_category.clone();
+    let archive_label = category_name
+        .clone()
+        .map(|label| format!("{label} Category"))
+        .unwrap_or_else(|| "Insights & Articles".to_string());
+    let archive_heading = category_name
+        .clone()
+        .map(|label| format!("{label} insights and articles"))
+        .unwrap_or_else(|| {
+            "Practical thinking on software, search, automation, and digital growth.".to_string()
+        });
+    let archive_description = category_name
+        .clone()
+        .map(|label| {
+            format!(
+                "Explore LKProfessionals articles in {label}, with practical guidance, strategy, and implementation insights."
+            )
+        })
+        .unwrap_or_else(|| {
+            "Browse dynamic articles from LKProfessionals covering web engineering, SEO strategy, AI-supported operations, and the systems that help modern businesses grow.".to_string()
+        });
+    let canonical_url = if let Some(label) = category_name.clone() {
+        let slug = slugify(&label);
+        if pagination.current_page > 1 {
+            format!(
+                "https://lkprofessionals.com/insights/category/{slug}?page={}",
+                pagination.current_page
+            )
+        } else {
+            format!("https://lkprofessionals.com/insights/category/{slug}")
+        }
+    } else if pagination.current_page > 1 {
+        format!(
+            "https://lkprofessionals.com/insights?page={}",
+            pagination.current_page
+        )
+    } else {
+        "https://lkprofessionals.com/insights".to_string()
+    };
+    let seo_title = category_name
+        .clone()
+        .map(|label| format!("{label} Insights & Articles | LKProfessionals"))
+        .unwrap_or_else(|| "Insights & Articles | LKProfessionals".to_string());
+    let meta_description = category_name
+        .clone()
+        .map(|label| {
+            format!(
+                "Read LKProfessionals articles in {label} covering strategy, implementation, and measurable digital growth."
+            )
+        })
+        .unwrap_or_else(|| {
+            "Read dynamic insights and articles from LKProfessionals on software, SEO, automation, AI, and digital growth strategy.".to_string()
+        });
+    let og_title = category_name
+        .clone()
+        .map(|label| format!("{label} Insights | LKProfessionals"))
+        .unwrap_or_else(|| "LKProfessionals Insights & Articles".to_string());
+    let og_description = archive_description.clone();
+    let twitter_title = og_title.clone();
+    let twitter_description = meta_description.clone();
+    let archive_schema_name = category_name
+        .clone()
+        .map(|label| format!("LKProfessionals {label} Insights"))
+        .unwrap_or_else(|| "LKProfessionals Insights".to_string());
+
+    InsightsTemplate {
+        insights,
+        featured_insights,
+        categories,
+        snapshot_metrics,
+        pagination,
+        seo_title,
+        meta_description,
+        canonical_url: canonical_url.clone(),
+        og_title,
+        og_description,
+        og_url: canonical_url,
+        twitter_title,
+        twitter_description,
+        archive_label,
+        archive_heading,
+        archive_description,
+        archive_schema_name,
     }
 }
 
@@ -296,6 +469,7 @@ async fn fetch_insight_by_slug(
         SELECT *
         FROM insights
         WHERE slug = $1 AND published = TRUE
+          AND (published_at IS NULL OR published_at <= NOW())
         LIMIT 1
         "#,
     )
@@ -332,6 +506,7 @@ async fn fetch_related_insights(
             SELECT *
             FROM insights
             WHERE published = TRUE
+              AND (published_at IS NULL OR published_at <= NOW())
               AND id <> $1
               AND category = $2
             ORDER BY featured DESC, published_at DESC NULLS LAST, created_at DESC
@@ -359,6 +534,7 @@ async fn fetch_related_insights(
         SELECT *
         FROM insights
         WHERE published = TRUE
+          AND (published_at IS NULL OR published_at <= NOW())
           AND id <> $1
         ORDER BY featured DESC, published_at DESC NULLS LAST, created_at DESC
         LIMIT 3
@@ -413,12 +589,7 @@ pub async fn insights(
                 .map(InsightRecord::to_card_view)
                 .collect();
 
-            let categories = all_records
-                .iter()
-                .map(|record| record.category_label().to_string())
-                .collect::<BTreeSet<_>>()
-                .into_iter()
-                .collect();
+            let categories = build_insight_category_links(&all_records, None);
 
             let stats = fetch_insight_stats(&state)
                 .await
@@ -458,13 +629,14 @@ pub async fn insights(
                 },
             ];
 
-            render(InsightsTemplate {
+            render(build_insights_template(
                 insights,
                 featured_insights,
                 categories,
                 snapshot_metrics,
-                pagination: build_pagination_view(current_page, total_pages.max(1)),
-            })
+                build_pagination_view(current_page, total_pages.max(1), build_insights_page_url),
+                None,
+            ))
             .into_response()
         }
         Err(error) => {
@@ -476,6 +648,124 @@ pub async fn insights(
                 .into_response()
         }
     }
+}
+
+pub async fn insights_by_category(
+    State(state): State<AppState>,
+    Path(category_slug): Path<String>,
+    Query(query): Query<InsightsQuery>,
+) -> impl IntoResponse {
+    let requested_page = query.page.unwrap_or(1).max(1);
+    let all_records = match fetch_public_insights(&state).await {
+        Ok(records) => records,
+        Err(error) => {
+            eprintln!("Failed to load insights for category page: {error}");
+            return (
+                StatusCode::INTERNAL_SERVER_ERROR,
+                "Failed to load insights.",
+            )
+                .into_response();
+        }
+    };
+
+    let Some(active_category) = all_records
+        .iter()
+        .map(|record| record.category_label().to_string())
+        .collect::<BTreeSet<_>>()
+        .into_iter()
+        .find(|label| slugify(label) == category_slug)
+    else {
+        return (StatusCode::NOT_FOUND, "Insight category not found.").into_response();
+    };
+
+    let filtered_records: Vec<InsightRecord> = all_records
+        .iter()
+        .filter(|record| record.category_label() == active_category)
+        .cloned()
+        .collect();
+
+    let total_count = filtered_records.len();
+    let total_pages = total_count.max(1).div_ceil(INSIGHTS_PER_PAGE);
+    let current_page = requested_page.min(total_pages.max(1));
+    let start = (current_page - 1) * INSIGHTS_PER_PAGE;
+    let end = (start + INSIGHTS_PER_PAGE).min(total_count);
+    let page_records = if start < end {
+        filtered_records[start..end].to_vec()
+    } else {
+        Vec::new()
+    };
+
+    let featured_records: Vec<InsightRecord> = filtered_records
+        .iter()
+        .filter(|record| record.featured)
+        .take(3)
+        .cloned()
+        .collect();
+    let featured_records = if featured_records.is_empty() && current_page == 1 {
+        filtered_records.iter().take(3).cloned().collect()
+    } else {
+        featured_records
+    };
+
+    let categories = build_insight_category_links(&all_records, Some(&active_category));
+    let insights = page_records
+        .iter()
+        .map(InsightRecord::to_card_view)
+        .collect::<Vec<_>>();
+    let featured_insights = featured_records
+        .iter()
+        .map(InsightRecord::to_card_view)
+        .collect::<Vec<_>>();
+    let category_article_count = filtered_records.len();
+    let category_total_reads = filtered_records
+        .iter()
+        .map(|record| i64::from(record.view_count))
+        .sum::<i64>();
+    let category_average_read_time = if filtered_records.is_empty() {
+        0.0
+    } else {
+        filtered_records
+            .iter()
+            .map(|record| f64::from(record.reading_time_minutes))
+            .sum::<f64>()
+            / filtered_records.len() as f64
+    };
+    let latest_published = filtered_records
+        .iter()
+        .map(|record| record.published_at.unwrap_or(record.created_at))
+        .max()
+        .map(|value| value.format("%b %Y").to_string())
+        .unwrap_or_else(|| "No updates".to_string());
+    let snapshot_metrics = vec![
+        InsightSnapshotMetric {
+            value: format_number(category_article_count as i64),
+            label: "Articles In Category".to_string(),
+        },
+        InsightSnapshotMetric {
+            value: format_number(category_total_reads),
+            label: "Category Reads".to_string(),
+        },
+        InsightSnapshotMetric {
+            value: format!("{}m", category_average_read_time.round().max(1.0) as i64),
+            label: "Avg. Read Time".to_string(),
+        },
+        InsightSnapshotMetric {
+            value: latest_published,
+            label: "Latest Update".to_string(),
+        },
+    ];
+
+    render(build_insights_template(
+        insights,
+        featured_insights,
+        categories,
+        snapshot_metrics,
+        build_pagination_view(current_page, total_pages.max(1), |page| {
+            build_insight_category_page_url(&category_slug, page)
+        }),
+        Some(active_category),
+    ))
+    .into_response()
 }
 
 pub async fn insight_single(
@@ -520,7 +810,11 @@ pub async fn dashboard_insights(
         Ok(insights) => {
             let total_count = insights.len();
             let published_count = insights.iter().filter(|item| item.published).count();
-            let draft_count = total_count.saturating_sub(published_count);
+            let scheduled_count = insights.iter().filter(|item| item.is_scheduled()).count();
+            let draft_count = insights
+                .iter()
+                .filter(|item| !item.published && !item.is_scheduled())
+                .count();
             let featured_count = insights.iter().filter(|item| item.featured).count();
             let total_views: i64 = insights.iter().map(|item| i64::from(item.view_count)).sum();
             let average_read_time = if insights.is_empty() {
@@ -566,7 +860,9 @@ pub async fn dashboard_insights(
                 DashboardInsightMetric {
                     label: "Total library".to_string(),
                     value: total_count.to_string(),
-                    note: format!("{published_count} live and {draft_count} drafts"),
+                    note: format!(
+                        "{published_count} live, {scheduled_count} scheduled, {draft_count} drafts"
+                    ),
                 },
                 DashboardInsightMetric {
                     label: "Featured pieces".to_string(),
@@ -616,6 +912,7 @@ pub async fn dashboard_insights(
                 timeline,
                 total_count,
                 published_count,
+                scheduled_count,
                 draft_count,
                 featured_count,
                 saved: query.get("saved").is_some_and(|value| value == "1"),
@@ -665,11 +962,12 @@ pub async fn dashboard_insight_store(
         return (StatusCode::BAD_REQUEST, message).into_response();
     }
 
-    let published_at = if view.published {
-        Some(Utc::now())
-    } else {
-        None
+    let requested_publish_at = match parse_optional_publish_at(&form.published_at) {
+        Ok(value) => value,
+        Err(message) => return (StatusCode::BAD_REQUEST, message).into_response(),
     };
+    let (published, published_at) =
+        resolve_publish_state(view.published, requested_publish_at, None);
 
     match sqlx::query(
         r#"
@@ -692,7 +990,7 @@ pub async fn dashboard_insight_store(
     .bind(clean_optional(&form.category))
     .bind(clean_optional(&form.cover_image_url))
     .bind(view.featured)
-    .bind(view.published)
+    .bind(published)
     .bind(view.reading_time_minutes)
     .bind(clean_optional(&form.meta_title))
     .bind(clean_optional(&form.meta_description))
@@ -703,7 +1001,7 @@ pub async fn dashboard_insight_store(
     .await
     {
         Ok(row) => {
-            if view.published {
+            if published {
                 let id: Uuid = row.get("id");
                 let slug: String = row.get("slug");
 
@@ -762,6 +1060,11 @@ pub async fn dashboard_insight_update(
         return (StatusCode::BAD_REQUEST, message).into_response();
     }
 
+    let requested_publish_at = match parse_optional_publish_at(&form.published_at) {
+        Ok(value) => value,
+        Err(message) => return (StatusCode::BAD_REQUEST, message).into_response(),
+    };
+
     let existing = match fetch_insight_by_id(&state, id).await {
         Ok(Some(insight)) => insight,
         Ok(None) => return (StatusCode::NOT_FOUND, "Insight not found.").into_response(),
@@ -775,11 +1078,13 @@ pub async fn dashboard_insight_update(
         }
     };
 
-    let published_at = if view.published {
-        existing.published_at.or(Some(Utc::now()))
-    } else {
-        None
-    };
+    let (published, published_at) =
+        resolve_publish_state(view.published, requested_publish_at, existing.published_at);
+    let was_live = existing.published
+        && existing
+            .published_at
+            .map(|value| value <= Utc::now())
+            .unwrap_or(true);
 
     match sqlx::query(
         r#"
@@ -813,7 +1118,7 @@ pub async fn dashboard_insight_update(
     .bind(clean_optional(&form.category))
     .bind(clean_optional(&form.cover_image_url))
     .bind(view.featured)
-    .bind(view.published)
+    .bind(published)
     .bind(view.reading_time_minutes)
     .bind(clean_optional(&form.meta_title))
     .bind(clean_optional(&form.meta_description))
@@ -824,7 +1129,7 @@ pub async fn dashboard_insight_update(
     .await
     {
         Ok(_) => {
-            if view.published && !existing.published {
+            if published && !was_live {
                 if let Err(error) = queue_insight_campaign(
                     &state.db,
                     id,

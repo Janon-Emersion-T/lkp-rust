@@ -8,6 +8,7 @@ mod services;
 mod state;
 
 use routes::app_routes;
+use services::insight_scheduler::start_insight_scheduler_worker;
 use services::newsletter::start_newsletter_worker;
 use state::AppState;
 use std::env;
@@ -79,6 +80,8 @@ async fn main() {
     if enable_newsletter_worker {
         start_newsletter_worker(db.clone()).await;
     }
+
+    start_insight_scheduler_worker(db.clone()).await;
 
     // Shared app state
     let state = AppState { db };

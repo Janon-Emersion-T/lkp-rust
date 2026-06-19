@@ -58,11 +58,16 @@
             <p class="text-sm text-slate-500">{{ total_count }} total articles in the CMS</p>
         </div>
 
-        <div class="mt-8 grid gap-4 sm:grid-cols-3">
+        <div class="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             <div class="rounded-[1.5rem] bg-slate-950 p-5 text-white">
                 <p class="text-[11px] font-black uppercase tracking-[0.26em] text-cyan-300">Published</p>
                 <p class="mt-3 text-3xl font-black">{{ published_count }}</p>
                 <p class="mt-2 text-sm text-slate-300">Live on the public insights hub.</p>
+            </div>
+            <div class="rounded-[1.5rem] border border-cyan-200 bg-cyan-50 p-5">
+                <p class="text-[11px] font-black uppercase tracking-[0.26em] text-cyan-700">Scheduled</p>
+                <p class="mt-3 text-3xl font-black text-slate-950">{{ scheduled_count }}</p>
+                <p class="mt-2 text-sm text-slate-600">Queued to publish automatically in the future.</p>
             </div>
             <div class="rounded-[1.5rem] border border-amber-200 bg-amber-50 p-5">
                 <p class="text-[11px] font-black uppercase tracking-[0.26em] text-amber-700">Drafts</p>
@@ -161,6 +166,7 @@
                 <select id="insights-status-filter" class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-cyan-400 focus:bg-white">
                     <option value="all">All statuses</option>
                     <option value="published">Published</option>
+                    <option value="scheduled">Scheduled</option>
                     <option value="draft">Drafts</option>
                     <option value="featured">Featured</option>
                 </select>
@@ -183,6 +189,9 @@
         </span>
         <span class="inline-flex rounded-full bg-white px-3 py-1 text-[11px] font-black uppercase tracking-[0.2em] text-emerald-700 ring-1 ring-emerald-200">
             Published {{ published_count }}
+        </span>
+        <span class="inline-flex rounded-full bg-white px-3 py-1 text-[11px] font-black uppercase tracking-[0.2em] text-cyan-700 ring-1 ring-cyan-200">
+            Scheduled {{ scheduled_count }}
         </span>
         <span class="inline-flex rounded-full bg-white px-3 py-1 text-[11px] font-black uppercase tracking-[0.2em] text-amber-700 ring-1 ring-amber-200">
             Drafts {{ draft_count }}
@@ -208,7 +217,7 @@
             class="insight-row rounded-[1.75rem] border border-slate-200 bg-slate-50 p-5 transition hover:border-cyan-200 hover:bg-white"
             data-insight-row
             data-search="{{ insight.title|lower }} {{ insight.author|lower }} {{ insight.category_label()|lower }} {{ insight.slug|lower }}"
-            data-status="{% if insight.published %}published{% else %}draft{% endif %}"
+            data-status="{{ insight.status_key() }}"
             data-featured="{% if insight.featured %}true{% else %}false{% endif %}"
             data-category="{{ insight.category_label()|lower }}"
         >

@@ -17,7 +17,7 @@
 
         <div class="mt-8 grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
             <div>
-                <p class="service-pill">{{ insight.category }}</p>
+                <p class="service-pill"><a href="{{ insight.category_url }}" class="transition hover:text-cyan-200">{{ insight.category }}</a></p>
                 <h1 class="mt-6 max-w-4xl text-4xl font-black tracking-tight md:text-6xl">
                     {{ insight.title }}
                 </h1>

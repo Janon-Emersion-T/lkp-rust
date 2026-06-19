@@ -11,7 +11,7 @@
             {% if categories.len() > 0 %}
             <div class="flex flex-wrap gap-3">
                 {% for category in categories %}
-                <span class="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-bold text-slate-700">{{ category }}</span>
+                <a href="{{ category.url }}" {% if category.active %}aria-current="page"{% endif %} class="rounded-full border px-4 py-2 text-sm font-bold transition {% if category.active %}border-cyan-500 bg-cyan-500 text-slate-950{% else %}border-slate-200 bg-white text-slate-700 hover:border-cyan-400 hover:text-cyan-700{% endif %}">{{ category.label }}</a>
                 {% endfor %}
             </div>
             {% endif %}
@@ -24,7 +24,7 @@
                     <img src="{{ insight.cover_image_url }}" alt="{{ insight.title }}" loading="lazy" decoding="async" width="1200" height="720" class="h-56 w-full object-cover transition duration-500 group-hover:scale-105" />
                 </div>
                 <div class="mt-6 flex flex-wrap items-center gap-3 text-xs font-black uppercase tracking-[0.18em] text-cyan-700">
-                    <span>{{ insight.category }}</span>
+                    <a href="{{ insight.category_url }}" class="transition hover:text-cyan-800">{{ insight.category }}</a>
                     <span class="text-slate-300">•</span>
                     <span class="text-slate-500">{{ insight.reading_time_label }}</span>
                 </div>

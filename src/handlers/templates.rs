@@ -59,15 +59,34 @@ pub struct CaseStudiesTemplate {
 pub struct InsightsTemplate {
     pub insights: Vec<InsightCardView>,
     pub featured_insights: Vec<InsightCardView>,
-    pub categories: Vec<String>,
+    pub categories: Vec<InsightCategoryLink>,
     pub snapshot_metrics: Vec<InsightSnapshotMetric>,
     pub pagination: PaginationView,
+    pub seo_title: String,
+    pub meta_description: String,
+    pub canonical_url: String,
+    pub og_title: String,
+    pub og_description: String,
+    pub og_url: String,
+    pub twitter_title: String,
+    pub twitter_description: String,
+    pub archive_label: String,
+    pub archive_heading: String,
+    pub archive_description: String,
+    pub archive_schema_name: String,
 }
 
 #[derive(Debug, Clone)]
 pub struct InsightSnapshotMetric {
     pub value: String,
     pub label: String,
+}
+
+#[derive(Debug, Clone)]
+pub struct InsightCategoryLink {
+    pub label: String,
+    pub url: String,
+    pub active: bool,
 }
 
 #[derive(Debug, Clone)]
@@ -341,6 +360,7 @@ pub struct DashboardInsightsTemplate {
     pub timeline: Vec<DashboardInsightTimelineView>,
     pub total_count: usize,
     pub published_count: usize,
+    pub scheduled_count: usize,
     pub draft_count: usize,
     pub featured_count: usize,
     pub saved: bool,

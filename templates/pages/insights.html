@@ -1,25 +1,25 @@
 {% extends "base.html" %}
 
-{% block title %}Insights & Articles | LKProfessionals{% endblock %}
+{% block title %}{{ seo_title }}{% endblock %}
 
 {% block meta_description %}
-Read dynamic insights and articles from LKProfessionals on software, SEO, automation, AI, and digital growth strategy.
+{{ meta_description }}
 {% endblock %}
 
-{% block canonical %}https://lkprofessionals.com/insights{% if pagination.current_page > 1 %}?page={{ pagination.current_page }}{% endif %}{% endblock %}
-{% block og_title %}LKProfessionals Insights & Articles{% if pagination.current_page > 1 %} | Page {{ pagination.current_page }}{% endif %}{% endblock %}
-{% block og_description %}Explore practical insights on business systems, web engineering, automation, SEO, and digital transformation.{% endblock %}
-{% block og_url %}https://lkprofessionals.com/insights{% if pagination.current_page > 1 %}?page={{ pagination.current_page }}{% endif %}{% endblock %}
-{% block twitter_title %}LKProfessionals Insights{% endblock %}
-{% block twitter_description %}Discover thought leadership and practical articles from LKProfessionals on software and digital growth.{% endblock %}
+{% block canonical %}{{ canonical_url }}{% endblock %}
+{% block og_title %}{{ og_title }}{% endblock %}
+{% block og_description %}{{ og_description }}{% endblock %}
+{% block og_url %}{{ og_url }}{% endblock %}
+{% block twitter_title %}{{ twitter_title }}{% endblock %}
+{% block twitter_description %}{{ twitter_description }}{% endblock %}
 
 {% block structured_data %}
 <script type="application/ld+json">
 {
     "@context": "https://schema.org",
     "@type": "Blog",
-    "name": "LKProfessionals Insights",
-    "url": "https://lkprofessionals.com/insights",
+    "name": "{{ archive_schema_name }}",
+    "url": "{{ canonical_url }}",
     "blogPost": [
         {% for insight in insights %}
         {

@@ -32,6 +32,7 @@ pub struct InsightCardView {
     pub excerpt: String,
     pub author: String,
     pub category: String,
+    pub category_url: String,
     pub cover_image_url: String,
     pub public_url: String,
     pub reading_time_label: String,
@@ -45,6 +46,7 @@ pub struct InsightDetailView {
     pub content_paragraphs: Vec<String>,
     pub author: String,
     pub category: String,
+    pub category_url: String,
     pub cover_image_url: String,
     pub canonical_url: String,
     pub meta_title: String,
@@ -70,6 +72,7 @@ pub struct InsightEditorView {
     pub meta_description: String,
     pub canonical_url: String,
     pub og_image_url: String,
+    pub published_at_local: String,
     pub featured: bool,
     pub published: bool,
 }
@@ -94,13 +97,43 @@ impl InsightRecord {
             .unwrap_or("Strategy")
     }
 
+    pub fn is_scheduled(&self) -> bool {
+        !self.published && self.published_at.is_some_and(|value| value > Utc::now())
+    }
+
+    pub fn status_key(&self) -> &str {
+        if self.published {
+            "published"
+        } else if self.is_scheduled() {
+            "scheduled"
+        } else {
+            "draft"
+        }
+    }
+
     pub fn status_label(&self) -> &str {
-        if self.published { "Published" } else { "Draft" }
+        if self.published {
+            "Published"
+        } else if self.is_scheduled() {
+            "Scheduled"
+        } else {
+            "Draft"
+        }
+    }
+
+    pub fn category_slug(&self) -> String {
+        slugify(self.category_label())
+    }
+
+    pub fn category_url(&self) -> String {
+        format!("/insights/category/{}", self.category_slug())
     }
 
     pub fn status_badge_class(&self) -> &str {
         if self.published {
             "bg-emerald-50 text-emerald-700 ring-emerald-200"
+        } else if self.is_scheduled() {
+            "bg-cyan-50 text-cyan-700 ring-cyan-200"
         } else {
             "bg-amber-50 text-amber-700 ring-amber-200"
         }
@@ -218,6 +251,7 @@ impl InsightRecord {
             excerpt: self.summary(),
             author: self.author.clone(),
             category: self.category_label().to_string(),
+            category_url: self.category_url(),
             cover_image_url: self.display_cover_image().to_string(),
             public_url: self.public_url(),
             reading_time_label: self.reading_time_label(),
@@ -234,6 +268,7 @@ impl InsightRecord {
             content_paragraphs: split_paragraphs(&self.content),
             author: self.author.clone(),
             category: self.category_label().to_string(),
+            category_url: self.category_url(),
             cover_image_url: self.display_cover_image().to_string(),
             canonical_url: self.canonical_url_or_fallback(),
             meta_title: self.meta_title_or_fallback(),
@@ -260,6 +295,10 @@ impl InsightRecord {
             meta_description: self.meta_description.clone().unwrap_or_default(),
             canonical_url: self.canonical_url.clone().unwrap_or_default(),
             og_image_url: self.og_image_url.clone().unwrap_or_default(),
+            published_at_local: self
+                .published_at
+                .map(|value| value.format("%Y-%m-%dT%H:%M").to_string())
+                .unwrap_or_default(),
             featured: self.featured,
             published: self.published,
         }
@@ -281,6 +320,7 @@ impl InsightEditorView {
             meta_description: String::new(),
             canonical_url: String::new(),
             og_image_url: String::new(),
+            published_at_local: String::new(),
             featured: false,
             published: false,
         }
