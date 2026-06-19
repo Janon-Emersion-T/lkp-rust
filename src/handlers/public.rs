@@ -5,12 +5,17 @@ use super::{
     render::render,
     service_content::services_overview_context,
     templates::{
-        AboutTemplate, ContactTemplate, FaqTemplate, RequestQuoteTemplate, ServicesTemplate,
+        AboutTemplate, ContactTemplate, FaqTemplate, FounderPortfolioTemplate,
+        RequestQuoteTemplate, ServicesTemplate,
     },
 };
 
 pub async fn about() -> impl IntoResponse {
     render(AboutTemplate)
+}
+
+pub async fn founder_portfolio() -> impl IntoResponse {
+    render(FounderPortfolioTemplate)
 }
 
 pub async fn services() -> impl IntoResponse {

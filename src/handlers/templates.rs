@@ -30,6 +30,7 @@ pub struct HomeTemplate {
     pub featured_industries: Vec<IndustryCardView>,
 }
 page!(AboutTemplate, "pages/aboutus.html");
+page!(FounderPortfolioTemplate, "pages/founder-portfolio.html");
 #[derive(Template)]
 #[template(path = "pages/services.html")]
 pub struct ServicesTemplate {
