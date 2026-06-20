@@ -65,6 +65,12 @@ pub struct QuickStatusForm {
     pub redirect_to: Option<String>,
 }
 
+#[derive(Debug, Deserialize)]
+pub struct BlockSenderForm {
+    pub redirect_to: Option<String>,
+    pub reason: Option<String>,
+}
+
 fn clean_optional(value: &Option<String>) -> Option<String> {
     value
         .as_deref()
@@ -190,6 +196,25 @@ async fn insert_contact_message(
     let message = form.message.trim();
     let lead_score = calculate_lead_score(form);
     let priority = calculate_priority(lead_score);
+    let sender_blocked = sqlx::query_scalar::<_, bool>(
+        r#"
+        SELECT EXISTS(
+            SELECT 1
+            FROM blocked_contact_senders
+            WHERE email = $1
+        )
+        "#,
+    )
+    .bind(&email)
+    .fetch_one(&state.db)
+    .await
+    .unwrap_or(false);
+    let status = if sender_blocked { "spam" } else { "new" };
+    let lost_reason = if sender_blocked {
+        Some("Automatically blocked sender".to_string())
+    } else {
+        None
+    };
 
     sqlx::query(
         r#"
@@ -208,10 +233,16 @@ async fn insert_contact_message(
             status,
             priority,
             lead_score,
+            lost_reason,
+            spam_at,
             client_ip,
             user_agent
         )
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, 'new', $11, $12, $13, $14)
+        VALUES (
+            $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14,
+            CASE WHEN $11 = 'spam' THEN NOW() ELSE NULL END,
+            $15, $16
+        )
         "#,
     )
     .bind(name)
@@ -224,8 +255,10 @@ async fn insert_contact_message(
     .bind(subject)
     .bind(message)
     .bind(clean_source(&form.source, fallback_source))
+    .bind(status)
     .bind(priority)
     .bind(lead_score)
+    .bind(lost_reason)
     .bind(client_ip(headers))
     .bind(user_agent(headers))
     .execute(&state.db)
@@ -610,4 +643,85 @@ pub async fn dashboard_contact_message_delete(
     }
 
     Redirect::to("/dashboard/contact-messages")
+}
+
+pub async fn dashboard_contact_message_block_sender(
+    State(state): State<AppState>,
+    Path(id): Path<Uuid>,
+    Form(form): Form<BlockSenderForm>,
+) -> impl IntoResponse {
+    let message = sqlx::query_scalar::<_, String>(
+        r#"
+        SELECT email
+        FROM contact_messages
+        WHERE id = $1
+        "#,
+    )
+    .bind(id)
+    .fetch_optional(&state.db)
+    .await;
+
+    let Some(email) = (match message {
+        Ok(value) => value,
+        Err(error) => {
+            eprintln!("Failed to fetch sender email for block action: {error}");
+            None
+        }
+    }) else {
+        return Redirect::to("/dashboard/contact-messages");
+    };
+
+    let email = email.trim().to_lowercase();
+    let reason =
+        clean_optional(&form.reason).unwrap_or_else(|| "Blocked from spam/scam review".to_string());
+
+    if let Err(error) = sqlx::query(
+        r#"
+        INSERT INTO blocked_contact_senders (email, reason, blocked_from_message_id, created_at, updated_at)
+        VALUES ($1, $2, $3, NOW(), NOW())
+        ON CONFLICT (email)
+        DO UPDATE SET
+            reason = EXCLUDED.reason,
+            blocked_from_message_id = EXCLUDED.blocked_from_message_id,
+            updated_at = NOW()
+        "#,
+    )
+    .bind(&email)
+    .bind(&reason)
+    .bind(id)
+    .execute(&state.db)
+    .await
+    {
+        eprintln!("Failed to block sender email: {error}");
+    }
+
+    if let Err(error) = sqlx::query(
+        r#"
+        UPDATE contact_messages
+        SET
+            status = 'spam',
+            spam_at = COALESCE(spam_at, NOW()),
+            lost_reason = CASE
+                WHEN lost_reason IS NULL OR btrim(lost_reason) = '' THEN $1
+                ELSE lost_reason
+            END,
+            updated_at = NOW()
+        WHERE lower(email) = $2
+        "#,
+    )
+    .bind(&reason)
+    .bind(&email)
+    .execute(&state.db)
+    .await
+    {
+        eprintln!("Failed to mark blocked sender messages as spam: {error}");
+    }
+
+    let redirect_to = form
+        .redirect_to
+        .as_deref()
+        .filter(|value| value.starts_with("/dashboard"))
+        .unwrap_or("/dashboard/contact-messages");
+
+    Redirect::to(redirect_to)
 }

@@ -10,12 +10,13 @@ use crate::{
         dashboard_career_application_show, dashboard_career_application_update,
         dashboard_career_applications, dashboard_career_create, dashboard_career_delete,
         dashboard_career_edit, dashboard_career_store, dashboard_career_update, dashboard_careers,
-        dashboard_contact_message_delete, dashboard_contact_message_quick_status,
-        dashboard_contact_message_reply, dashboard_contact_message_show,
-        dashboard_contact_message_update, dashboard_contact_messages, dashboard_faq_create,
-        dashboard_faq_edit, dashboard_faqs, dashboard_industries, dashboard_industry_create,
-        dashboard_industry_delete, dashboard_industry_edit, dashboard_industry_store,
-        dashboard_industry_update, dashboard_insight_categories, dashboard_insight_category_create,
+        dashboard_contact_message_block_sender, dashboard_contact_message_delete,
+        dashboard_contact_message_quick_status, dashboard_contact_message_reply,
+        dashboard_contact_message_show, dashboard_contact_message_update,
+        dashboard_contact_messages, dashboard_faq_create, dashboard_faq_edit, dashboard_faqs,
+        dashboard_industries, dashboard_industry_create, dashboard_industry_delete,
+        dashboard_industry_edit, dashboard_industry_store, dashboard_industry_update,
+        dashboard_insight_categories, dashboard_insight_category_create,
         dashboard_insight_category_edit, dashboard_insight_create, dashboard_insight_delete,
         dashboard_insight_edit, dashboard_insight_store, dashboard_insight_tag_create,
         dashboard_insight_tag_edit, dashboard_insight_tags, dashboard_insight_update,
@@ -235,6 +236,10 @@ pub fn dashboard_routes() -> Router<AppState> {
         .route(
             "/dashboard/contact-messages/{id}/delete",
             post(dashboard_contact_message_delete),
+        )
+        .route(
+            "/dashboard/contact-messages/{id}/block-sender",
+            post(dashboard_contact_message_block_sender),
         )
         .route_layer(middleware::from_fn(require_auth))
 }

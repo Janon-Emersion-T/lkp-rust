@@ -253,6 +253,14 @@
                                 Mark Qualified
                             </button>
                         </form>
+
+                        <form action="/dashboard/contact-messages/{{ message.id }}/block-sender" method="post">
+                            <input type="hidden" name="redirect_to" value="/dashboard/contact-messages">
+                            <input type="hidden" name="reason" value="Blocked from inbox after spam/scam review">
+                            <button class="rounded-full border border-rose-200 bg-rose-50 px-4 py-2 text-sm font-black text-rose-700 transition hover:bg-rose-100">
+                                Block Sender
+                            </button>
+                        </form>
                     </div>
                 </div>
             </article>
