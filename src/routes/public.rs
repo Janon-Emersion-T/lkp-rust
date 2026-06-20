@@ -5,10 +5,11 @@ use axum::{
 
 use crate::{
     handlers::{
-        about, career_apply, career_single, careers, case_studies, case_study_single, contact, faq,
-        founder_portfolio, home, industries, insight_single, insights, insights_by_category,
-        llmo_txt, llms_txt, request_quote, robot_txt, robots_txt, service_area_single,
-        service_areas, services, sitemap_html, sitemap_xml, submit_career_application,
+        about, career_apply, career_single, careers, case_studies, case_study_single,
+        comparison_page, contact, faq, founder_portfolio, free_audit_page, home, industries,
+        insight_single, insights, insights_by_category, llmo_txt, llms_txt, pricing_page,
+        region_page, request_quote, robot_txt, robots_txt, service_area_single, service_areas,
+        services, sitemap_html, sitemap_xml, solution_page, submit_career_application,
         submit_contact_message, submit_request_quote, subscribe_newsletter, why_work,
     },
     state::AppState,
@@ -26,6 +27,11 @@ pub fn public_routes() -> Router<AppState> {
         .route("/about", get(about))
         .route("/founder/janon-emersion-t", get(founder_portfolio))
         .route("/services", get(services))
+        .route("/solutions/{slug}", get(solution_page))
+        .route("/pricing/{slug}", get(pricing_page))
+        .route("/compare/{slug}", get(comparison_page))
+        .route("/regions/{slug}", get(region_page))
+        .route("/free-website-seo-audit", get(free_audit_page))
         .route("/service-area", get(service_areas))
         .route("/service-areas", get(service_areas))
         .route("/service-area/{slug}", get(service_area_single))

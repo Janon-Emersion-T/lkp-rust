@@ -113,7 +113,7 @@ pub fn service_page_context(slug: &str) -> ServicePageContext {
         "web-development" => ServicePageContext {
             slug: "web-development",
             title: "Web Development",
-            meta_title: "Web Development Services in Sri Lanka | LKProfessionals",
+            meta_title: "Web Development Company | LKProfessionals",
             meta_description: "Conversion-focused web development for corporate sites, landing pages, portals, and high-performance digital experiences by LKProfessionals.",
             canonical_path: "/services/web-development",
             eyebrow: "Web Development",
@@ -234,7 +234,7 @@ pub fn service_page_context(slug: &str) -> ServicePageContext {
         "mobile-app-development" => ServicePageContext {
             slug: "mobile-app-development",
             title: "Mobile App Development",
-            meta_title: "Mobile App Development in Sri Lanka | LKProfessionals",
+            meta_title: "Mobile App Development Company | LKProfessionals",
             meta_description: "Mobile app development for Android, iOS, and cross-platform products focused on usability, reliability, and business outcomes.",
             canonical_path: "/services/mobile-app-development",
             eyebrow: "Mobile App Development",
@@ -355,7 +355,7 @@ pub fn service_page_context(slug: &str) -> ServicePageContext {
         "custom-software-development" => ServicePageContext {
             slug: "custom-software-development",
             title: "Custom Software Development",
-            meta_title: "Custom Software Development in Sri Lanka | LKProfessionals",
+            meta_title: "Custom Software Development Company | LKProfessionals",
             meta_description: "Custom software systems for operations, sales, reporting, education, healthcare, logistics, and other business workflows.",
             canonical_path: "/services/custom-software-development",
             eyebrow: "Custom Software Development",
@@ -476,7 +476,7 @@ pub fn service_page_context(slug: &str) -> ServicePageContext {
         "software-development" => ServicePageContext {
             slug: "software-development",
             title: "Software Development",
-            meta_title: "Software Development Services in Sri Lanka | LKProfessionals",
+            meta_title: "Software Development Company | LKProfessionals",
             meta_description: "Software development for platforms, dashboards, portals, and digital products with strong architecture and long-term maintainability.",
             canonical_path: "/services/software-development",
             eyebrow: "Software Development",
@@ -597,7 +597,7 @@ pub fn service_page_context(slug: &str) -> ServicePageContext {
         "digital-marketing" => ServicePageContext {
             slug: "digital-marketing",
             title: "Digital Marketing",
-            meta_title: "Digital Marketing Services in Sri Lanka | LKProfessionals",
+            meta_title: "Digital Marketing Services | LKProfessionals",
             meta_description: "Digital marketing strategy, campaign execution, content direction, and growth systems for brands that want measurable momentum.",
             canonical_path: "/services/digital-marketing",
             eyebrow: "Digital Marketing",
@@ -718,7 +718,7 @@ pub fn service_page_context(slug: &str) -> ServicePageContext {
         "seo-search-growth" => ServicePageContext {
             slug: "seo-search-growth",
             title: "SEO & Search Growth",
-            meta_title: "SEO Services in Sri Lanka | LKProfessionals Search Growth",
+            meta_title: "SEO, GEO & Search Growth Services | LKProfessionals",
             meta_description: "Technical SEO, content strategy, on-page optimization, and search growth services for businesses that want durable organic visibility.",
             canonical_path: "/services/seo-search-growth",
             eyebrow: "SEO & Search Growth",
@@ -960,7 +960,7 @@ pub fn service_page_context(slug: &str) -> ServicePageContext {
         "ai-automation-solutions" => ServicePageContext {
             slug: "ai-automation-solutions",
             title: "AI & Automation Solutions",
-            meta_title: "AI Automation Solutions in Sri Lanka | LKProfessionals",
+            meta_title: "AI Automation Solutions | LKProfessionals",
             meta_description: "AI and automation solutions for repetitive workflows, service operations, internal processes, and smarter business execution.",
             canonical_path: "/services/ai-automation-solutions",
             eyebrow: "AI & Automation Solutions",

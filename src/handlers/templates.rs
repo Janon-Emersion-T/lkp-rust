@@ -1,7 +1,10 @@
 use askama::Template;
 
 use crate::{
-    handlers::service_content::{ServiceCard, ServicePageContext, ServicePoint, ServiceStep},
+    handlers::{
+        marketing::MarketingLandingPage,
+        service_content::{ServiceCard, ServicePageContext, ServicePoint, ServiceStep},
+    },
     models::{
         CareerApplicationEditorView, CareerApplicationRecord, CareerCardView, CareerDetailView,
         CareerEditorView, CareerRecord, ContactMessage, IndustryCardView, IndustryEditorView,
@@ -194,6 +197,12 @@ pub struct ServiceAreaPageView {
     pub area_type_label: String,
 }
 
+#[derive(Debug, Clone)]
+pub struct MarketingLandingView {
+    pub page: MarketingLandingPage,
+    pub page_url: String,
+}
+
 #[derive(Template)]
 #[template(path = "pages/careers.html")]
 pub struct CareersTemplate {
@@ -231,6 +240,12 @@ pub struct ServiceAreaDetailTemplate {
 pub struct SitemapTemplate {
     pub sections: Vec<SitemapSectionView>,
     pub total_urls: usize,
+}
+
+#[derive(Template)]
+#[template(path = "pages/marketing/landing.html")]
+pub struct MarketingLandingTemplate {
+    pub view: MarketingLandingView,
 }
 
 // Legal pages
