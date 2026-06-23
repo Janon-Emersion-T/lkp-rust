@@ -1,35 +1,73 @@
 {% extends "base.html" %}
 
-{% block title %}Services | Web, Software, SEO, Marketing & IT Solutions | LKProfessionals{% endblock %}
+{% block title %}IT Services & Software Development | LKProfessionals{% endblock %}
 
 {% block meta_description %}
-Explore LKProfessionals services including web development, software development, mobile apps, SEO, digital marketing, hosting, automation, and IT consultation.
+Explore custom software development, web applications, SEO, digital marketing, and IT consulting services from LKProfessionals for growth-focused businesses.
 {% endblock %}
 
 {% block canonical %}https://lkprofessionals.com/services{% endblock %}
-{% block og_title %}Services by LKProfessionals | Digital Growth, Software & IT Solutions{% endblock %}
-{% block og_description %}A complete service lineup covering websites, software, automation, SEO, digital marketing, hosting, and strategic IT consultation.{% endblock %}
+{% block og_title %}IT Services & Software Development | LKProfessionals{% endblock %}
+{% block og_description %}Explore custom software development, web applications, SEO, digital marketing, and IT consulting services from LKProfessionals for growth-focused businesses.{% endblock %}
 {% block og_url %}https://lkprofessionals.com/services{% endblock %}
-{% block twitter_title %}Services by LKProfessionals{% endblock %}
-{% block twitter_description %}Discover LKProfessionals services for websites, software, SEO, marketing, hosting, cloud, and digital transformation.{% endblock %}
+{% block twitter_title %}IT Services & Software Development | LKProfessionals{% endblock %}
+{% block twitter_description %}Explore custom software development, web applications, SEO, digital marketing, and IT consulting services from LKProfessionals for growth-focused businesses.{% endblock %}
 
 {% block structured_data %}
 <script type="application/ld+json">
 {
     "@context": "https://schema.org",
-    "@type": "ItemList",
-    "name": "LKProfessionals Services",
-    "url": "https://lkprofessionals.com/services",
-    "itemListElement": [
-        {% for service in services %}
+    "@graph": [
         {
-            "@type": "Service",
-            "position": {{ loop.index }},
-            "name": "{{ service.title }}",
-            "url": "https://lkprofessionals.com{{ service.slug }}",
-            "description": "{{ service.summary }}"
-        }{% if !loop.last %},{% endif %}
-        {% endfor %}
+            "@type": "CollectionPage",
+            "@id": "https://lkprofessionals.com/services#webpage",
+            "name": "IT Services & Software Development | LKProfessionals",
+            "url": "https://lkprofessionals.com/services",
+            "description": "Explore custom software development, web applications, SEO, digital marketing, and IT consulting services from LKProfessionals for growth-focused businesses.",
+            "isPartOf": {
+                "@id": "https://lkprofessionals.com/#website"
+            },
+            "about": {
+                "@id": "https://lkprofessionals.com/#organization"
+            },
+            "breadcrumb": {
+                "@id": "https://lkprofessionals.com/services#breadcrumb"
+            }
+        },
+        {
+            "@type": "BreadcrumbList",
+            "@id": "https://lkprofessionals.com/services#breadcrumb",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://lkprofessionals.com/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Services",
+                    "item": "https://lkprofessionals.com/services"
+                }
+            ]
+        },
+        {
+            "@type": "ItemList",
+            "name": "LKProfessionals Services",
+            "url": "https://lkprofessionals.com/services",
+            "itemListElement": [
+                {% for service in services %}
+                {
+                    "@type": "Service",
+                    "position": {{ loop.index }},
+                    "name": "{{ service.title }}",
+                    "url": "https://lkprofessionals.com{{ service.slug }}",
+                    "description": "{{ service.summary }}"
+                }{% if !loop.last %},{% endif %}
+                {% endfor %}
+            ]
+        }
     ]
 }
 </script>
@@ -68,6 +106,10 @@ Explore LKProfessionals services including web development, software development
                 <a href="/compare/offshore-development-vs-local-agency" class="rounded-[1.5rem] border border-slate-200 bg-white p-5 transition hover:border-cyan-300 hover:bg-cyan-50">
                     <h3 class="text-lg font-black text-slate-950">Comparison Page</h3>
                     <p class="mt-2 text-sm leading-7 text-slate-600">Buyer-friendly decision support for fit, cost, and delivery model.</p>
+                </a>
+                <a href="/industries" class="rounded-[1.5rem] border border-slate-200 bg-white p-5 transition hover:border-cyan-300 hover:bg-cyan-50">
+                    <h3 class="text-lg font-black text-slate-950">Industries We Serve</h3>
+                    <p class="mt-2 text-sm leading-7 text-slate-600">See how LKProfessionals adapts software and IT services to real operational environments.</p>
                 </a>
             </div>
         </div>

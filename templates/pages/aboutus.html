@@ -1,27 +1,38 @@
 {% extends "base.html" %}
 
-{% block title %}About LKProfessionals | Digital Solutions Company in Sri Lanka{% endblock %}
-{% block meta_description %}Learn about LKProfessionals, our digital delivery approach, service ecosystem, technical capabilities, and the industries we support from Sri Lanka to global markets.{% endblock %}
+{% block title %}About LKProfessionals | IT Solutions Company Sri Lanka{% endblock %}
+{% block meta_description %}Learn about LKProfessionals, our mission, expertise, and reliable IT solutions for businesses seeking software, web, SEO, and automation support.{% endblock %}
 {% block canonical %}https://lkprofessionals.com/about{% endblock %}
-{% block og_title %}About LKProfessionals | Digital Solutions Company{% endblock %}
-{% block og_description %}Meet the team, methods, and operational mindset behind LKProfessionals web, software, SEO, and automation services.{% endblock %}
+{% block og_title %}About LKProfessionals | IT Solutions Company Sri Lanka{% endblock %}
+{% block og_description %}Learn about LKProfessionals, our mission, expertise, and reliable IT solutions for businesses seeking software, web, SEO, and automation support.{% endblock %}
 {% block og_url %}https://lkprofessionals.com/about{% endblock %}
-{% block twitter_title %}About LKProfessionals | Digital Solutions Company{% endblock %}
-{% block twitter_description %}The story, culture, service model, and technical depth behind LKProfessionals.{% endblock %}
+{% block twitter_title %}About LKProfessionals | IT Solutions Company Sri Lanka{% endblock %}
+{% block twitter_description %}Learn about LKProfessionals, our mission, expertise, and reliable IT solutions for businesses seeking software, web, SEO, and automation support.{% endblock %}
 
 {% block structured_data %}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "AboutPage",
+  "@id": "https://lkprofessionals.com/about#webpage",
   "name": "About LKProfessionals",
   "url": "https://lkprofessionals.com/about",
-  "description": "Learn about LKProfessionals, a digital solutions company based in Jaffna, Sri Lanka."
+  "description": "Learn about LKProfessionals, an IT company in Sri Lanka serving businesses with software, web, SEO, and automation solutions.",
+  "isPartOf": {
+    "@id": "https://lkprofessionals.com/#website"
+  },
+  "about": {
+    "@id": "https://lkprofessionals.com/#organization"
+  },
+  "breadcrumb": {
+    "@id": "https://lkprofessionals.com/about#breadcrumb"
+  }
 }
 </script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
+  "@id": "https://lkprofessionals.com/about#breadcrumb",
   "@type": "BreadcrumbList",
   "itemListElement": [
     {
@@ -68,7 +79,7 @@
         <p class="text-sm font-black text-slate-950">Custom Software Development</p>
         <p class="mt-2 text-sm leading-7 text-slate-600">Understand the system-design and workflow thinking behind operational software delivery.</p>
       </a>
-      <a href="/case-studies" class="rounded-[1.4rem] border border-slate-200 bg-slate-50 p-5 transition hover:border-cyan-300 hover:bg-cyan-50">
+      <a href="/portfolio" class="rounded-[1.4rem] border border-slate-200 bg-slate-50 p-5 transition hover:border-cyan-300 hover:bg-cyan-50">
         <p class="text-sm font-black text-slate-950">Case Studies</p>
         <p class="mt-2 text-sm leading-7 text-slate-600">Review implementation examples, delivery angles, and commercial outcomes.</p>
       </a>

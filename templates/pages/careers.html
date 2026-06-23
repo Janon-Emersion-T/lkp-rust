@@ -1,34 +1,68 @@
 {% extends "base.html" %}
 
-{% block title %}Careers at LKProfessionals | Engineering, Growth, and Digital Delivery Roles{% endblock %}
-{% block meta_description %}Explore current LKProfessionals vacancies across engineering, frontend, SEO, and digital delivery. Learn how we work and apply for open roles in Sri Lanka and remote-friendly teams.{% endblock %}
+{% block title %}Software & IT Careers in Sri Lanka | LKProfessionals{% endblock %}
+{% block meta_description %}Explore software, SEO, design, and IT career opportunities at LKProfessionals for professionals who want meaningful digital delivery work in Sri Lanka.{% endblock %}
 {% block canonical %}https://lkprofessionals.com/careers{% endblock %}
-{% block og_title %}Careers at LKProfessionals{% endblock %}
-{% block og_description %}Join LKProfessionals and work on web platforms, software systems, SEO growth, and business-focused digital delivery.{% endblock %}
+{% block og_title %}Software & IT Careers in Sri Lanka | LKProfessionals{% endblock %}
+{% block og_description %}Explore software, SEO, design, and IT career opportunities at LKProfessionals for professionals who want meaningful digital delivery work in Sri Lanka.{% endblock %}
 {% block og_url %}https://lkprofessionals.com/careers{% endblock %}
+{% block twitter_title %}Software & IT Careers in Sri Lanka | LKProfessionals{% endblock %}
+{% block twitter_description %}Explore software, SEO, design, and IT career opportunities at LKProfessionals for professionals who want meaningful digital delivery work in Sri Lanka.{% endblock %}
 
 {% block structured_data %}
 <script type="application/ld+json">
 {
     "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    "name": "LKProfessionals Careers",
-    "url": "https://lkprofessionals.com/careers",
-    "description": "Current LKProfessionals job openings and hiring information.",
-    "mainEntity": {
-        "@type": "ItemList",
-        "numberOfItems": {{ careers.len() }},
-        "itemListElement": [
-            {% for role in careers %}
-            {
-                "@type": "ListItem",
-                "position": {{ loop.index }},
-                "url": "https://lkprofessionals.com{{ role.public_url }}",
-                "name": "{{ role.title }}"
-            }{% if !loop.last %},{% endif %}
-            {% endfor %}
-        ]
-    }
+    "@graph": [
+        {
+            "@type": "CollectionPage",
+            "@id": "https://lkprofessionals.com/careers#webpage",
+            "name": "Software & IT Careers in Sri Lanka | LKProfessionals",
+            "url": "https://lkprofessionals.com/careers",
+            "description": "Explore software, SEO, design, and IT career opportunities at LKProfessionals for professionals who want meaningful digital delivery work in Sri Lanka.",
+            "isPartOf": {
+                "@id": "https://lkprofessionals.com/#website"
+            },
+            "about": {
+                "@id": "https://lkprofessionals.com/#organization"
+            },
+            "breadcrumb": {
+                "@id": "https://lkprofessionals.com/careers#breadcrumb"
+            },
+            "mainEntity": {
+                "@type": "ItemList",
+                "numberOfItems": {{ careers.len() }},
+                "itemListElement": [
+                    {% for role in careers %}
+                    {
+                        "@type": "ListItem",
+                        "position": {{ loop.index }},
+                        "url": "https://lkprofessionals.com{{ role.public_url }}",
+                        "name": "{{ role.title }}"
+                    }{% if !loop.last %},{% endif %}
+                    {% endfor %}
+                ]
+            }
+        },
+        {
+            "@type": "BreadcrumbList",
+            "@id": "https://lkprofessionals.com/careers#breadcrumb",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://lkprofessionals.com/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Careers",
+                    "item": "https://lkprofessionals.com/careers"
+                }
+            ]
+        }
+    ]
 }
 </script>
 {% endblock %}

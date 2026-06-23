@@ -1,39 +1,71 @@
 {% extends "base.html" %}
 
-{% block title %}Case Studies & Portfolio | LKProfessionals{% endblock %}
+{% block title %}Software Portfolio & Case Studies | LKProfessionals{% endblock %}
 
 {% block meta_description %}
-Explore SEO-friendly case studies and portfolio work by LKProfessionals across software development, web platforms, automation, and digital growth delivery.
+Explore LKProfessionals portfolio and case studies across software development, websites, SEO, automation, and digital transformation projects.
 {% endblock %}
 
-{% block canonical %}https://lkprofessionals.com/case-studies{% endblock %}
-{% block og_title %}LKProfessionals Case Studies & Portfolio{% endblock %}
-{% block og_description %}See how LKProfessionals delivers business websites, software platforms, automation systems, and growth-focused digital execution.{% endblock %}
-{% block og_url %}https://lkprofessionals.com/case-studies{% endblock %}
-{% block twitter_title %}LKProfessionals Case Studies{% endblock %}
-{% block twitter_description %}Browse project case studies, outcomes, technologies, and industry delivery experience from LKProfessionals.{% endblock %}
+{% block canonical %}https://lkprofessionals.com/portfolio{% endblock %}
+{% block og_title %}Software Portfolio & Case Studies | LKProfessionals{% endblock %}
+{% block og_description %}Explore LKProfessionals portfolio and case studies across software development, websites, SEO, automation, and digital transformation projects.{% endblock %}
+{% block og_url %}https://lkprofessionals.com/portfolio{% endblock %}
+{% block twitter_title %}Software Portfolio & Case Studies | LKProfessionals{% endblock %}
+{% block twitter_description %}Explore LKProfessionals portfolio and case studies across software development, websites, SEO, automation, and digital transformation projects.{% endblock %}
 
 {% block structured_data %}
 <script type="application/ld+json">
 {
     "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    "name": "LKProfessionals Case Studies",
-    "url": "https://lkprofessionals.com/case-studies",
-    "description": "Case studies and portfolio work from LKProfessionals across web, software, automation, and digital growth.",
-    "mainEntity": {
-        "@type": "ItemList",
-        "itemListElement": [
-            {% for portfolio in portfolios %}
-            {
-                "@type": "ListItem",
-                "position": {{ loop.index }},
-                "url": "https://lkprofessionals.com{{ portfolio.public_url }}",
-                "name": "{{ portfolio.title }}"
-            }{% if !loop.last %},{% endif %}
-            {% endfor %}
-        ]
-    }
+    "@graph": [
+        {
+            "@type": "CollectionPage",
+            "@id": "https://lkprofessionals.com/portfolio#webpage",
+            "name": "Software Portfolio & Case Studies | LKProfessionals",
+            "url": "https://lkprofessionals.com/portfolio",
+            "description": "Explore LKProfessionals portfolio and case studies across software development, websites, SEO, automation, and digital transformation projects.",
+            "isPartOf": {
+                "@id": "https://lkprofessionals.com/#website"
+            },
+            "about": {
+                "@id": "https://lkprofessionals.com/#organization"
+            },
+            "breadcrumb": {
+                "@id": "https://lkprofessionals.com/portfolio#breadcrumb"
+            },
+            "mainEntity": {
+                "@type": "ItemList",
+                "itemListElement": [
+                    {% for portfolio in portfolios %}
+                    {
+                        "@type": "ListItem",
+                        "position": {{ loop.index }},
+                        "url": "https://lkprofessionals.com{{ portfolio.public_url }}",
+                        "name": "{{ portfolio.title }}"
+                    }{% if !loop.last %},{% endif %}
+                    {% endfor %}
+                ]
+            }
+        },
+        {
+            "@type": "BreadcrumbList",
+            "@id": "https://lkprofessionals.com/portfolio#breadcrumb",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://lkprofessionals.com/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Portfolio",
+                    "item": "https://lkprofessionals.com/portfolio"
+                }
+            ]
+        }
+    ]
 }
 </script>
 {% endblock %}
@@ -42,4 +74,23 @@ Explore SEO-friendly case studies and portfolio work by LKProfessionals across s
 {% include "components/portfolio/index-hero.html" %}
 {% include "components/portfolio/index-featured.html" %}
 {% include "components/portfolio/index-grid.html" %}
+<section class="bg-slate-50 px-6 py-20">
+    <div class="mx-auto max-w-7xl rounded-[2rem] border border-slate-200 bg-white p-8 shadow-[0_22px_50px_rgba(15,23,42,0.06)] md:p-10">
+        <p class="text-sm font-black uppercase tracking-[0.24em] text-cyan-600">Next Step</p>
+        <h2 class="mt-4 text-3xl font-black tracking-tight text-slate-950 md:text-4xl">
+            Turn portfolio research into a practical conversation.
+        </h2>
+        <p class="mt-4 max-w-3xl text-base leading-8 text-slate-600">
+            If you have seen enough proof and want to discuss a similar website, software, SEO, or automation project, move directly into a scoped conversation with LKProfessionals.
+        </p>
+        <div class="mt-8 flex flex-col gap-4 sm:flex-row">
+            <a href="/contact" class="inline-flex items-center justify-center rounded-full bg-slate-950 px-6 py-3 text-sm font-black uppercase tracking-wide text-white transition hover:bg-cyan-700">
+                Contact LKProfessionals
+            </a>
+            <a href="/request-quote" class="inline-flex items-center justify-center rounded-full border border-slate-300 px-6 py-3 text-sm font-black uppercase tracking-wide text-slate-950 transition hover:border-cyan-500 hover:text-cyan-700">
+                Request a Quote
+            </a>
+        </div>
+    </div>
+</section>
 {% endblock %}

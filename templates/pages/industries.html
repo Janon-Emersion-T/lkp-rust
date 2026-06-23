@@ -1,38 +1,70 @@
 {% extends "base.html" %}
 
-{% block title %}Industries We Serve | LKProfessionals{% endblock %}
+{% block title %}Industries We Serve in Software & IT | LKProfessionals{% endblock %}
 
 {% block meta_description %}
-Explore the industries LKProfessionals serves with tailored websites, software systems, automation workflows, and digital growth solutions.
+Explore the industries LKProfessionals serves with tailored software, websites, SEO, automation, and IT solutions built around real business needs.
 {% endblock %}
 
 {% block canonical %}https://lkprofessionals.com/industries{% endblock %}
-{% block og_title %}Industries We Serve | LKProfessionals{% endblock %}
-{% block og_description %}Industry-focused software, websites, automation, and digital delivery for retail, education, healthcare, logistics, hospitality, and more.{% endblock %}
+{% block og_title %}Industries We Serve in Software & IT | LKProfessionals{% endblock %}
+{% block og_description %}Explore the industries LKProfessionals serves with tailored software, websites, SEO, automation, and IT solutions built around real business needs.{% endblock %}
 {% block og_url %}https://lkprofessionals.com/industries{% endblock %}
-{% block twitter_title %}Industries We Serve | LKProfessionals{% endblock %}
-{% block twitter_description %}See how LKProfessionals supports real-world industries with tailored digital systems and growth-ready execution.{% endblock %}
+{% block twitter_title %}Industries We Serve in Software & IT | LKProfessionals{% endblock %}
+{% block twitter_description %}Explore the industries LKProfessionals serves with tailored software, websites, SEO, automation, and IT solutions built around real business needs.{% endblock %}
 
 {% block structured_data %}
 <script type="application/ld+json">
 {
     "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    "name": "Industries We Serve",
-    "url": "https://lkprofessionals.com/industries",
-    "description": "Industry-specific delivery capabilities from LKProfessionals.",
-    "mainEntity": {
-        "@type": "ItemList",
-        "itemListElement": [
-            {% for industry in industries %}
-            {
-                "@type": "ListItem",
-                "position": {{ loop.index }},
-                "name": "{{ industry.title }}"
-            }{% if !loop.last %},{% endif %}
-            {% endfor %}
-        ]
-    }
+    "@graph": [
+        {
+            "@type": "CollectionPage",
+            "@id": "https://lkprofessionals.com/industries#webpage",
+            "name": "Industries We Serve in Software & IT | LKProfessionals",
+            "url": "https://lkprofessionals.com/industries",
+            "description": "Explore the industries LKProfessionals serves with tailored software, websites, SEO, automation, and IT solutions built around real business needs.",
+            "isPartOf": {
+                "@id": "https://lkprofessionals.com/#website"
+            },
+            "about": {
+                "@id": "https://lkprofessionals.com/#organization"
+            },
+            "breadcrumb": {
+                "@id": "https://lkprofessionals.com/industries#breadcrumb"
+            },
+            "mainEntity": {
+                "@type": "ItemList",
+                "itemListElement": [
+                    {% for industry in industries %}
+                    {
+                        "@type": "ListItem",
+                        "position": {{ loop.index }},
+                        "name": "{{ industry.title }}"
+                    }{% if !loop.last %},{% endif %}
+                    {% endfor %}
+                ]
+            }
+        },
+        {
+            "@type": "BreadcrumbList",
+            "@id": "https://lkprofessionals.com/industries#breadcrumb",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://lkprofessionals.com/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Industries",
+                    "item": "https://lkprofessionals.com/industries"
+                }
+            ]
+        }
+    ]
 }
 </script>
 {% endblock %}
@@ -47,6 +79,13 @@ Explore the industries LKProfessionals serves with tailored websites, software s
     <div class="relative mx-auto max-w-7xl">
         <div class="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
             <div>
+                <nav aria-label="Breadcrumb" class="text-sm text-slate-300">
+                    <ol class="flex flex-wrap items-center gap-2">
+                        <li><a href="/" class="transition hover:text-white">Home</a></li>
+                        <li aria-hidden="true" class="text-slate-500">/</li>
+                        <li aria-current="page" class="font-bold text-white">Industries</li>
+                    </ol>
+                </nav>
                 <p class="service-pill">Industries We Serve</p>
                 <h1 class="mt-6 max-w-4xl text-4xl font-black tracking-tight md:text-6xl">
                     Digital systems shaped around real operational environments.
@@ -100,6 +139,26 @@ Explore the industries LKProfessionals serves with tailored websites, software s
                 {% endif %}
             </article>
             {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="bg-slate-50 px-6 py-20">
+    <div class="mx-auto max-w-7xl rounded-[2rem] border border-slate-200 bg-white p-8 shadow-[0_22px_50px_rgba(15,23,42,0.06)] md:p-10">
+        <p class="text-sm font-black uppercase tracking-[0.24em] text-cyan-600">Proof By Industry</p>
+        <h2 class="mt-4 text-3xl font-black tracking-tight text-slate-950 md:text-4xl">
+            See how industry requirements translate into portfolio execution.
+        </h2>
+        <p class="mt-4 max-w-3xl text-base leading-8 text-slate-600">
+            Browse project examples and case studies that show how LKProfessionals turns industry context into software, website, SEO, and automation delivery.
+        </p>
+        <div class="mt-8 flex flex-col gap-4 sm:flex-row">
+            <a href="/portfolio" class="inline-flex items-center justify-center rounded-full bg-slate-950 px-6 py-3 text-sm font-black uppercase tracking-wide text-white transition hover:bg-cyan-700">
+                Explore Portfolio
+            </a>
+            <a href="/contact" class="inline-flex items-center justify-center rounded-full border border-slate-300 px-6 py-3 text-sm font-black uppercase tracking-wide text-slate-950 transition hover:border-cyan-500 hover:text-cyan-700">
+                Discuss Your Industry
+            </a>
         </div>
     </div>
 </section>

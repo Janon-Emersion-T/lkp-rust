@@ -17,17 +17,56 @@
 <script type="application/ld+json">
 {
     "@context": "https://schema.org",
-    "@type": "Blog",
-    "name": "{{ archive_schema_name }}",
-    "url": "{{ canonical_url }}",
-    "blogPost": [
-        {% for insight in insights %}
+    "@graph": [
         {
-            "@type": "BlogPosting",
-            "headline": "{{ insight.title }}",
-            "url": "https://lkprofessionals.com{{ insight.public_url }}"
-        }{% if !loop.last %},{% endif %}
-        {% endfor %}
+            "@type": "Blog",
+            "@id": "{{ canonical_url }}#blog",
+            "name": "{{ archive_schema_name }}",
+            "url": "{{ canonical_url }}",
+            "description": "{{ meta_description }}",
+            "isPartOf": {
+                "@id": "https://lkprofessionals.com/#website"
+            },
+            "about": {
+                "@id": "https://lkprofessionals.com/#organization"
+            },
+            "breadcrumb": {
+                "@id": "{{ canonical_url }}#breadcrumb"
+            },
+            "blogPost": [
+                {% for insight in insights %}
+                {
+                    "@type": "BlogPosting",
+                    "headline": "{{ insight.title }}",
+                    "url": "https://lkprofessionals.com{{ insight.public_url }}"
+                }{% if !loop.last %},{% endif %}
+                {% endfor %}
+            ]
+        },
+        {
+            "@type": "BreadcrumbList",
+            "@id": "{{ canonical_url }}#breadcrumb",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://lkprofessionals.com/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Insights",
+                    "item": "https://lkprofessionals.com/insights"
+                }{% if archive_label != "Insights & Articles" %},
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "{{ archive_label }}",
+                    "item": "{{ canonical_url }}"
+                }{% endif %}
+            ]
+        }
     ]
 }
 </script>
@@ -39,5 +78,34 @@
 {% include "components/insights/index-featured.html" %}
 {% endif %}
 {% include "components/insights/index-grid.html" %}
+<section class="bg-slate-50 px-6 py-20">
+    <div class="mx-auto max-w-7xl rounded-[2rem] border border-slate-200 bg-white p-8 shadow-[0_22px_50px_rgba(15,23,42,0.06)] md:p-10">
+        <p class="text-sm font-black uppercase tracking-[0.24em] text-cyan-600">Explore Services</p>
+        <h2 class="mt-4 text-3xl font-black tracking-tight text-slate-950 md:text-4xl">
+            Move from insights into delivery-focused service pages.
+        </h2>
+        <p class="mt-4 max-w-3xl text-base leading-8 text-slate-600">
+            Use these insights to understand the strategy, then review the LKProfessionals services that turn that thinking into software, SEO, automation, and digital execution.
+        </p>
+        <div class="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            <a href="/services" class="rounded-[1.4rem] border border-slate-200 bg-slate-50 p-5 transition hover:border-cyan-300 hover:bg-cyan-50">
+                <p class="text-sm font-black text-slate-950">All Services</p>
+                <p class="mt-2 text-sm leading-7 text-slate-600">Review the full service lineup across software, web, SEO, and automation.</p>
+            </a>
+            <a href="/services/software-development" class="rounded-[1.4rem] border border-slate-200 bg-slate-50 p-5 transition hover:border-cyan-300 hover:bg-cyan-50">
+                <p class="text-sm font-black text-slate-950">Software Development</p>
+                <p class="mt-2 text-sm leading-7 text-slate-600">See how LKProfessionals scopes and delivers custom software systems.</p>
+            </a>
+            <a href="/services/seo-search-growth" class="rounded-[1.4rem] border border-slate-200 bg-slate-50 p-5 transition hover:border-cyan-300 hover:bg-cyan-50">
+                <p class="text-sm font-black text-slate-950">SEO Services</p>
+                <p class="mt-2 text-sm leading-7 text-slate-600">Move from search strategy reading into commercial SEO service details.</p>
+            </a>
+            <a href="/request-quote" class="rounded-[1.4rem] border border-slate-200 bg-slate-50 p-5 transition hover:border-cyan-300 hover:bg-cyan-50">
+                <p class="text-sm font-black text-slate-950">Request Quote</p>
+                <p class="mt-2 text-sm leading-7 text-slate-600">Take the next step if you want the strategy implemented with clear scope.</p>
+            </a>
+        </div>
+    </div>
+</section>
 {% include "components/insights/index-subscribe.html" %}
 {% endblock %}

@@ -404,7 +404,7 @@ fn build_insights_template(
     let seo_title = category_name
         .clone()
         .map(|label| format!("{label} Insights & Articles | LKProfessionals"))
-        .unwrap_or_else(|| "Insights & Articles | LKProfessionals".to_string());
+        .unwrap_or_else(|| "SEO, Software & Automation Insights | LKProfessionals".to_string());
     let meta_description = category_name
         .clone()
         .map(|label| {
@@ -413,12 +413,12 @@ fn build_insights_template(
             )
         })
         .unwrap_or_else(|| {
-            "Read dynamic insights and articles from LKProfessionals on software, SEO, automation, AI, and digital growth strategy.".to_string()
+            "Read LKProfessionals insights on software, SEO, automation, and digital strategy to plan stronger websites, systems, campaigns, and business growth.".to_string()
         });
     let og_title = category_name
         .clone()
         .map(|label| format!("{label} Insights | LKProfessionals"))
-        .unwrap_or_else(|| "LKProfessionals Insights & Articles".to_string());
+        .unwrap_or_else(|| "SEO, Software & Automation Insights | LKProfessionals".to_string());
     let og_description = archive_description.clone();
     let twitter_title = og_title.clone();
     let twitter_description = meta_description.clone();

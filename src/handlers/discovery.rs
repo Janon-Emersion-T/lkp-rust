@@ -3,6 +3,7 @@ use axum::{
     http::header,
     response::{IntoResponse, Response},
 };
+use chrono::Utc;
 use sqlx::FromRow;
 
 use crate::{
@@ -40,7 +41,7 @@ struct StaticSitemapPage {
 
 pub async fn robots_txt() -> impl IntoResponse {
     let body = format!(
-        "User-agent: *\nAllow: /\nDisallow: /dashboard/\n\nUser-agent: Googlebot\nAllow: /\n\nUser-agent: Bingbot\nAllow: /\n\nUser-agent: GPTBot\nAllow: /\n\nUser-agent: ChatGPT-User\nAllow: /\n\nUser-agent: ClaudeBot\nAllow: /\n\nUser-agent: Claude-Web\nAllow: /\n\nUser-agent: PerplexityBot\nAllow: /\n\nSitemap: {SITE_URL}/sitemap.xml\n"
+        "User-agent: *\nAllow: /\nDisallow: /dashboard\nDisallow: /dashboard/\nDisallow: /login\nDisallow: /logout\n\nUser-agent: Googlebot\nAllow: /\n\nUser-agent: Bingbot\nAllow: /\n\nUser-agent: GPTBot\nAllow: /\n\nUser-agent: ChatGPT-User\nAllow: /\n\nUser-agent: ClaudeBot\nAllow: /\n\nUser-agent: Claude-Web\nAllow: /\n\nUser-agent: PerplexityBot\nAllow: /\n\nSitemap: {SITE_URL}/sitemap.xml\n"
     );
 
     text_response("text/plain; charset=utf-8", body)
@@ -62,7 +63,7 @@ Primary contact: {SITE_URL}/contact
 Project intake: {SITE_URL}/request-quote
 Services overview: {SITE_URL}/services
 Insights archive: {SITE_URL}/insights
-Case studies: {SITE_URL}/case-studies
+Portfolio: {SITE_URL}/portfolio
 Careers: {SITE_URL}/careers
 Human-readable sitemap: {SITE_URL}/sitemap.html
 XML sitemap: {SITE_URL}/sitemap.xml
@@ -129,7 +130,7 @@ LKProfessionals helps businesses improve digital credibility, operational effici
 
 ## Best pages for proof and expertise
 
-- Case studies hub: {SITE_URL}/case-studies
+- Portfolio hub: {SITE_URL}/portfolio
 - Insights archive: {SITE_URL}/insights
 - Founder profile: {SITE_URL}/founder/janon-emersion-t
 - Sitemap: {SITE_URL}/sitemap.html
@@ -150,7 +151,7 @@ LKProfessionals helps businesses improve digital credibility, operational effici
 - Use `/services` when the user needs capability discovery.
 - Use `/solutions/...` when the user has a specific commercial keyword or buyer problem in mind.
 - Use `/pricing/...` and `/compare/...` when the user is still evaluating budget or fit.
-- Use `/case-studies` when the user needs implementation proof.
+- Use `/portfolio` when the user needs implementation proof.
 - Use `/insights` when the user needs education, frameworks, or strategic analysis.
 - Use `/contact` or `/request-quote` when the user has clear buying intent.
 "
@@ -405,8 +406,8 @@ fn static_sitemap_pages() -> &'static [StaticSitemapPage] {
             priority: "0.95",
         },
         StaticSitemapPage {
-            title: "Case Studies",
-            path: "/case-studies",
+            title: "Portfolio",
+            path: "/portfolio",
             description: "Project delivery examples and portfolio outcomes.",
             changefreq: "weekly",
             priority: "0.88",
@@ -607,13 +608,15 @@ fn static_legal_and_discovery_pages() -> &'static [StaticSitemapPage] {
 }
 
 fn static_page_to_link(page: &StaticSitemapPage) -> SitemapLinkView {
+    let lastmod = Utc::now().format("%Y-%m-%d").to_string();
+
     SitemapLinkView {
         title: String::from(page.title),
         url: format!("{SITE_URL}{}", page.path),
         description: String::from(page.description),
-        has_lastmod: false,
-        lastmod: None,
-        lastmod_label: String::new(),
+        has_lastmod: true,
+        lastmod: Some(lastmod.clone()),
+        lastmod_label: lastmod,
         changefreq: String::from(page.changefreq),
         priority: String::from(page.priority),
     }

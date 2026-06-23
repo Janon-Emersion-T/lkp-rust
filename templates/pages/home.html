@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 
-{% block title %}LKProfessionals | Global Software Development, Web, SEO, GEO & Automation{% endblock %}
-{% block meta_description %}LKProfessionals is a Sri Lanka-based global software development, web development, SEO, GEO, and automation partner for businesses in Sri Lanka, UK, USA, Canada, Australia, Europe, the Middle East, and beyond.{% endblock %}
+{% block title %}Global Software Development Company | LKProfessionals{% endblock %}
+{% block meta_description %}LKProfessionals delivers software development, web design, SEO, digital marketing, and automation solutions for businesses ready to grow worldwide.{% endblock %}
 {% block canonical %}https://lkprofessionals.com/{% endblock %}
-{% block og_title %}LKProfessionals | Global Software Development, Web, SEO, GEO & Automation{% endblock %}
-{% block og_description %}Explore LKProfessionals services, case studies, industries, international landing pages, and insights across software, web, SEO, GEO, automation, and business growth.{% endblock %}
+{% block og_title %}Global Software Development Company | LKProfessionals{% endblock %}
+{% block og_description %}LKProfessionals delivers software development, web design, SEO, digital marketing, and automation solutions for businesses ready to grow worldwide.{% endblock %}
 {% block og_url %}https://lkprofessionals.com/{% endblock %}
-{% block twitter_title %}LKProfessionals | Global Software Development, Web, SEO, GEO & Automation{% endblock %}
-{% block twitter_description %}Websites, software, automation, SEO, GEO, hosting, and digital systems built for modern business growth worldwide.{% endblock %}
+{% block twitter_title %}Global Software Development Company | LKProfessionals{% endblock %}
+{% block twitter_description %}LKProfessionals delivers software development, web design, SEO, digital marketing, and automation solutions for businesses ready to grow worldwide.{% endblock %}
 {% block preload_assets %}
 <link rel="preload" as="image" href="/static/images/hero-coding-bg-cleaner.webp" fetchpriority="high">
 {% endblock %}
@@ -18,99 +18,54 @@
   "@context": "https://schema.org",
   "@graph": [
     {
-      "@type": [
-        "ProfessionalService",
-        "Corporation"
-      ],
-      "@id": "https://lkprofessionals.com/#organization",
-      "name": "LKProfessionals (Pvt) Ltd.",
+      "@type": "WebPage",
+      "@id": "https://lkprofessionals.com/#webpage",
       "url": "https://lkprofessionals.com/",
-      "logo": "https://lkprofessionals.com/static/images/logo.png",
-      "telephone": "+94761234321",
-      "email": "info@lkprofessionals.com",
-      "founder": {
-        "@type": "Person",
-        "name": "Mr. Janon Emersion T",
-        "jobTitle": "Founder & CEO"
+      "name": "Global Software Development Company | LKProfessionals",
+      "description": "LKProfessionals delivers software development, web design, SEO, digital marketing, and automation solutions for businesses ready to grow worldwide.",
+      "isPartOf": {
+        "@id": "https://lkprofessionals.com/#website"
       },
-      "foundingDate": "2013",
-      "foundingLocation": {
-        "@type": "Place",
-        "name": "Jaffna, Sri Lanka"
+      "about": {
+        "@id": "https://lkprofessionals.com/#organization"
       },
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "6/7, Vidhan's Lane, Eachchamoddai",
-        "addressLocality": "Jaffna",
-        "postalCode": "40000",
-        "addressCountry": "LK"
-      },
-      "areaServed": [
-        "Jaffna",
-        "Colombo",
-        "Sri Lanka",
-        "United Kingdom",
-        "United States",
-        "Canada",
-        "Australia",
-        "Europe",
-        "Middle East",
-        "Worldwide"
-      ],
-      "sameAs": [
-        "https://www.linkedin.com/company/lkprofessionals",
-        "https://x.com/lkprofess",
-        "https://web.facebook.com/lkprofessionals",
-        "https://www.instagram.com/lkprofessionalspvtltd/",
-        "https://www.youtube.com/@lkprofessionals",
-        "https://www.tiktok.com/@lkprofessionals"
-      ],
-      "knowsAbout": [
-        "Custom Web Development",
-        "POS Systems",
-        "E-commerce Platforms",
-        "SaaS Applications",
-        "Digital Marketing",
-        "SEO",
-        "IT Consultation"
-      ]
+      "breadcrumb": {
+        "@id": "https://lkprofessionals.com/#breadcrumb"
+      }
     },
     {
-      "@type": "WebSite",
-      "@id": "https://lkprofessionals.com/#website",
-      "name": "LKProfessionals",
-      "url": "https://lkprofessionals.com/",
-      "publisher": {
-        "@id": "https://lkprofessionals.com/#organization"
-      }
+      "@type": "BreadcrumbList",
+      "@id": "https://lkprofessionals.com/#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://lkprofessionals.com/"
+        }
+      ]
     },
     {
       "@type": "Service",
       "@id": "https://lkprofessionals.com/#primary-services",
-      "name": "Web Development, SaaS, SEO, and IT Consulting Services",
+      "name": "Software Development, Web Design, SEO, and Automation Services",
       "provider": {
         "@id": "https://lkprofessionals.com/#organization"
       },
+      "serviceType": [
+        "Software Development",
+        "Web Design",
+        "SEO",
+        "Digital Marketing",
+        "Business Automation"
+      ],
       "areaServed": [
-        "Jaffna",
-        "Colombo",
         "Sri Lanka",
-        "United Kingdom",
         "United States",
+        "United Kingdom",
         "Canada",
         "Australia",
-        "Europe",
-        "Middle East",
         "Worldwide"
-      ],
-      "serviceType": [
-        "Custom Web Development",
-        "POS Systems",
-        "E-commerce Platforms",
-        "SaaS Applications",
-        "Digital Marketing",
-        "SEO",
-        "IT Consultation"
       ],
       "url": "https://lkprofessionals.com/services"
     }

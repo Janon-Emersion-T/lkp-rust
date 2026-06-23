@@ -1,29 +1,52 @@
 {% extends "base.html" %}
 
-{% block title %}Request a Quote | LKProfessionals{% endblock %}
-{% block meta_description %}Request a quote from LKProfessionals for website development, custom software, SEO, automation, mobile apps, hosting, and digital growth projects.{% endblock %}
+{% block title %}Request a Software Project Quote | LKProfessionals{% endblock %}
+{% block meta_description %}Request a project quote from LKProfessionals for software development, web design, SEO, automation, and digital transformation work with clear scope.{% endblock %}
 {% block canonical %}https://lkprofessionals.com/request-quote{% endblock %}
-{% block og_title %}Request a Quote | LKProfessionals{% endblock %}
-{% block og_description %}Start a conversation about your website, software, SEO, automation, or digital transformation project with LKProfessionals.{% endblock %}
+{% block og_title %}Request a Software Project Quote | LKProfessionals{% endblock %}
+{% block og_description %}Request a project quote from LKProfessionals for software development, web design, SEO, automation, and digital transformation work with clear scope.{% endblock %}
 {% block og_url %}https://lkprofessionals.com/request-quote{% endblock %}
+{% block twitter_title %}Request a Software Project Quote | LKProfessionals{% endblock %}
+{% block twitter_description %}Request a project quote from LKProfessionals for software development, web design, SEO, automation, and digital transformation work with clear scope.{% endblock %}
 
 {% block structured_data %}
 <script type="application/ld+json">
 {
     "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
+    "@graph": [
         {
-            "@type": "ListItem",
-            "position": 1,
-            "name": "Home",
-            "item": "https://lkprofessionals.com/"
+            "@type": "WebPage",
+            "@id": "https://lkprofessionals.com/request-quote#webpage",
+            "name": "Request a Software Project Quote | LKProfessionals",
+            "url": "https://lkprofessionals.com/request-quote",
+            "description": "Request a project quote from LKProfessionals for software development, web design, SEO, automation, and digital transformation work with clear scope.",
+            "isPartOf": {
+                "@id": "https://lkprofessionals.com/#website"
+            },
+            "about": {
+                "@id": "https://lkprofessionals.com/#organization"
+            },
+            "breadcrumb": {
+                "@id": "https://lkprofessionals.com/request-quote#breadcrumb"
+            }
         },
         {
-            "@type": "ListItem",
-            "position": 2,
-            "name": "Request Quote",
-            "item": "https://lkprofessionals.com/request-quote"
+            "@type": "BreadcrumbList",
+            "@id": "https://lkprofessionals.com/request-quote#breadcrumb",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://lkprofessionals.com/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Request Quote",
+                    "item": "https://lkprofessionals.com/request-quote"
+                }
+            ]
         }
     ]
 }
