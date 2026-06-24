@@ -62,6 +62,8 @@ Canonical site: {SITE_URL}
 Primary contact: {SITE_URL}/contact
 Project intake: {SITE_URL}/request-quote
 Services overview: {SITE_URL}/services
+Packages overview: {SITE_URL}/packages
+Business website package: {SITE_URL}/packages/business-website-package
 Insights archive: {SITE_URL}/insights
 Portfolio: {SITE_URL}/portfolio
 Careers: {SITE_URL}/careers
@@ -77,6 +79,7 @@ LKProfessionals helps businesses improve digital credibility, operational effici
 ## Core capabilities
 
 - Website design and development
+- Fixed-scope business website packages
 - Custom software and internal business systems
 - Mobile app development
 - SEO and search growth
@@ -111,6 +114,8 @@ LKProfessionals helps businesses improve digital credibility, operational effici
 - Home: {SITE_URL}/
 - About: {SITE_URL}/about
 - Services: {SITE_URL}/services
+- Packages: {SITE_URL}/packages
+- Professional Business Website Package: {SITE_URL}/packages/business-website-package
 - Custom Software Development Company: {SITE_URL}/solutions/custom-software-development-company
 - Offshore Software Development Company: {SITE_URL}/solutions/offshore-software-development-company
 - Remote Software Development Team: {SITE_URL}/solutions/remote-software-development-team
@@ -404,6 +409,20 @@ fn static_sitemap_pages() -> &'static [StaticSitemapPage] {
             description: "Service overview covering software, SEO, cloud, and automation.",
             changefreq: "weekly",
             priority: "0.95",
+        },
+        StaticSitemapPage {
+            title: "Packages",
+            path: "/packages",
+            description: "Fixed-scope website and digital packages for faster buying decisions.",
+            changefreq: "weekly",
+            priority: "0.90",
+        },
+        StaticSitemapPage {
+            title: "Professional Business Website Package",
+            path: "/packages/business-website-package",
+            description: "Affordable professional website package with hosting, domain, SEO, and fast delivery.",
+            changefreq: "weekly",
+            priority: "0.92",
         },
         StaticSitemapPage {
             title: "Portfolio",
