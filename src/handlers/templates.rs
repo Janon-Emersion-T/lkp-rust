@@ -222,6 +222,10 @@ pub struct ContactTemplate {
 page!(RequestQuoteTemplate, "pages/requestquote.html");
 page!(PackagesIndexTemplate, "pages/packages/index.html");
 page!(
+    BusinessSeoOfferTemplate,
+    "pages/packages/business_seo_offer.html"
+);
+page!(
     BusinessWebsitePackageTemplate,
     "pages/packages/business_website_package.html"
 );

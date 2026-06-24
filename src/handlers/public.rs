@@ -5,8 +5,9 @@ use super::{
     render::render,
     service_content::services_overview_context,
     templates::{
-        AboutTemplate, BusinessWebsitePackageTemplate, ContactTemplate, FaqTemplate,
-        FounderPortfolioTemplate, PackagesIndexTemplate, RequestQuoteTemplate, ServicesTemplate,
+        AboutTemplate, BusinessSeoOfferTemplate, BusinessWebsitePackageTemplate, ContactTemplate,
+        FaqTemplate, FounderPortfolioTemplate, PackagesIndexTemplate, RequestQuoteTemplate,
+        ServicesTemplate,
     },
 };
 
@@ -48,4 +49,8 @@ pub async fn packages() -> impl IntoResponse {
 
 pub async fn business_website_package() -> impl IntoResponse {
     render(BusinessWebsitePackageTemplate)
+}
+
+pub async fn business_seo_offer() -> impl IntoResponse {
+    render(BusinessSeoOfferTemplate)
 }
