@@ -1,4 +1,5 @@
 use chrono::{DateTime, Utc};
+use pulldown_cmark::{Options, Parser, html};
 use uuid::Uuid;
 
 use crate::models::shared::slugify;
@@ -43,7 +44,7 @@ pub struct InsightCardView {
 pub struct InsightDetailView {
     pub title: String,
     pub excerpt: String,
-    pub content_paragraphs: Vec<String>,
+    pub content_html: String,
     pub author: String,
     pub category: String,
     pub category_url: String,
@@ -265,7 +266,7 @@ impl InsightRecord {
         InsightDetailView {
             title: self.title.clone(),
             excerpt: self.excerpt.clone(),
-            content_paragraphs: split_paragraphs(&self.content),
+            content_html: render_content_html(&self.content),
             author: self.author.clone(),
             category: self.category_label().to_string(),
             category_url: self.category_url(),
@@ -337,13 +338,16 @@ impl InsightEditorView {
     }
 }
 
-fn split_paragraphs(content: &str) -> Vec<String> {
-    content
-        .split("\n\n")
-        .map(str::trim)
-        .filter(|value| !value.is_empty())
-        .map(ToOwned::to_owned)
-        .collect()
+fn render_content_html(content: &str) -> String {
+    let mut options = Options::empty();
+    options.insert(Options::ENABLE_TABLES);
+    options.insert(Options::ENABLE_STRIKETHROUGH);
+    options.insert(Options::ENABLE_TASKLISTS);
+
+    let parser = Parser::new_ext(content, options);
+    let mut html_output = String::new();
+    html::push_html(&mut html_output, parser);
+    ammonia::clean(&html_output)
 }
 
 fn truncate_text(value: &str, max_chars: usize) -> String {
