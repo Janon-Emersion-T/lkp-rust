@@ -220,15 +220,6 @@ pub struct ContactTemplate {
     pub success: bool,
 }
 page!(RequestQuoteTemplate, "pages/requestquote.html");
-page!(PackagesIndexTemplate, "pages/packages/index.html");
-page!(
-    BusinessSeoOfferTemplate,
-    "pages/packages/business_seo_offer.html"
-);
-page!(
-    BusinessWebsitePackageTemplate,
-    "pages/packages/business_website_package.html"
-);
 #[derive(Template)]
 #[template(path = "pages/service-areas.html")]
 pub struct ServiceAreasTemplate {

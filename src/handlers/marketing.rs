@@ -1063,11 +1063,6 @@ fn solution_page_content(slug: &str) -> Option<MarketingLandingPage> {
                     "Entry point for audit-led GEO work.",
                 ),
                 (
-                    "AI Search Growth Package",
-                    "/packages/business-seo-offer",
-                    "Commercial package page with launch pricing and monthly deliverables.",
-                ),
-                (
                     "Insights",
                     "/insights",
                     "Authority content that supports AI visibility.",
