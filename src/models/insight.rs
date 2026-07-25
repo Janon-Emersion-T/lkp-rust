@@ -33,11 +33,14 @@ pub struct InsightCardView {
     pub excerpt: String,
     pub author: String,
     pub category: String,
+    pub category_key: String,
     pub category_url: String,
     pub cover_image_url: String,
     pub public_url: String,
     pub reading_time_label: String,
+    pub published_date_iso: String,
     pub published_date_label: String,
+    pub view_count_label: String,
 }
 
 #[derive(Debug, Clone)]
@@ -252,11 +255,14 @@ impl InsightRecord {
             excerpt: self.summary(),
             author: self.author.clone(),
             category: self.category_label().to_string(),
+            category_key: self.category_slug(),
             category_url: self.category_url(),
             cover_image_url: self.display_cover_image().to_string(),
             public_url: self.public_url(),
             reading_time_label: self.reading_time_label(),
+            published_date_iso: published.to_rfc3339(),
             published_date_label: published.format("%d %b %Y").to_string(),
+            view_count_label: self.view_count_label(),
         }
     }
 

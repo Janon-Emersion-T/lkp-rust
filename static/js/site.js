@@ -331,11 +331,221 @@
     sync();
   };
 
+  const initInsightsHub = () => {
+    const hub = document.querySelector("[data-insights-hub]");
+    if (!hub) {
+      return;
+    }
+
+    const progressBar = document.querySelector("[data-insights-progress]");
+    const cards = Array.from(hub.querySelectorAll("[data-insight-card]"));
+    const filterButtons = Array.from(hub.querySelectorAll("[data-category-filter]"));
+    const searchInputs = Array.from(hub.querySelectorAll("[data-insights-search-input]"));
+    const resetButtons = Array.from(hub.querySelectorAll("[data-insights-reset]"));
+    const emptyState = hub.querySelector("[data-insights-empty-state]");
+    const resultsCount = hub.querySelector("[data-insights-results-count]");
+    const resultsPanels = Array.from(hub.querySelectorAll("[data-insights-search-results]"));
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    let activeCategory = "all";
+    let query = "";
+    let searchIndex = [];
+
+    try {
+      const payload = document.getElementById("insights-search-index");
+      searchIndex = payload?.textContent ? JSON.parse(payload.textContent) : [];
+    } catch (_error) {
+      searchIndex = [];
+    }
+
+    const syncInputs = () => {
+      for (const input of searchInputs) {
+        if (input.value !== query) {
+          input.value = query;
+        }
+      }
+    };
+
+    const updateFilterButtons = () => {
+      for (const button of filterButtons) {
+        const matches = (button.dataset.categoryFilter || "all") === activeCategory;
+        button.classList.toggle("is-active", matches);
+        if (matches) {
+          button.setAttribute("aria-pressed", "true");
+        } else {
+          button.removeAttribute("aria-pressed");
+        }
+      }
+    };
+
+    const updateProgress = () => {
+      if (!progressBar) {
+        return;
+      }
+
+      const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+      const ratio = scrollable > 0 ? Math.min(window.scrollY / scrollable, 1) : 0;
+      progressBar.style.transform = `scaleX(${ratio})`;
+    };
+
+    const renderSearchResults = () => {
+      const normalizedQuery = query.trim().toLowerCase();
+      const shouldShow = normalizedQuery.length >= 2;
+
+      for (const panel of resultsPanels) {
+        if (!shouldShow) {
+          panel.hidden = true;
+          panel.innerHTML = "";
+          continue;
+        }
+
+        const matches = searchIndex
+          .filter((item) => {
+            const haystack = [
+              item.title,
+              item.excerpt,
+              item.author,
+              item.category,
+              item.category_key,
+            ]
+              .join(" ")
+              .toLowerCase();
+            const categoryMatch =
+              activeCategory === "all" || item.category_key === activeCategory;
+            return categoryMatch && haystack.includes(normalizedQuery);
+          })
+          .slice(0, 6);
+
+        panel.hidden = false;
+        if (matches.length === 0) {
+          panel.innerHTML = `
+            <div class="insights-dark-soft rounded-2xl border px-4 py-4 text-sm text-slate-300">
+              No archive results matched that search. Try a broader keyword or reset the filters.
+            </div>
+          `;
+          continue;
+        }
+
+        panel.innerHTML = matches
+          .map(
+            (item) => `
+              <a href="${item.public_url}" class="insights-dark-soft block rounded-2xl border px-4 py-4 transition hover:border-cyan-300 hover:bg-white/10">
+                <div class="flex flex-wrap items-center gap-2 text-xs font-black uppercase tracking-[0.18em] text-cyan-300">
+                  <span>${item.category}</span>
+                  <span class="text-slate-500">•</span>
+                  <span class="text-slate-300">${item.published_date_label}</span>
+                  <span class="text-slate-500">•</span>
+                  <span class="text-slate-300">${item.reading_time_label}</span>
+                </div>
+                <div class="mt-2 text-base font-black tracking-tight text-white">${item.title}</div>
+                <p class="mt-2 text-sm leading-6 text-slate-300">${item.excerpt}</p>
+              </a>
+            `,
+          )
+          .join("");
+      }
+    };
+
+    const applyFilters = () => {
+      const normalizedQuery = query.trim().toLowerCase();
+      let visibleCount = 0;
+
+      for (const card of cards) {
+        const category = card.dataset.category || "";
+        const haystack = (card.dataset.search || "").toLowerCase();
+        const categoryMatch = activeCategory === "all" || category === activeCategory;
+        const queryMatch = !normalizedQuery || haystack.includes(normalizedQuery);
+        const visible = categoryMatch && queryMatch;
+
+        card.classList.toggle("insights-card-hidden", !visible);
+        card.hidden = !visible;
+        if (visible) {
+          visibleCount += 1;
+        }
+      }
+
+      if (resultsCount) {
+        resultsCount.textContent = `${visibleCount} article${visibleCount === 1 ? "" : "s"}`;
+        resultsCount.dataset.empty = visibleCount === 0 ? "true" : "false";
+      }
+
+      if (emptyState) {
+        emptyState.hidden = visibleCount !== 0;
+      }
+
+      updateFilterButtons();
+      renderSearchResults();
+    };
+
+    for (const input of searchInputs) {
+      input.addEventListener("input", () => {
+        query = input.value;
+        syncInputs();
+        applyFilters();
+      });
+    }
+
+    for (const button of filterButtons) {
+      button.addEventListener("click", (event) => {
+        const targetCategory = button.dataset.categoryFilter || "all";
+
+        if (button.tagName === "A") {
+          event.preventDefault();
+        }
+
+        activeCategory = targetCategory;
+        applyFilters();
+      });
+    }
+
+    for (const button of resetButtons) {
+      button.addEventListener("click", () => {
+        query = "";
+        activeCategory = "all";
+        syncInputs();
+        applyFilters();
+      });
+    }
+
+    const revealItems = Array.from(hub.querySelectorAll("[data-reveal]"));
+    if (reducedMotion) {
+      for (const item of revealItems) {
+        item.classList.add("is-visible");
+      }
+    } else if ("IntersectionObserver" in window) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-visible");
+              observer.unobserve(entry.target);
+            }
+          }
+        },
+        { threshold: 0.12, rootMargin: "0px 0px -40px 0px" },
+      );
+
+      for (const item of revealItems) {
+        observer.observe(item);
+      }
+    } else {
+      for (const item of revealItems) {
+        item.classList.add("is-visible");
+      }
+    }
+
+    window.addEventListener("scroll", updateProgress, { passive: true });
+    updateProgress();
+    syncInputs();
+    applyFilters();
+  };
+
   document.addEventListener("DOMContentLoaded", () => {
     initDeferredStyles();
     initHeader();
     initRequestQuoteModal();
     initNewsletterForms();
     initBackToTop();
+    initInsightsHub();
   });
 })();

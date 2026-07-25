@@ -1,17 +1,22 @@
 <section class="bg-white px-6 pb-24">
-    <div class="mx-auto max-w-7xl overflow-hidden rounded-[2.5rem] border border-slate-200 bg-[linear-gradient(135deg,#082f49_0%,#0f172a_55%,#164e63_100%)] px-8 py-12 text-white shadow-[0_30px_100px_rgba(15,23,42,0.18)] md:px-12 md:py-14">
+    <div class="insights-newsletter-shell mx-auto max-w-7xl overflow-hidden border border-slate-200 px-8 py-12 text-white md:px-12 md:py-14">
         <div class="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
-            <div>
+            <div class="insights-reveal" data-reveal>
                 <p class="text-sm font-black uppercase tracking-[0.28em] text-cyan-300">Newsletter</p>
                 <h2 class="mt-4 max-w-3xl text-3xl font-black tracking-tight md:text-5xl">
-                    Receive new insights, case studies, and practical digital growth guidance.
+                    Receive practical technology and business insights from LKProfessionals.
                 </h2>
                 <p class="mt-5 max-w-2xl text-base leading-8 text-slate-300">
-                    Subscribe once and the latest LKProfessionals thinking on software, SEO, automation, AI, and business systems will come straight to your inbox.
+                    Subscribe for measured thinking on software delivery, search growth, AI-assisted operations, website strategy, and digital decision-making. No noise, no aggressive selling.
                 </p>
+                <div class="mt-6 flex flex-wrap gap-3 text-sm text-slate-300">
+                    <span class="insights-glass-pill rounded-full border px-4 py-2">Useful updates only</span>
+                    <span class="insights-glass-pill rounded-full border px-4 py-2">Unsubscribe anytime</span>
+                    <span class="insights-glass-pill rounded-full border px-4 py-2">Privacy respected</span>
+                </div>
             </div>
 
-            <div class="rounded-[2rem] border border-white/10 bg-white/10 p-6 backdrop-blur-xl">
+            <div class="insights-reveal rounded-[2rem] border border-white/10 bg-white/10 p-6 backdrop-blur-xl" data-reveal>
                 <form class="grid gap-4" data-newsletter-form>
                     <input type="hidden" name="source" value="Insights Page" />
 
@@ -20,10 +25,13 @@
                         <input name="email" type="email" required autocomplete="email" placeholder="you@company.com" class="rounded-2xl border border-white/15 bg-white/10 px-4 py-3 text-white outline-none transition placeholder:text-slate-400 focus:border-cyan-300" />
                     </label>
 
-                    <button type="submit" class="rounded-full bg-cyan-400 px-6 py-3 text-sm font-black text-slate-950 transition hover:bg-white">
-                        Subscribe to Updates
+                    <button type="submit" class="inline-flex min-h-12 items-center justify-center rounded-full bg-cyan-400 px-6 py-3 text-sm font-black uppercase tracking-[0.16em] text-slate-950 transition hover:bg-white">
+                        Subscribe
                     </button>
 
+                    <p class="text-xs leading-6 text-slate-300">
+                        Your email is used only for LKProfessionals updates and insight delivery.
+                    </p>
                     <p hidden class="rounded-2xl border px-4 py-3 text-sm font-semibold" data-newsletter-message></p>
                 </form>
             </div>

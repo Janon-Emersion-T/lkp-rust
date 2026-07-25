@@ -13,6 +13,130 @@
 {% block twitter_title %}{{ twitter_title }}{% endblock %}
 {% block twitter_description %}{{ twitter_description }}{% endblock %}
 
+{% block head_extras %}
+<style>
+    .insights-progress {
+        position: fixed;
+        inset: 0 0 auto;
+        z-index: 80;
+        height: 3px;
+        transform-origin: left center;
+        transform: scaleX(0);
+        background: linear-gradient(90deg, rgba(34, 211, 238, 0.95), rgba(37, 99, 235, 0.9));
+        box-shadow: 0 0 22px rgba(14, 165, 233, 0.35);
+    }
+
+    .insights-reveal {
+        opacity: 0;
+        transform: translateY(24px);
+        transition: opacity 0.45s ease, transform 0.45s ease;
+    }
+
+    .insights-reveal.is-visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .insights-filter-button.is-active,
+    .insights-filter-button[aria-current="page"] {
+        border-color: rgba(34, 211, 238, 0.8);
+        background: linear-gradient(135deg, rgba(34, 211, 238, 0.92), rgba(103, 232, 249, 0.88));
+        color: #082f49;
+        box-shadow: 0 16px 32px rgba(8, 47, 73, 0.14);
+    }
+
+    .insights-search-results[hidden] {
+        display: none;
+    }
+
+    .insights-grid-overlay {
+        background-image:
+            linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+        background-size: 4.5rem 4.5rem;
+    }
+
+    .insights-glass-pill {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.12);
+    }
+
+    .insights-glass-panel {
+        background: rgba(255, 255, 255, 0.08);
+        box-shadow: 0 28px 70px rgba(2, 6, 23, 0.24);
+    }
+
+    .insights-glass-metric {
+        background: rgba(255, 255, 255, 0.08);
+        box-shadow: 0 18px 42px rgba(2, 6, 23, 0.18);
+    }
+
+    .insights-dark-panel {
+        background: rgba(2, 6, 23, 0.55);
+    }
+
+    .insights-dark-input {
+        background: rgba(2, 6, 23, 0.35);
+    }
+
+    .insights-search-surface {
+        background: rgba(2, 6, 23, 0.65);
+    }
+
+    .insights-dark-soft {
+        background: rgba(255, 255, 255, 0.06);
+        border-color: rgba(255, 255, 255, 0.12);
+    }
+
+    .insights-editorial-gradient {
+        background:
+            radial-gradient(circle at top left, rgba(34, 211, 238, 0.12), transparent 30%),
+            linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    }
+
+    .insights-feature-overlay {
+        background:
+            radial-gradient(circle at top left, rgba(34, 211, 238, 0.18), transparent 28%),
+            linear-gradient(180deg, rgba(2, 6, 23, 0.02), rgba(2, 6, 23, 0.68));
+    }
+
+    .insights-newsletter-shell {
+        border-radius: 2.6rem;
+        background:
+            radial-gradient(circle at top left, rgba(34, 211, 238, 0.18), transparent 26%),
+            linear-gradient(135deg, #082f49 0%, #0f172a 50%, #164e63 100%);
+        box-shadow: 0 32px 100px rgba(15, 23, 42, 0.18);
+    }
+
+    .insights-card-hidden {
+        display: none;
+    }
+
+    .insights-results-count[data-empty="true"] {
+        color: #b91c1c;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        html {
+            scroll-behavior: auto;
+        }
+
+        .insights-reveal {
+            opacity: 1;
+            transform: none;
+            transition: none;
+        }
+
+        .group:hover .group-hover\:scale-105,
+        .group:hover .group-hover\:translate-x-1 {
+            transform: none;
+            scale: 1;
+            translate: 0;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block structured_data %}
 <script type="application/ld+json">
 {
@@ -73,39 +197,61 @@
 {% endblock %}
 
 {% block content %}
+<div class="insights-progress" data-insights-progress aria-hidden="true"></div>
+<main data-insights-hub>
 {% include "components/insights/index-hero.html" %}
 {% if pagination.current_page == 1 %}
 {% include "components/insights/index-featured.html" %}
 {% endif %}
 {% include "components/insights/index-grid.html" %}
 <section class="bg-slate-50 px-6 py-20">
-    <div class="mx-auto max-w-7xl rounded-[2rem] border border-slate-200 bg-white p-8 shadow-[0_22px_50px_rgba(15,23,42,0.06)] md:p-10">
-        <p class="text-sm font-black uppercase tracking-[0.24em] text-cyan-600">Explore Services</p>
-        <h2 class="mt-4 text-3xl font-black tracking-tight text-slate-950 md:text-4xl">
-            Move from insights into delivery-focused service pages.
-        </h2>
-        <p class="mt-4 max-w-3xl text-base leading-8 text-slate-600">
-            Use these insights to understand the strategy, then review the LKProfessionals services that turn that thinking into software, SEO, automation, and digital execution.
-        </p>
-        <div class="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-            <a href="/services" class="rounded-[1.4rem] border border-slate-200 bg-slate-50 p-5 transition hover:border-cyan-300 hover:bg-cyan-50">
-                <p class="text-sm font-black text-slate-950">All Services</p>
-                <p class="mt-2 text-sm leading-7 text-slate-600">Review the full service lineup across software, web, SEO, and automation.</p>
-            </a>
-            <a href="/services/software-development" class="rounded-[1.4rem] border border-slate-200 bg-slate-50 p-5 transition hover:border-cyan-300 hover:bg-cyan-50">
-                <p class="text-sm font-black text-slate-950">Software Development</p>
-                <p class="mt-2 text-sm leading-7 text-slate-600">See how LKProfessionals scopes and delivers custom software systems.</p>
-            </a>
-            <a href="/services/seo-search-growth" class="rounded-[1.4rem] border border-slate-200 bg-slate-50 p-5 transition hover:border-cyan-300 hover:bg-cyan-50">
-                <p class="text-sm font-black text-slate-950">SEO Services</p>
-                <p class="mt-2 text-sm leading-7 text-slate-600">Move from search strategy reading into commercial SEO service details.</p>
-            </a>
-            <a href="/request-quote" class="rounded-[1.4rem] border border-slate-200 bg-slate-50 p-5 transition hover:border-cyan-300 hover:bg-cyan-50">
-                <p class="text-sm font-black text-slate-950">Request Quote</p>
-                <p class="mt-2 text-sm leading-7 text-slate-600">Take the next step if you want the strategy implemented with clear scope.</p>
-            </a>
+    <div class="mx-auto max-w-7xl overflow-hidden rounded-[2.4rem] border border-slate-200 bg-white shadow-[0_28px_80px_rgba(15,23,42,0.08)]">
+        <div class="grid gap-0 lg:grid-cols-[1.2fr_0.8fr]">
+            <div class="insights-editorial-gradient px-8 py-10 md:px-10 md:py-12">
+                <p class="text-sm font-black uppercase tracking-[0.24em] text-cyan-600">Apply These Ideas</p>
+                <h2 class="mt-4 max-w-3xl text-3xl font-black tracking-tight text-slate-950 md:text-5xl">
+                    Need help turning these insights into delivery decisions?
+                </h2>
+                <p class="mt-4 max-w-3xl text-base leading-8 text-slate-600">
+                    LKProfessionals helps businesses turn technical uncertainty into practical execution across software delivery, SEO growth, automation, cloud infrastructure, and digital transformation planning.
+                </p>
+                <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                    <a href="/contact" class="inline-flex min-h-12 items-center justify-center rounded-full bg-slate-950 px-6 py-3 text-sm font-black uppercase tracking-[0.18em] text-white transition hover:-translate-y-0.5 hover:bg-cyan-500 hover:text-slate-950">
+                        Speak With Our Team
+                    </a>
+                    <a href="/request-quote" class="inline-flex min-h-12 items-center justify-center rounded-full border border-slate-300 px-6 py-3 text-sm font-black uppercase tracking-[0.18em] text-slate-950 transition hover:border-cyan-400 hover:text-cyan-700">
+                        Request a Consultation
+                    </a>
+                    <a href="/services" class="inline-flex min-h-12 items-center justify-center rounded-full border border-slate-300 px-6 py-3 text-sm font-black uppercase tracking-[0.18em] text-slate-950 transition hover:border-cyan-400 hover:text-cyan-700">
+                        Explore Our Services
+                    </a>
+                </div>
+            </div>
+
+            <div class="bg-slate-950 px-8 py-10 text-white md:px-10 md:py-12">
+                <p class="text-sm font-black uppercase tracking-[0.24em] text-cyan-300">When This Hub Helps Most</p>
+                <div class="mt-6 space-y-4">
+                    <div class="insights-dark-soft rounded-[1.5rem] border p-5">
+                        <p class="text-sm font-black text-white">Choosing a delivery approach</p>
+                        <p class="mt-2 text-sm leading-7 text-slate-300">Use the archive to compare build paths, technical priorities, and commercial trade-offs before you commit.</p>
+                    </div>
+                    <div class="insights-dark-soft rounded-[1.5rem] border p-5">
+                        <p class="text-sm font-black text-white">Diagnosing website and search issues</p>
+                        <p class="mt-2 text-sm leading-7 text-slate-300">Move from surface symptoms into structured SEO, content, performance, and conversion decisions.</p>
+                    </div>
+                    <div class="insights-dark-soft rounded-[1.5rem] border p-5">
+                        <p class="text-sm font-black text-white">Planning automation and systems work</p>
+                        <p class="mt-2 text-sm leading-7 text-slate-300">See where process clarity, system design, and governance matter before new tools are introduced.</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>
 {% include "components/insights/index-subscribe.html" %}
+</main>
+{% endblock %}
+
+{% block body_end %}
+<script id="insights-search-index" type="application/json">{{ search_index_json|safe }}</script>
 {% endblock %}

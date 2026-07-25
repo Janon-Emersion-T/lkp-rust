@@ -62,9 +62,13 @@ pub struct CaseStudiesTemplate {
 pub struct InsightsTemplate {
     pub insights: Vec<InsightCardView>,
     pub featured_insights: Vec<InsightCardView>,
+    pub hero_featured: Option<InsightCardView>,
+    pub popular_insights: Vec<InsightCardView>,
+    pub recommended_insights: Vec<InsightCardView>,
     pub categories: Vec<InsightCategoryLink>,
     pub snapshot_metrics: Vec<InsightSnapshotMetric>,
     pub pagination: PaginationView,
+    pub search_index_json: String,
     pub seo_title: String,
     pub meta_description: String,
     pub canonical_url: String,
@@ -88,6 +92,7 @@ pub struct InsightSnapshotMetric {
 #[derive(Debug, Clone)]
 pub struct InsightCategoryLink {
     pub label: String,
+    pub key: String,
     pub url: String,
     pub active: bool,
 }

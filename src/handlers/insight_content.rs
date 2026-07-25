@@ -7,7 +7,7 @@ use axum::{
 };
 use chrono::TimeZone;
 use chrono::{DateTime, FixedOffset, NaiveDateTime, Utc};
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use sqlx::Row;
 use uuid::Uuid;
 
@@ -269,6 +269,18 @@ struct InsightStatsRecord {
     average_read_time: f64,
 }
 
+#[derive(Debug, Serialize)]
+struct InsightSearchDocument {
+    title: String,
+    excerpt: String,
+    author: String,
+    category: String,
+    category_key: String,
+    public_url: String,
+    reading_time_label: String,
+    published_date_label: String,
+}
+
 async fn fetch_insight_stats(state: &AppState) -> Result<InsightStatsRecord, sqlx::Error> {
     sqlx::query_as::<_, InsightStatsRecord>(
         r#"
@@ -347,6 +359,7 @@ fn build_insight_category_links(
         .collect::<BTreeSet<_>>()
         .into_iter()
         .map(|label| InsightCategoryLink {
+            key: slugify(&label),
             url: format!("/insights/category/{}", slugify(&label)),
             active: active_category.is_some_and(|current| current == label),
             label,
@@ -354,13 +367,74 @@ fn build_insight_category_links(
         .collect()
 }
 
+fn build_popular_insights(records: &[InsightRecord], limit: usize) -> Vec<InsightCardView> {
+    let mut sorted = records.to_vec();
+    sorted.sort_by(|left, right| {
+        right
+            .view_count
+            .cmp(&left.view_count)
+            .then_with(|| right.published_at.cmp(&left.published_at))
+            .then_with(|| right.created_at.cmp(&left.created_at))
+    });
+
+    sorted
+        .into_iter()
+        .take(limit)
+        .map(|record| record.to_card_view())
+        .collect()
+}
+
+fn build_recommended_insights(
+    primary: Option<&InsightRecord>,
+    featured_records: &[InsightRecord],
+    source_records: &[InsightRecord],
+    limit: usize,
+) -> Vec<InsightCardView> {
+    let mut seen = BTreeSet::new();
+
+    primary.iter().for_each(|record| {
+        seen.insert(record.slug.clone());
+    });
+
+    featured_records
+        .iter()
+        .chain(source_records.iter())
+        .filter(|record| seen.insert(record.slug.clone()))
+        .take(limit)
+        .map(InsightRecord::to_card_view)
+        .collect()
+}
+
+fn build_search_index_json(records: &[InsightRecord]) -> String {
+    let docs = records
+        .iter()
+        .map(InsightRecord::to_card_view)
+        .map(|view| InsightSearchDocument {
+            title: view.title,
+            excerpt: view.excerpt,
+            author: view.author,
+            category: view.category,
+            category_key: view.category_key,
+            public_url: view.public_url,
+            reading_time_label: view.reading_time_label,
+            published_date_label: view.published_date_label,
+        })
+        .collect::<Vec<_>>();
+
+    serde_json::to_string(&docs).unwrap_or_else(|_| "[]".to_string())
+}
+
 fn build_insights_template(
     insights: Vec<InsightCardView>,
     featured_insights: Vec<InsightCardView>,
+    hero_featured: Option<InsightCardView>,
+    popular_insights: Vec<InsightCardView>,
+    recommended_insights: Vec<InsightCardView>,
     categories: Vec<InsightCategoryLink>,
     snapshot_metrics: Vec<InsightSnapshotMetric>,
     pagination: PaginationView,
     active_category: Option<String>,
+    search_index_json: String,
 ) -> InsightsTemplate {
     let category_name = active_category.clone();
     let archive_label = category_name
@@ -430,9 +504,13 @@ fn build_insights_template(
     InsightsTemplate {
         insights,
         featured_insights,
+        hero_featured,
+        popular_insights,
+        recommended_insights,
         categories,
         snapshot_metrics,
         pagination,
+        search_index_json,
         seo_title,
         meta_description,
         canonical_url: canonical_url.clone(),
@@ -578,6 +656,10 @@ pub async fn insights(
             let featured_records = fetch_public_featured_insights(&state)
                 .await
                 .unwrap_or_default();
+            let hero_record = featured_records
+                .first()
+                .cloned()
+                .or_else(|| page_records.first().cloned());
 
             let insights: Vec<InsightCardView> = page_records
                 .iter()
@@ -588,6 +670,9 @@ pub async fn insights(
                 .iter()
                 .map(InsightRecord::to_card_view)
                 .collect();
+            let popular_insights = build_popular_insights(&all_records, 5);
+            let recommended_insights =
+                build_recommended_insights(hero_record.as_ref(), &featured_records, &all_records, 5);
 
             let categories = build_insight_category_links(&all_records, None);
 
@@ -632,10 +717,14 @@ pub async fn insights(
             render(build_insights_template(
                 insights,
                 featured_insights,
+                hero_record.map(|record| record.to_card_view()),
+                popular_insights,
+                recommended_insights,
                 categories,
                 snapshot_metrics,
                 build_pagination_view(current_page, total_pages.max(1), build_insights_page_url),
                 None,
+                build_search_index_json(&all_records),
             ))
             .into_response()
         }
@@ -706,6 +795,10 @@ pub async fn insights_by_category(
     } else {
         featured_records
     };
+    let hero_record = featured_records
+        .first()
+        .cloned()
+        .or_else(|| page_records.first().cloned());
 
     let categories = build_insight_category_links(&all_records, Some(&active_category));
     let insights = page_records
@@ -716,6 +809,9 @@ pub async fn insights_by_category(
         .iter()
         .map(InsightRecord::to_card_view)
         .collect::<Vec<_>>();
+    let popular_insights = build_popular_insights(&filtered_records, 5);
+    let recommended_insights =
+        build_recommended_insights(hero_record.as_ref(), &featured_records, &filtered_records, 5);
     let category_article_count = filtered_records.len();
     let category_total_reads = filtered_records
         .iter()
@@ -758,12 +854,16 @@ pub async fn insights_by_category(
     render(build_insights_template(
         insights,
         featured_insights,
+        hero_record.map(|record| record.to_card_view()),
+        popular_insights,
+        recommended_insights,
         categories,
         snapshot_metrics,
         build_pagination_view(current_page, total_pages.max(1), |page| {
             build_insight_category_page_url(&category_slug, page)
         }),
         Some(active_category),
+        build_search_index_json(&filtered_records),
     ))
     .into_response()
 }

@@ -178,6 +178,7 @@
     </script>
 
     {% block structured_data %}{% endblock %}
+    {% block head_extras %}{% endblock %}
 
     <style>
         body {
@@ -499,5 +500,6 @@
         </div>
     </div>
 
-</body>
+    {% block body_end %}{% endblock %}
+    </body>
 </html>
