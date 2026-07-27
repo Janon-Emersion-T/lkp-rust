@@ -12,6 +12,7 @@ use crate::{
         render::render,
         templates::{SitemapLinkView, SitemapSectionView, SitemapTemplate},
     },
+    models::shared::slugify,
     state::AppState,
 };
 
@@ -28,6 +29,12 @@ struct SitemapSlugRecord {
 struct SitemapServiceAreaRecord {
     area_name: String,
     slug: String,
+    lastmod: Option<String>,
+}
+
+#[derive(Debug, FromRow)]
+struct SitemapInsightCategoryRecord {
+    category: Option<String>,
     lastmod: Option<String>,
 }
 
@@ -202,6 +209,7 @@ pub async fn sitemap_xml(State(state): State<AppState>) -> impl IntoResponse {
 
 async fn build_sitemap_sections(state: &AppState) -> Vec<SitemapSectionView> {
     let insight_pages = fetch_slug_urls(state, "insights", "/insights").await;
+    let insight_category_pages = fetch_insight_category_urls(state).await;
     let portfolio_pages = fetch_slug_urls(state, "portfolios", "/case-studies").await;
     let career_pages = fetch_slug_urls(state, "careers", "/careers").await;
     let service_area_pages = fetch_service_area_urls(state).await;
@@ -246,6 +254,18 @@ async fn build_sitemap_sections(state: &AppState) -> Vec<SitemapSectionView> {
             description: String::from("Published articles, guides, and expertise content."),
             link_count,
             links: insight_pages,
+        });
+    }
+
+    if !insight_category_pages.is_empty() {
+        let link_count = insight_category_pages.len();
+        sections.push(SitemapSectionView {
+            title: String::from("Insight Categories"),
+            description: String::from(
+                "Topic archive pages that group published insights by category.",
+            ),
+            link_count,
+            links: insight_category_pages,
         });
     }
 
@@ -306,6 +326,7 @@ async fn fetch_service_area_urls(state: &AppState) -> Vec<SitemapLinkView> {
             ) AS lastmod
         FROM service_areas
         WHERE published = TRUE
+          AND (published_at IS NULL OR published_at <= NOW())
         ORDER BY market_region ASC, sort_order ASC, area_name ASC
         "#,
     )
@@ -332,6 +353,53 @@ async fn fetch_service_area_urls(state: &AppState) -> Vec<SitemapLinkView> {
     }
 }
 
+async fn fetch_insight_category_urls(state: &AppState) -> Vec<SitemapLinkView> {
+    match sqlx::query_as::<_, SitemapInsightCategoryRecord>(
+        r#"
+        SELECT
+            category,
+            to_char(
+                MAX(COALESCE(updated_at, published_at, created_at)) AT TIME ZONE 'UTC',
+                'YYYY-MM-DD"T"HH24:MI:SS"Z"'
+            ) AS lastmod
+        FROM insights
+        WHERE published = TRUE
+          AND (published_at IS NULL OR published_at <= NOW())
+        GROUP BY category
+        ORDER BY MAX(COALESCE(updated_at, published_at, created_at)) DESC
+        "#,
+    )
+    .fetch_all(&state.db)
+    .await
+    {
+        Ok(records) => records
+            .into_iter()
+            .map(|record| {
+                let category = record
+                    .category
+                    .as_deref()
+                    .map(str::trim)
+                    .filter(|value| !value.is_empty())
+                    .unwrap_or("Strategy");
+                SitemapLinkView {
+                    title: format!("{category} Insights"),
+                    url: format!("{SITE_URL}/insights/category/{}", slugify(category)),
+                    description: format!("Published insights categorized under {category}."),
+                    has_lastmod: record.lastmod.is_some(),
+                    lastmod_label: record.lastmod.clone().unwrap_or_default(),
+                    lastmod: record.lastmod,
+                    changefreq: String::from("weekly"),
+                    priority: String::from("0.60"),
+                }
+            })
+            .collect(),
+        Err(error) => {
+            eprintln!("Failed to build sitemap section for insight categories: {error}");
+            Vec::new()
+        }
+    }
+}
+
 async fn fetch_slug_urls(state: &AppState, table: &str, prefix: &str) -> Vec<SitemapLinkView> {
     let query = format!(
         r#"
@@ -344,6 +412,7 @@ async fn fetch_slug_urls(state: &AppState, table: &str, prefix: &str) -> Vec<Sit
             ) AS lastmod
         FROM {table}
         WHERE published = TRUE
+          AND (published_at IS NULL OR published_at <= NOW())
         ORDER BY COALESCE(updated_at, published_at, created_at) DESC
         "#
     );
@@ -397,6 +466,13 @@ fn static_sitemap_pages() -> &'static [StaticSitemapPage] {
             description: "Company positioning, founder authority, and delivery approach.",
             changefreq: "monthly",
             priority: "0.70",
+        },
+        StaticSitemapPage {
+            title: "Founder Portfolio",
+            path: "/founder/janon-emersion-t",
+            description: "Founder profile, track record, and public authority page.",
+            changefreq: "monthly",
+            priority: "0.66",
         },
         StaticSitemapPage {
             title: "Services",
