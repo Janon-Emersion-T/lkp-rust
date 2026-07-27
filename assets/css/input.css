@@ -189,7 +189,7 @@
 
   .site-dropdown-panel {
     position: absolute;
-    top: calc(100% + 0.9rem);
+    top: calc(100% + 0.35rem);
     left: 50%;
     z-index: 30;
     display: grid;
@@ -203,6 +203,15 @@
     padding: 0.75rem;
     box-shadow: 0 32px 80px rgb(2 6 23 / 0.44);
     backdrop-filter: blur(22px);
+  }
+
+  .site-dropdown-panel::before {
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: 100%;
+    left: 0;
+    height: 0.85rem;
   }
 
   .site-dropdown-item {

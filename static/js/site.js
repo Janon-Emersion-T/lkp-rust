@@ -32,6 +32,7 @@
     let mobileOpen = false;
     let servicesOpen = false;
     let mobileServicesOpen = false;
+    let servicesCloseTimer = null;
 
     const setScrolled = () => {
       header.classList.toggle("is-scrolled", window.scrollY > 24);
@@ -59,6 +60,21 @@
       }
       const chevron = servicesToggle?.querySelector(".fa-chevron-down");
       chevron?.classList.toggle("rotate-180", open);
+    };
+
+    const clearServicesCloseTimer = () => {
+      if (servicesCloseTimer !== null) {
+        window.clearTimeout(servicesCloseTimer);
+        servicesCloseTimer = null;
+      }
+    };
+
+    const scheduleServicesClose = () => {
+      clearServicesCloseTimer();
+      servicesCloseTimer = window.setTimeout(() => {
+        setServicesOpen(false);
+        servicesCloseTimer = null;
+      }, 140);
     };
 
     const setMobileServicesOpen = (open) => {
@@ -112,6 +128,7 @@
 
     servicesToggle?.addEventListener("click", (event) => {
       event.preventDefault();
+      clearServicesCloseTimer();
       setServicesOpen(!servicesOpen);
     });
 
@@ -120,15 +137,30 @@
     });
 
     servicesMenu?.addEventListener("mouseenter", () => {
+      clearServicesCloseTimer();
       setServicesOpen(true);
     });
 
     servicesMenu?.addEventListener("mouseleave", () => {
-      setServicesOpen(false);
+      scheduleServicesClose();
+    });
+
+    servicesMenu?.addEventListener("focusin", () => {
+      clearServicesCloseTimer();
+      setServicesOpen(true);
+    });
+
+    servicesMenu?.addEventListener("focusout", () => {
+      window.setTimeout(() => {
+        if (servicesMenu && !servicesMenu.contains(document.activeElement)) {
+          scheduleServicesClose();
+        }
+      }, 0);
     });
 
     document.addEventListener("click", (event) => {
       if (servicesOpen && servicesMenu && !servicesMenu.contains(event.target)) {
+        clearServicesCloseTimer();
         setServicesOpen(false);
       }
     });
@@ -154,6 +186,7 @@
 
     window.addEventListener("keydown", (event) => {
       if (event.key === "Escape") {
+        clearServicesCloseTimer();
         setServicesOpen(false);
         setMobileOpen(false);
         setMobileServicesOpen(false);
