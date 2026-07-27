@@ -39,6 +39,13 @@ pub struct ServiceFaq {
     pub answer: &'static str,
 }
 
+#[derive(Clone, Copy)]
+pub struct ServiceLink {
+    pub title: &'static str,
+    pub href: &'static str,
+    pub description: &'static str,
+}
+
 pub struct ServiceOverviewContext {
     pub services: Vec<ServiceCard>,
     pub proof_points: Vec<ServicePoint>,
@@ -68,6 +75,11 @@ pub struct ServicePageContext {
     pub differentiators: Vec<ServicePoint>,
     pub faqs: Vec<ServiceFaq>,
     pub related_services: Vec<ServiceCard>,
+    pub industries_served: Vec<&'static str>,
+    pub technologies_used: Vec<&'static str>,
+    pub related_solutions: Vec<ServiceLink>,
+    pub related_case_studies: Vec<ServiceLink>,
+    pub related_insights: Vec<ServiceLink>,
 }
 
 pub fn services_overview_context() -> ServiceOverviewContext {
@@ -230,6 +242,11 @@ pub fn service_page_context(slug: &str) -> ServicePageContext {
                 "digital-marketing",
                 "hosting-domain-cloud-services",
             ]),
+            industries_served: industries_for("web-development"),
+            technologies_used: technologies_for("web-development"),
+            related_solutions: solution_links_for("web-development"),
+            related_case_studies: case_study_links_for("web-development"),
+            related_insights: insight_links_for("web-development"),
         },
         "mobile-app-development" => ServicePageContext {
             slug: "mobile-app-development",
@@ -351,6 +368,11 @@ pub fn service_page_context(slug: &str) -> ServicePageContext {
                 "ai-automation-solutions",
                 "it-consultation-digital-transformation",
             ]),
+            industries_served: industries_for("mobile-app-development"),
+            technologies_used: technologies_for("mobile-app-development"),
+            related_solutions: solution_links_for("mobile-app-development"),
+            related_case_studies: case_study_links_for("mobile-app-development"),
+            related_insights: insight_links_for("mobile-app-development"),
         },
         "custom-software-development" => ServicePageContext {
             slug: "custom-software-development",
@@ -472,6 +494,11 @@ pub fn service_page_context(slug: &str) -> ServicePageContext {
                 "ai-automation-solutions",
                 "it-consultation-digital-transformation",
             ]),
+            industries_served: industries_for("custom-software-development"),
+            technologies_used: technologies_for("custom-software-development"),
+            related_solutions: solution_links_for("custom-software-development"),
+            related_case_studies: case_study_links_for("custom-software-development"),
+            related_insights: insight_links_for("custom-software-development"),
         },
         "software-development" => ServicePageContext {
             slug: "software-development",
@@ -593,6 +620,11 @@ pub fn service_page_context(slug: &str) -> ServicePageContext {
                 "mobile-app-development",
                 "web-development",
             ]),
+            industries_served: industries_for("software-development"),
+            technologies_used: technologies_for("software-development"),
+            related_solutions: solution_links_for("software-development"),
+            related_case_studies: case_study_links_for("software-development"),
+            related_insights: insight_links_for("software-development"),
         },
         "digital-marketing" => ServicePageContext {
             slug: "digital-marketing",
@@ -714,6 +746,11 @@ pub fn service_page_context(slug: &str) -> ServicePageContext {
                 "web-development",
                 "ai-automation-solutions",
             ]),
+            industries_served: industries_for("digital-marketing"),
+            technologies_used: technologies_for("digital-marketing"),
+            related_solutions: solution_links_for("digital-marketing"),
+            related_case_studies: case_study_links_for("digital-marketing"),
+            related_insights: insight_links_for("digital-marketing"),
         },
         "seo-search-growth" => ServicePageContext {
             slug: "seo-search-growth",
@@ -835,6 +872,11 @@ pub fn service_page_context(slug: &str) -> ServicePageContext {
                 "digital-marketing",
                 "hosting-domain-cloud-services",
             ]),
+            industries_served: industries_for("seo-search-growth"),
+            technologies_used: technologies_for("seo-search-growth"),
+            related_solutions: solution_links_for("seo-search-growth"),
+            related_case_studies: case_study_links_for("seo-search-growth"),
+            related_insights: insight_links_for("seo-search-growth"),
         },
         "hosting-domain-cloud-services" => ServicePageContext {
             slug: "hosting-domain-cloud-services",
@@ -956,6 +998,11 @@ pub fn service_page_context(slug: &str) -> ServicePageContext {
                 "software-development",
                 "seo-search-growth",
             ]),
+            industries_served: industries_for("hosting-domain-cloud-services"),
+            technologies_used: technologies_for("hosting-domain-cloud-services"),
+            related_solutions: solution_links_for("hosting-domain-cloud-services"),
+            related_case_studies: case_study_links_for("hosting-domain-cloud-services"),
+            related_insights: insight_links_for("hosting-domain-cloud-services"),
         },
         "ai-automation-solutions" => ServicePageContext {
             slug: "ai-automation-solutions",
@@ -1077,6 +1124,11 @@ pub fn service_page_context(slug: &str) -> ServicePageContext {
                 "software-development",
                 "it-consultation-digital-transformation",
             ]),
+            industries_served: industries_for("ai-automation-solutions"),
+            technologies_used: technologies_for("ai-automation-solutions"),
+            related_solutions: solution_links_for("ai-automation-solutions"),
+            related_case_studies: case_study_links_for("ai-automation-solutions"),
+            related_insights: insight_links_for("ai-automation-solutions"),
         },
         "it-consultation-digital-transformation" => ServicePageContext {
             slug: "it-consultation-digital-transformation",
@@ -1198,6 +1250,893 @@ pub fn service_page_context(slug: &str) -> ServicePageContext {
                 "ai-automation-solutions",
                 "hosting-domain-cloud-services",
             ]),
+            industries_served: industries_for("it-consultation-digital-transformation"),
+            technologies_used: technologies_for("it-consultation-digital-transformation"),
+            related_solutions: solution_links_for("it-consultation-digital-transformation"),
+            related_case_studies: case_study_links_for("it-consultation-digital-transformation"),
+            related_insights: insight_links_for("it-consultation-digital-transformation"),
+        },
+        "google-ads-agency" => ServicePageContext {
+            slug: "google-ads-agency",
+            title: "Google Ads Agency",
+            meta_title: "Google Ads Agency | LKProfessionals",
+            meta_description: "Google Ads management for service businesses that need stronger enquiry quality, better landing pages, and more disciplined PPC execution.",
+            canonical_path: "/services/google-ads-agency",
+            eyebrow: "Google Ads Agency",
+            hero_title: "Google Ads campaigns built to generate qualified enquiries, not wasted clicks.",
+            hero_description: "We plan, launch, and improve Google Ads campaigns for businesses that want commercial search visibility, tighter lead quality, and landing pages that support conversion instead of leaking budget.",
+            hero_panel_title: "Best fit for",
+            hero_panel_body: "Businesses that need fast demand generation, better PPC structure, or a paid-search partner who can connect campaign intent with website performance.",
+            hero_checklist: vec![
+                "Search campaigns for high-intent service keywords",
+                "Landing page alignment for stronger conversion rates",
+                "Ongoing optimization around lead quality and cost control",
+            ],
+            primary_cta_label: "Plan Your Google Ads Campaign",
+            primary_cta_href: "/request-quote",
+            secondary_cta_label: "Talk to LKProfessionals",
+            secondary_cta_href: "/contact",
+            stats: vec![
+                ServiceStat {
+                    value: "Intent-led",
+                    label: "Search-first targeting",
+                    note: "Campaigns focus on the terms most likely to produce commercial action.",
+                },
+                ServiceStat {
+                    value: "Sharper",
+                    label: "Lead quality control",
+                    note: "Keyword, ad, and landing page decisions are shaped to reduce low-fit enquiries.",
+                },
+                ServiceStat {
+                    value: "Measured",
+                    label: "Optimization discipline",
+                    note: "We use search-term, conversion, and page-quality signals to improve performance over time.",
+                },
+            ],
+            challenges: vec![
+                ServicePoint {
+                    title: "Budget disappearing into broad traffic",
+                    description: "We tighten campaign structure and search intent targeting so spend supports realistic buying behavior.",
+                },
+                ServicePoint {
+                    title: "Clicks arriving on weak landing pages",
+                    description: "We align ads with clearer pages, stronger messaging, and more deliberate CTAs.",
+                },
+                ServicePoint {
+                    title: "No clear view of what is working",
+                    description: "We create a cleaner optimization loop around conversion paths, search terms, and campaign priorities.",
+                },
+            ],
+            deliverables: vec![
+                ServiceDeliverable {
+                    title: "Campaign architecture and keyword planning",
+                    description: "Ad groups, keyword intent, and conversion priorities structured around the offer.",
+                },
+                ServiceDeliverable {
+                    title: "Ad copy and extension setup",
+                    description: "Message testing shaped to match user intent and service credibility.",
+                },
+                ServiceDeliverable {
+                    title: "Landing page coordination",
+                    description: "Recommendations or implementation support for the pages responsible for converting paid traffic.",
+                },
+                ServiceDeliverable {
+                    title: "Management and optimization",
+                    description: "Ongoing reviews of search terms, bids, conversion performance, and page fit.",
+                },
+            ],
+            process: vec![
+                ServiceStep {
+                    title: "Clarify commercial intent",
+                    description: "We define which services, locations, and buyer actions the campaign should target first.",
+                },
+                ServiceStep {
+                    title: "Build the campaign structure",
+                    description: "Keyword clusters, ad messaging, exclusions, and conversion actions are organized deliberately.",
+                },
+                ServiceStep {
+                    title: "Launch with landing-page support",
+                    description: "Campaigns go live alongside the page and CTA conditions needed to convert traffic cleanly.",
+                },
+                ServiceStep {
+                    title: "Optimize around signal quality",
+                    description: "We refine based on search intent, cost efficiency, and the quality of resulting enquiries.",
+                },
+            ],
+            differentiators: vec![
+                ServicePoint {
+                    title: "Paid search tied to business reality",
+                    description: "Campaign strategy reflects your service model, buyer cycle, and landing page strength.",
+                },
+                ServicePoint {
+                    title: "Landing experience matters",
+                    description: "We do not treat ads and web pages as separate systems when conversion depends on both.",
+                },
+                ServicePoint {
+                    title: "Useful accountability",
+                    description: "Optimization is driven by commercial signal quality, not vanity metrics alone.",
+                },
+            ],
+            faqs: vec![
+                ServiceFaq {
+                    question: "Do you only manage Google Search Ads?",
+                    answer: "Search campaigns are often the highest-priority starting point for service businesses, but we can also advise on wider campaign structure where appropriate.",
+                },
+                ServiceFaq {
+                    question: "Can you improve the landing page as well?",
+                    answer: "Yes. We frequently support landing page structure, copy direction, and CTA clarity because campaign performance depends on the page after the click.",
+                },
+                ServiceFaq {
+                    question: "Is Google Ads useful if we are already investing in SEO?",
+                    answer: "Yes. Paid search can capture immediate demand while SEO compounds longer-term visibility, especially when both target the same commercial intent carefully.",
+                },
+            ],
+            related_services: related_services(&[
+                "digital-marketing",
+                "seo-search-growth",
+                "web-development",
+            ]),
+            industries_served: industries_for("google-ads-agency"),
+            technologies_used: technologies_for("google-ads-agency"),
+            related_solutions: solution_links_for("google-ads-agency"),
+            related_case_studies: case_study_links_for("google-ads-agency"),
+            related_insights: insight_links_for("google-ads-agency"),
+        },
+        "local-seo-services" => ServicePageContext {
+            slug: "local-seo-services",
+            title: "Local SEO Services",
+            meta_title: "Local SEO Services in Sri Lanka | LKProfessionals",
+            meta_description: "Local SEO services for Sri Lankan businesses that need stronger map visibility, service-area relevance, and more qualified local enquiries.",
+            canonical_path: "/services/local-seo-services",
+            eyebrow: "Local SEO Services",
+            hero_title: "Local search visibility that helps nearby customers find the right service faster.",
+            hero_description: "We improve local SEO for businesses that depend on city-based visibility, service-area relevance, and stronger trust signals across their website, Google Business presence, and supporting location content.",
+            hero_panel_title: "Best fit for",
+            hero_panel_body: "Service businesses, clinics, agencies, and multi-location brands that want better local discovery in Sri Lanka without relying only on paid traffic.",
+            hero_checklist: vec![
+                "Google Business and location signal optimization",
+                "Service-area and city-page support",
+                "On-page and internal linking improvements for local intent",
+            ],
+            primary_cta_label: "Strengthen Local Visibility",
+            primary_cta_href: "/request-quote",
+            secondary_cta_label: "Explore SEO Services",
+            secondary_cta_href: "/services/seo-search-growth",
+            stats: vec![
+                ServiceStat {
+                    value: "Local",
+                    label: "Area relevance focus",
+                    note: "We align pages and signals with where your business actually serves customers.",
+                },
+                ServiceStat {
+                    value: "Trust-led",
+                    label: "Business presence clarity",
+                    note: "Address, service scope, entity consistency, and page quality work together.",
+                },
+                ServiceStat {
+                    value: "Scalable",
+                    label: "Supports expansion",
+                    note: "The structure can grow from one location to multiple target areas without becoming thin.",
+                },
+            ],
+            challenges: vec![
+                ServicePoint {
+                    title: "Ranking weakly in the areas that matter most",
+                    description: "We improve page intent, location relevance, and supporting internal links so local signals become clearer.",
+                },
+                ServicePoint {
+                    title: "Service pages written too broadly",
+                    description: "We help connect commercial service pages with the local contexts buyers actually search from.",
+                },
+                ServicePoint {
+                    title: "Google Business presence not fully supporting the website",
+                    description: "We align the website structure with the visibility work happening around your local business profile.",
+                },
+            ],
+            deliverables: vec![
+                ServiceDeliverable {
+                    title: "Local SEO audit and opportunity map",
+                    description: "A practical review of location targeting, page quality, internal linking, and local search signals.",
+                },
+                ServiceDeliverable {
+                    title: "Local page and service alignment",
+                    description: "Recommendations or implementation support for location-aware service pages and nearby search intent.",
+                },
+                ServiceDeliverable {
+                    title: "Google Business and citation guidance",
+                    description: "Advice on business profile alignment and supporting trust signals where relevant.",
+                },
+                ServiceDeliverable {
+                    title: "Ongoing optimization priorities",
+                    description: "A staged plan for expanding local visibility without creating duplicate or weak pages.",
+                },
+            ],
+            process: vec![
+                ServiceStep {
+                    title: "Assess current local visibility",
+                    description: "We review what areas you target, how local intent is handled on-site, and where gaps exist.",
+                },
+                ServiceStep {
+                    title: "Strengthen location relevance",
+                    description: "We improve page focus, internal linking, and service-to-location alignment.",
+                },
+                ServiceStep {
+                    title: "Support trust and discoverability",
+                    description: "Entity consistency, business profile considerations, and content support are addressed where useful.",
+                },
+                ServiceStep {
+                    title: "Expand deliberately",
+                    description: "Once the foundation works, we help prioritize the next locations or service-area opportunities.",
+                },
+            ],
+            differentiators: vec![
+                ServicePoint {
+                    title: "Local SEO without thin-page sprawl",
+                    description: "We focus on useful, commercially aligned location relevance instead of mass-producing weak pages.",
+                },
+                ServicePoint {
+                    title: "Commercial service pages come first",
+                    description: "Local visibility works better when the core service pages are strong enough to deserve the traffic.",
+                },
+                ServicePoint {
+                    title: "Built for Sri Lankan search realities",
+                    description: "Recommendations consider how local service buyers search across cities, districts, and nearby alternatives.",
+                },
+            ],
+            faqs: vec![
+                ServiceFaq {
+                    question: "Do we need a separate page for every city?",
+                    answer: "Not always. The right structure depends on your service model, proof of local relevance, and whether each page can offer distinct value.",
+                },
+                ServiceFaq {
+                    question: "Can local SEO help a business outside Colombo?",
+                    answer: "Yes. Local SEO matters anywhere buyers search for nearby or area-specific services, including Jaffna and other regional markets.",
+                },
+                ServiceFaq {
+                    question: "Is this different from broader SEO?",
+                    answer: "Yes. Local SEO focuses more heavily on location intent, service-area relevance, business presence signals, and nearby discoverability.",
+                },
+            ],
+            related_services: related_services(&[
+                "seo-search-growth",
+                "web-development",
+                "digital-marketing",
+            ]),
+            industries_served: industries_for("local-seo-services"),
+            technologies_used: technologies_for("local-seo-services"),
+            related_solutions: solution_links_for("local-seo-services"),
+            related_case_studies: case_study_links_for("local-seo-services"),
+            related_insights: insight_links_for("local-seo-services"),
+        },
+        "website-maintenance-services" => ServicePageContext {
+            slug: "website-maintenance-services",
+            title: "Website Maintenance Services",
+            meta_title: "Website Maintenance Services | LKProfessionals",
+            meta_description: "Website maintenance services covering updates, fixes, monitoring, backups, performance checks, and support for business-critical websites.",
+            canonical_path: "/services/website-maintenance-services",
+            eyebrow: "Website Maintenance Services",
+            hero_title: "Website maintenance that protects performance, trust, and day-to-day business continuity.",
+            hero_description: "We support business websites after launch with structured maintenance, technical fixes, monitoring, backups, and practical support so your site stays reliable instead of quietly degrading.",
+            hero_panel_title: "Best fit for",
+            hero_panel_body: "Teams that rely on their website for enquiries, campaigns, visibility, or customer trust and need dependable support beyond the initial launch.",
+            hero_checklist: vec![
+                "Ongoing technical support and updates",
+                "Monitoring, backup, and recovery discipline",
+                "Performance, SEO, and security-minded maintenance",
+            ],
+            primary_cta_label: "Get Website Support",
+            primary_cta_href: "/request-quote",
+            secondary_cta_label: "Talk to LKProfessionals",
+            secondary_cta_href: "/contact",
+            stats: vec![
+                ServiceStat {
+                    value: "Protected",
+                    label: "Stability-first care",
+                    note: "We reduce the risk of avoidable breakage, downtime, and silent technical decay.",
+                },
+                ServiceStat {
+                    value: "Responsive",
+                    label: "Issue-handling support",
+                    note: "Fixes and updates move through a clearer process than ad hoc emergency requests.",
+                },
+                ServiceStat {
+                    value: "Useful",
+                    label: "Business-impact aware",
+                    note: "Maintenance work considers SEO, conversion flow, and user experience, not just code changes.",
+                },
+            ],
+            challenges: vec![
+                ServicePoint {
+                    title: "No one actively maintaining the website",
+                    description: "We create a structured support layer so small issues do not turn into larger business problems.",
+                },
+                ServicePoint {
+                    title: "Content, design, or integrations falling out of date",
+                    description: "We keep the site usable and commercially credible as the business changes.",
+                },
+                ServicePoint {
+                    title: "Fear of updates breaking something important",
+                    description: "We handle maintenance with a steadier process that reduces avoidable release risk.",
+                },
+            ],
+            deliverables: vec![
+                ServiceDeliverable {
+                    title: "Routine maintenance and updates",
+                    description: "Planned changes, bug fixes, content support, and technical housekeeping.",
+                },
+                ServiceDeliverable {
+                    title: "Monitoring and backup oversight",
+                    description: "A more reliable posture around uptime awareness, backups, and recovery readiness.",
+                },
+                ServiceDeliverable {
+                    title: "Performance and SEO checks",
+                    description: "Basic maintenance work informed by how site quality affects search visibility and conversion.",
+                },
+                ServiceDeliverable {
+                    title: "Support for growth changes",
+                    description: "Help with adding sections, adjusting CTAs, improving pages, or supporting new campaigns.",
+                },
+            ],
+            process: vec![
+                ServiceStep {
+                    title: "Review the current website condition",
+                    description: "We assess the setup, known issues, dependencies, and the level of support the site really needs.",
+                },
+                ServiceStep {
+                    title: "Stabilize the essentials",
+                    description: "Urgent fixes, update priorities, and risk areas are handled before longer-term improvements.",
+                },
+                ServiceStep {
+                    title: "Move into structured maintenance",
+                    description: "Requests, updates, and preventative checks follow a more predictable support rhythm.",
+                },
+                ServiceStep {
+                    title: "Improve over time",
+                    description: "Maintenance becomes a platform for incremental UX, SEO, and conversion improvements as needed.",
+                },
+            ],
+            differentiators: vec![
+                ServicePoint {
+                    title: "Support with commercial awareness",
+                    description: "We understand that a business website needs to stay credible, discoverable, and conversion-ready.",
+                },
+                ServicePoint {
+                    title: "Not limited to emergency fixes",
+                    description: "We can also support page improvements, content structure, and technical refinements that keep the site stronger over time.",
+                },
+                ServicePoint {
+                    title: "Useful bridge between launch and growth",
+                    description: "Maintenance becomes the layer that keeps the website usable while bigger improvements are phased in.",
+                },
+            ],
+            faqs: vec![
+                ServiceFaq {
+                    question: "Do you only maintain websites you originally built?",
+                    answer: "No. We can often take over support for an existing website after reviewing the platform, risks, and practical maintenance needs.",
+                },
+                ServiceFaq {
+                    question: "Can maintenance include small SEO or conversion improvements?",
+                    answer: "Yes. Where appropriate, maintenance work can include better page structure, CTA refinements, and technical fixes that support search visibility.",
+                },
+                ServiceFaq {
+                    question: "Is hosting included?",
+                    answer: "Maintenance and hosting are related but distinct. We can support both and recommend the right mix based on how the site is currently managed.",
+                },
+            ],
+            related_services: related_services(&[
+                "hosting-domain-cloud-services",
+                "web-development",
+                "seo-search-growth",
+            ]),
+            industries_served: industries_for("website-maintenance-services"),
+            technologies_used: technologies_for("website-maintenance-services"),
+            related_solutions: solution_links_for("website-maintenance-services"),
+            related_case_studies: case_study_links_for("website-maintenance-services"),
+            related_insights: insight_links_for("website-maintenance-services"),
+        },
+        "website-redesign-services" => ServicePageContext {
+            slug: "website-redesign-services",
+            title: "Website Redesign Services",
+            meta_title: "Website Redesign Services | LKProfessionals",
+            meta_description: "Website redesign services for businesses that need stronger trust, better conversion flow, improved SEO structure, and a more modern digital presence.",
+            canonical_path: "/services/website-redesign-services",
+            eyebrow: "Website Redesign Services",
+            hero_title: "Website redesigns that improve trust, clarity, and commercial performance without losing direction.",
+            hero_description: "We redesign business websites that have become outdated, difficult to manage, conversion-weak, or disconnected from the company they are supposed to represent today.",
+            hero_panel_title: "Best fit for",
+            hero_panel_body: "Businesses with aging websites, unclear service presentation, weak enquiry flow, or a digital presence that no longer matches their standards.",
+            hero_checklist: vec![
+                "Modern design and content restructuring",
+                "SEO-aware redesign planning",
+                "Conversion-path improvements across key pages",
+            ],
+            primary_cta_label: "Discuss a Website Redesign",
+            primary_cta_href: "/request-quote",
+            secondary_cta_label: "See Web Development",
+            secondary_cta_href: "/services/web-development",
+            stats: vec![
+                ServiceStat {
+                    value: "Clearer",
+                    label: "Better message hierarchy",
+                    note: "We simplify how the website explains the business and guides the visitor.",
+                },
+                ServiceStat {
+                    value: "Stronger",
+                    label: "Trust and conversion focus",
+                    note: "Design decisions are tied to credibility, usability, and enquiry quality.",
+                },
+                ServiceStat {
+                    value: "Safer",
+                    label: "SEO-aware transition",
+                    note: "Redesign planning considers rankings, internal links, and page continuity before launch.",
+                },
+            ],
+            challenges: vec![
+                ServicePoint {
+                    title: "The website no longer reflects the business properly",
+                    description: "We reposition the site so the offer, quality, and priorities are represented more convincingly.",
+                },
+                ServicePoint {
+                    title: "Users reach the site but do not take action",
+                    description: "We improve message flow, CTA placement, and page structure to reduce conversion friction.",
+                },
+                ServicePoint {
+                    title: "Redesign risk around SEO and existing traffic",
+                    description: "We approach structural change carefully so visibility is not damaged by unnecessary disruption.",
+                },
+            ],
+            deliverables: vec![
+                ServiceDeliverable {
+                    title: "Website review and redesign roadmap",
+                    description: "A clear view of what should change, what should be preserved, and how the site should improve.",
+                },
+                ServiceDeliverable {
+                    title: "Page architecture and content restructuring",
+                    description: "Sharper hierarchy for service pages, trust signals, and conversion paths.",
+                },
+                ServiceDeliverable {
+                    title: "Responsive redesign implementation",
+                    description: "A more current visual system and front-end experience that still respects usability and performance.",
+                },
+                ServiceDeliverable {
+                    title: "Launch transition support",
+                    description: "Redirect awareness, QA, and structural checks to protect the move into the new version.",
+                },
+            ],
+            process: vec![
+                ServiceStep {
+                    title: "Audit the current website",
+                    description: "We identify what is weakening trust, search visibility, usability, or conversion performance.",
+                },
+                ServiceStep {
+                    title: "Restructure the key journeys",
+                    description: "The homepage, service pages, and CTA flow are reorganized around business priorities.",
+                },
+                ServiceStep {
+                    title: "Design and rebuild deliberately",
+                    description: "We implement the redesign with attention to speed, responsiveness, and continuity.",
+                },
+                ServiceStep {
+                    title: "Launch with reduced risk",
+                    description: "Technical checks, redirects, and post-launch review help the redesign land more cleanly.",
+                },
+            ],
+            differentiators: vec![
+                ServicePoint {
+                    title: "Redesign for outcomes, not just aesthetics",
+                    description: "We treat visual improvement as one part of a broader credibility and conversion upgrade.",
+                },
+                ServicePoint {
+                    title: "SEO and UX considered together",
+                    description: "Page structure, metadata, internal links, and message hierarchy are part of the same redesign conversation.",
+                },
+                ServicePoint {
+                    title: "Grounded modernization",
+                    description: "The result aims to feel more capable and current without turning the site into trend-driven noise.",
+                },
+            ],
+            faqs: vec![
+                ServiceFaq {
+                    question: "Do we need a full rebuild to redesign the site?",
+                    answer: "Not always. Some websites need a full rebuild, while others can be improved through restructuring and selective redevelopment.",
+                },
+                ServiceFaq {
+                    question: "Can a redesign help with SEO?",
+                    answer: "Yes, if handled properly. A redesign can improve structure, internal linking, performance, and page quality, but it needs careful planning to avoid regressions.",
+                },
+                ServiceFaq {
+                    question: "Can you redesign only a few key pages first?",
+                    answer: "Yes. In some cases a phased redesign focused on the homepage and core service pages is the most sensible starting point.",
+                },
+            ],
+            related_services: related_services(&[
+                "web-development",
+                "seo-search-growth",
+                "website-maintenance-services",
+            ]),
+            industries_served: industries_for("website-redesign-services"),
+            technologies_used: technologies_for("website-redesign-services"),
+            related_solutions: solution_links_for("website-redesign-services"),
+            related_case_studies: case_study_links_for("website-redesign-services"),
+            related_insights: insight_links_for("website-redesign-services"),
+        },
+        "crm-software-development" => ServicePageContext {
+            slug: "crm-software-development",
+            title: "CRM Software Development",
+            meta_title: "CRM Software Development Company | LKProfessionals",
+            meta_description: "CRM software development for sales pipelines, customer follow-up, lead assignment, reporting visibility, and relationship-driven operations.",
+            canonical_path: "/services/crm-software-development",
+            eyebrow: "CRM Software Development",
+            hero_title: "Custom CRM software that gives your team clearer pipelines, cleaner follow-up, and better customer visibility.",
+            hero_description: "We build CRM systems for businesses that have outgrown spreadsheets, disconnected sales tools, or generic platforms that do not reflect how their customer relationships are actually managed.",
+            hero_panel_title: "Best fit for",
+            hero_panel_body: "Sales teams, service businesses, and growing organizations that need tighter lead tracking, customer history, and operational visibility.",
+            hero_checklist: vec![
+                "Lead, customer, and opportunity management",
+                "Pipeline stages, tasks, follow-up, and team accountability",
+                "Reports and dashboards for sales or service visibility",
+            ],
+            primary_cta_label: "Plan Your CRM System",
+            primary_cta_href: "/request-quote",
+            secondary_cta_label: "Talk to LKProfessionals",
+            secondary_cta_href: "/contact",
+            stats: vec![
+                ServiceStat {
+                    value: "Visible",
+                    label: "Pipeline clarity",
+                    note: "The right CRM gives managers and teams a shared view of customer progress.",
+                },
+                ServiceStat {
+                    value: "Structured",
+                    label: "Follow-up discipline",
+                    note: "Tasks, reminders, ownership, and stage logic reduce opportunities slipping through gaps.",
+                },
+                ServiceStat {
+                    value: "Tailored",
+                    label: "Business-fit design",
+                    note: "We shape CRM flows around your sales and service model instead of forcing generic behavior.",
+                },
+            ],
+            challenges: vec![
+                ServicePoint {
+                    title: "Lead and customer information scattered everywhere",
+                    description: "We centralize records, activity history, and ownership so the team works from one clearer system.",
+                },
+                ServicePoint {
+                    title: "Inconsistent follow-up and lost opportunities",
+                    description: "We build task flow and pipeline discipline into the product so accountability improves.",
+                },
+                ServicePoint {
+                    title: "Reports that do not reflect operational reality",
+                    description: "We structure dashboards and views around the decisions your business actually needs to make.",
+                },
+            ],
+            deliverables: vec![
+                ServiceDeliverable {
+                    title: "CRM discovery and workflow mapping",
+                    description: "We model how leads, customers, tasks, and handoffs move through your operation.",
+                },
+                ServiceDeliverable {
+                    title: "Pipeline, contact, and activity design",
+                    description: "Stages, records, reminders, notes, and ownership rules are shaped into a practical system.",
+                },
+                ServiceDeliverable {
+                    title: "Reporting and managerial visibility",
+                    description: "Dashboards and summaries that show the state of sales or service performance more clearly.",
+                },
+                ServiceDeliverable {
+                    title: "Rollout and refinement support",
+                    description: "We help the first release become usable in real team workflows, then improve based on adoption feedback.",
+                },
+            ],
+            process: vec![
+                ServiceStep {
+                    title: "Understand the relationship workflow",
+                    description: "We identify how enquiries, customers, follow-up, and internal accountability currently work.",
+                },
+                ServiceStep {
+                    title: "Design the CRM around real behavior",
+                    description: "Roles, stages, tasks, notes, and reports are structured to fit the operation.",
+                },
+                ServiceStep {
+                    title: "Build the core modules",
+                    description: "We implement the records, pipeline flows, dashboards, and controls the team needs first.",
+                },
+                ServiceStep {
+                    title: "Support adoption and iteration",
+                    description: "The system is refined based on real usage, not only assumptions made before launch.",
+                },
+            ],
+            differentiators: vec![
+                ServicePoint {
+                    title: "CRM built around your business logic",
+                    description: "We care about the real sales and service flow, not just generic contact storage.",
+                },
+                ServicePoint {
+                    title: "Commercial workflow awareness",
+                    description: "The goal is clearer follow-up, better visibility, and stronger relationship handling across the team.",
+                },
+                ServicePoint {
+                    title: "Natural fit with broader software delivery",
+                    description: "If the CRM needs portals, booking flows, automation, or integrations, we can shape that wider system too.",
+                },
+            ],
+            faqs: vec![
+                ServiceFaq {
+                    question: "Why build a custom CRM instead of using a standard tool?",
+                    answer: "A custom CRM makes sense when your process, reporting needs, or team workflow are too specific for a generic platform to handle well.",
+                },
+                ServiceFaq {
+                    question: "Can a CRM include service follow-up as well as sales?",
+                    answer: "Yes. CRM systems can be designed for sales pipelines, customer servicing, retention workflows, or a blend of all three.",
+                },
+                ServiceFaq {
+                    question: "Can you build a CRM in phases?",
+                    answer: "Yes. Many teams start with contacts, pipelines, and reporting, then add automation, integrations, or additional modules later.",
+                },
+            ],
+            related_services: related_services(&[
+                "custom-software-development",
+                "software-development",
+                "ai-automation-solutions",
+            ]),
+            industries_served: industries_for("crm-software-development"),
+            technologies_used: technologies_for("crm-software-development"),
+            related_solutions: solution_links_for("crm-software-development"),
+            related_case_studies: case_study_links_for("crm-software-development"),
+            related_insights: insight_links_for("crm-software-development"),
+        },
+        "inventory-management-software" => ServicePageContext {
+            slug: "inventory-management-software",
+            title: "Inventory Management Software",
+            meta_title: "Inventory Management Software Development | LKProfessionals",
+            meta_description: "Inventory management software for stock visibility, purchasing control, warehouse accuracy, branch coordination, and decision-ready reporting.",
+            canonical_path: "/services/inventory-management-software",
+            eyebrow: "Inventory Management Software",
+            hero_title: "Inventory systems that give growing businesses tighter stock control and fewer operational surprises.",
+            hero_description: "We build inventory management software for businesses that need clearer stock visibility, better replenishment decisions, stronger branch coordination, and a more reliable view of what is actually happening across products and locations.",
+            hero_panel_title: "Best fit for",
+            hero_panel_body: "Retailers, distributors, service businesses with stocked items, and multi-branch operations that have outgrown spreadsheets or fragmented stock tools.",
+            hero_checklist: vec![
+                "Stock, purchase, and supplier workflow control",
+                "Branch, warehouse, and movement visibility",
+                "Reporting for replenishment and operational decisions",
+            ],
+            primary_cta_label: "Build an Inventory System",
+            primary_cta_href: "/request-quote",
+            secondary_cta_label: "Discuss Your Workflow",
+            secondary_cta_href: "/contact",
+            stats: vec![
+                ServiceStat {
+                    value: "Accurate",
+                    label: "Better stock visibility",
+                    note: "The right system reduces uncertainty around what is available, moving, or at risk.",
+                },
+                ServiceStat {
+                    value: "Controlled",
+                    label: "Purchasing discipline",
+                    note: "Teams gain clearer signals for reordering, supplier handling, and stock movement.",
+                },
+                ServiceStat {
+                    value: "Scalable",
+                    label: "Supports branch growth",
+                    note: "The structure can expand into warehouses, stores, and broader product complexity over time.",
+                },
+            ],
+            challenges: vec![
+                ServicePoint {
+                    title: "Stock counts and spreadsheets not matching reality",
+                    description: "We help replace fragile manual tracking with a system that shows movement and availability more clearly.",
+                },
+                ServicePoint {
+                    title: "Purchasing decisions made with poor visibility",
+                    description: "We create reporting and stock logic that supports replenishment and supplier planning.",
+                },
+                ServicePoint {
+                    title: "Multiple branches or stores operating without coordination",
+                    description: "We design workflows that make stock movement and location-level visibility easier to manage.",
+                },
+            ],
+            deliverables: vec![
+                ServiceDeliverable {
+                    title: "Inventory workflow discovery",
+                    description: "We map products, suppliers, purchases, adjustments, movements, and reporting needs.",
+                },
+                ServiceDeliverable {
+                    title: "Stock and warehouse system design",
+                    description: "Product records, movement logic, and role-based controls are structured around your operation.",
+                },
+                ServiceDeliverable {
+                    title: "Reporting and visibility modules",
+                    description: "Dashboards for stock status, purchasing patterns, and operational exceptions.",
+                },
+                ServiceDeliverable {
+                    title: "Expansion-ready implementation",
+                    description: "A foundation that can later connect with POS, e-commerce, barcode workflows, or broader ERP logic.",
+                },
+            ],
+            process: vec![
+                ServiceStep {
+                    title: "Map current stock handling",
+                    description: "We identify where inaccuracy, delays, or blind spots are affecting the business most.",
+                },
+                ServiceStep {
+                    title: "Design the control model",
+                    description: "Products, locations, users, purchase flows, and reporting rules are shaped into the system.",
+                },
+                ServiceStep {
+                    title: "Build the operational core",
+                    description: "The high-value stock workflows are implemented first so teams can start improving visibility quickly.",
+                },
+                ServiceStep {
+                    title: "Refine around real usage",
+                    description: "Feedback from daily operations helps improve reports, controls, and branch-specific needs.",
+                },
+            ],
+            differentiators: vec![
+                ServicePoint {
+                    title: "Inventory control with operational realism",
+                    description: "We design for the exceptions, approvals, and day-to-day pressures that stock systems must survive.",
+                },
+                ServicePoint {
+                    title: "Clear path into broader business systems",
+                    description: "Inventory projects can evolve into POS, CRM, ERP, or e-commerce integrations when the business is ready.",
+                },
+                ServicePoint {
+                    title: "Decision support built in",
+                    description: "Reporting matters because inventory is not only about counting; it affects purchasing, cash flow, and service quality.",
+                },
+            ],
+            faqs: vec![
+                ServiceFaq {
+                    question: "Is this only for retail companies?",
+                    answer: "No. Inventory systems can also support distributors, pharmacies, workshops, service businesses with stocked items, and multi-location operations.",
+                },
+                ServiceFaq {
+                    question: "Can inventory software connect with POS or e-commerce later?",
+                    answer: "Yes. Many businesses start with inventory control and then connect it to sales, ordering, or reporting systems over time.",
+                },
+                ServiceFaq {
+                    question: "Can you support barcode-based workflows?",
+                    answer: "Yes. Barcode handling can be included where it improves receiving, stock movement, sales, or counting processes.",
+                },
+            ],
+            related_services: related_services(&[
+                "custom-software-development",
+                "software-development",
+                "booking-system-development",
+            ]),
+            industries_served: industries_for("inventory-management-software"),
+            technologies_used: technologies_for("inventory-management-software"),
+            related_solutions: solution_links_for("inventory-management-software"),
+            related_case_studies: case_study_links_for("inventory-management-software"),
+            related_insights: insight_links_for("inventory-management-software"),
+        },
+        "booking-system-development" => ServicePageContext {
+            slug: "booking-system-development",
+            title: "Booking System Development",
+            meta_title: "Booking System Development Company | LKProfessionals",
+            meta_description: "Booking system development for appointments, reservations, scheduling logic, confirmations, resource allocation, and service workflow control.",
+            canonical_path: "/services/booking-system-development",
+            eyebrow: "Booking System Development",
+            hero_title: "Booking systems that make appointments, reservations, and scheduling easier to manage at scale.",
+            hero_description: "We build booking systems for service businesses and institutions that need cleaner scheduling, fewer manual coordination issues, and a customer experience that makes booking feel straightforward.",
+            hero_panel_title: "Best fit for",
+            hero_panel_body: "Clinics, education providers, hospitality brands, consultancies, and service teams that need appointment, reservation, or schedule management built around their real workflow.",
+            hero_checklist: vec![
+                "Appointment, reservation, and resource scheduling",
+                "Availability logic, confirmations, and staff coordination",
+                "Admin dashboards and operational visibility",
+            ],
+            primary_cta_label: "Plan a Booking Platform",
+            primary_cta_href: "/request-quote",
+            secondary_cta_label: "Talk to LKProfessionals",
+            secondary_cta_href: "/contact",
+            stats: vec![
+                ServiceStat {
+                    value: "Simpler",
+                    label: "Lower coordination friction",
+                    note: "Users and staff both benefit when booking logic is easier to understand and act on.",
+                },
+                ServiceStat {
+                    value: "Organized",
+                    label: "Better schedule control",
+                    note: "Availability, assignments, and changes are managed through a clearer system.",
+                },
+                ServiceStat {
+                    value: "Scalable",
+                    label: "Supports growing demand",
+                    note: "The booking flow can expand across locations, staff, services, or customer types.",
+                },
+            ],
+            challenges: vec![
+                ServicePoint {
+                    title: "Manual booking handling consuming too much staff time",
+                    description: "We automate and structure the booking flow so teams spend less time coordinating basic availability.",
+                },
+                ServicePoint {
+                    title: "Customer booking journeys that feel confusing",
+                    description: "We simplify the front-end booking experience so customers can complete the right action with less friction.",
+                },
+                ServicePoint {
+                    title: "Operational rules too specific for generic tools",
+                    description: "We shape the system around actual service lengths, capacities, approvals, or assignment logic.",
+                },
+            ],
+            deliverables: vec![
+                ServiceDeliverable {
+                    title: "Booking workflow discovery",
+                    description: "We define how appointments, reservations, resources, and exceptions should really behave.",
+                },
+                ServiceDeliverable {
+                    title: "Customer-facing booking experience",
+                    description: "A front-end flow designed to reduce confusion and improve completion rates.",
+                },
+                ServiceDeliverable {
+                    title: "Admin and operational controls",
+                    description: "Dashboards, calendars, notifications, and rule handling for the internal team.",
+                },
+                ServiceDeliverable {
+                    title: "Integration and expansion planning",
+                    description: "The system can be shaped to connect with payments, CRM, reporting, or broader software tools.",
+                },
+            ],
+            process: vec![
+                ServiceStep {
+                    title: "Understand the scheduling reality",
+                    description: "We review how services, staff, resources, capacity, and customer actions currently interact.",
+                },
+                ServiceStep {
+                    title: "Design the booking logic",
+                    description: "Availability rules, confirmations, constraints, and admin handling are structured carefully.",
+                },
+                ServiceStep {
+                    title: "Build the key flows",
+                    description: "We implement the booking experience and the operational control layer needed to run it confidently.",
+                },
+                ServiceStep {
+                    title: "Improve through live usage",
+                    description: "Once the system is in use, we refine edge cases, reporting, and conversion friction based on real demand.",
+                },
+            ],
+            differentiators: vec![
+                ServicePoint {
+                    title: "Booking systems built around operations",
+                    description: "We consider staff coordination, approval logic, and resource constraints as core design inputs.",
+                },
+                ServicePoint {
+                    title: "Customer experience matters too",
+                    description: "The booking flow should help users complete the action, not only satisfy the backend logic.",
+                },
+                ServicePoint {
+                    title: "Flexible enough for industry-specific needs",
+                    description: "The same core approach can support clinics, training, hospitality, or service businesses with very different scheduling rules.",
+                },
+            ],
+            faqs: vec![
+                ServiceFaq {
+                    question: "Can a booking system include payments or reminders?",
+                    answer: "Yes. Depending on the workflow, the system can include confirmations, reminders, payments, or other customer-handling steps.",
+                },
+                ServiceFaq {
+                    question: "Is this useful only for hotels?",
+                    answer: "No. Booking systems are useful for clinics, educators, consultants, service providers, and many appointment-driven businesses.",
+                },
+                ServiceFaq {
+                    question: "Can you integrate booking with CRM or custom software?",
+                    answer: "Yes. Booking often works best when it connects with customer records, internal dashboards, or broader workflow systems.",
+                },
+            ],
+            related_services: related_services(&[
+                "custom-software-development",
+                "mobile-app-development",
+                "crm-software-development",
+            ]),
+            industries_served: industries_for("booking-system-development"),
+            technologies_used: technologies_for("booking-system-development"),
+            related_solutions: solution_links_for("booking-system-development"),
+            related_case_studies: case_study_links_for("booking-system-development"),
+            related_insights: insight_links_for("booking-system-development"),
         },
         _ => service_page_context("web-development"),
     }
@@ -1254,6 +2193,22 @@ pub fn all_service_cards() -> Vec<ServiceCard> {
             icon: "fa-solid fa-chart-line",
         },
         ServiceCard {
+            slug: "/services/google-ads-agency",
+            title: "Google Ads Agency",
+            short_title: "Google Ads",
+            category: "Paid Growth",
+            summary: "Google Ads strategy, campaign management, landing page alignment, and qualified lead generation support.",
+            icon: "fa-solid fa-rectangle-ad",
+        },
+        ServiceCard {
+            slug: "/services/local-seo-services",
+            title: "Local SEO Services",
+            short_title: "Local SEO",
+            category: "Visibility",
+            summary: "Local search optimization for Sri Lankan businesses that need stronger map visibility, service-area relevance, and enquiry quality.",
+            icon: "fa-solid fa-map-location-dot",
+        },
+        ServiceCard {
             slug: "/services/hosting-domain-cloud-services",
             title: "Hosting, Domain & Cloud Services",
             short_title: "Hosting & Cloud",
@@ -1262,12 +2217,52 @@ pub fn all_service_cards() -> Vec<ServiceCard> {
             icon: "fa-solid fa-cloud",
         },
         ServiceCard {
+            slug: "/services/website-maintenance-services",
+            title: "Website Maintenance Services",
+            short_title: "Website Maintenance",
+            category: "Support",
+            summary: "Ongoing updates, fixes, monitoring, backup discipline, and technical support for business-critical websites.",
+            icon: "fa-solid fa-screwdriver-wrench",
+        },
+        ServiceCard {
+            slug: "/services/website-redesign-services",
+            title: "Website Redesign Services",
+            short_title: "Website Redesign",
+            category: "Digital Presence",
+            summary: "Website redesign work for businesses that need stronger trust, better conversion flow, and a more current digital presence.",
+            icon: "fa-solid fa-pen-ruler",
+        },
+        ServiceCard {
             slug: "/services/ai-automation-solutions",
             title: "AI & Automation Solutions",
             short_title: "AI & Automation",
             category: "Efficiency",
             summary: "Automation workflows and AI-assisted operations that reduce repetitive work and speed up handling.",
             icon: "fa-solid fa-robot",
+        },
+        ServiceCard {
+            slug: "/services/crm-software-development",
+            title: "CRM Software Development",
+            short_title: "CRM Development",
+            category: "Operations",
+            summary: "Custom CRM systems for sales pipelines, follow-up control, team visibility, and customer relationship workflows.",
+            icon: "fa-solid fa-address-book",
+        },
+        ServiceCard {
+            slug: "/services/inventory-management-software",
+            title: "Inventory Management Software",
+            short_title: "Inventory Systems",
+            category: "Operations",
+            summary: "Inventory control systems for stock visibility, purchasing accuracy, reporting clarity, and multi-location coordination.",
+            icon: "fa-solid fa-boxes-stacked",
+        },
+        ServiceCard {
+            slug: "/services/booking-system-development",
+            title: "Booking System Development",
+            short_title: "Booking Systems",
+            category: "Operations",
+            summary: "Booking systems for appointments, reservations, scheduling logic, confirmations, and customer-facing service workflows.",
+            icon: "fa-solid fa-calendar-check",
         },
         ServiceCard {
             slug: "/services/it-consultation-digital-transformation",
@@ -1288,4 +2283,445 @@ fn related_services(slugs: &[&str]) -> Vec<ServiceCard> {
             slugs.contains(&route_slug)
         })
         .collect()
+}
+
+fn service_link(title: &'static str, href: &'static str, description: &'static str) -> ServiceLink {
+    ServiceLink {
+        title,
+        href,
+        description,
+    }
+}
+
+fn industries_for(slug: &str) -> Vec<&'static str> {
+    match slug {
+        "web-development" | "website-redesign-services" | "website-maintenance-services" => vec![
+            "Professional services firms",
+            "Healthcare and clinics",
+            "Education and training providers",
+            "Retail and e-commerce brands",
+            "Hospitality and service businesses",
+        ],
+        "seo-search-growth" | "local-seo-services" | "digital-marketing" | "google-ads-agency" => {
+            vec![
+                "Local service businesses",
+                "Professional services firms",
+                "E-commerce and retail brands",
+                "Healthcare and clinics",
+                "Education and training providers",
+            ]
+        }
+        "software-development" | "custom-software-development" | "crm-software-development" => {
+            vec![
+                "Professional services firms",
+                "Education and training providers",
+                "Healthcare and clinics",
+                "Retail and distribution businesses",
+                "Operationally complex SMEs",
+            ]
+        }
+        "inventory-management-software" => vec![
+            "Retail businesses",
+            "Wholesale and distribution teams",
+            "Pharmacies and healthcare suppliers",
+            "Multi-branch stores",
+            "Service operations with stocked items",
+        ],
+        "booking-system-development" | "mobile-app-development" => vec![
+            "Healthcare and clinics",
+            "Education and training providers",
+            "Hospitality and travel services",
+            "Professional services firms",
+            "Field-service businesses",
+        ],
+        "hosting-domain-cloud-services" => vec![
+            "Corporate websites",
+            "Software platforms",
+            "Campaign microsites",
+            "Growing digital businesses",
+            "Multi-environment teams",
+        ],
+        "ai-automation-solutions" | "it-consultation-digital-transformation" => vec![
+            "Operationally growing SMEs",
+            "Professional services firms",
+            "Education and healthcare organizations",
+            "Retail and distribution teams",
+            "Businesses modernizing internal workflows",
+        ],
+        _ => vec![
+            "Professional services firms",
+            "Retail and distribution businesses",
+            "Education and training providers",
+            "Healthcare and clinics",
+            "Growing digital businesses",
+        ],
+    }
+}
+
+fn technologies_for(slug: &str) -> Vec<&'static str> {
+    match slug {
+        "web-development" | "website-redesign-services" => vec![
+            "Rust and Axum application stacks",
+            "Askama templating systems",
+            "Responsive front-end engineering",
+            "SEO metadata and structured data",
+            "Analytics and conversion tracking setup",
+        ],
+        "website-maintenance-services" | "hosting-domain-cloud-services" => vec![
+            "Cloud hosting environments",
+            "Deployment and DNS management",
+            "Performance monitoring and backups",
+            "Security hardening basics",
+            "Version-controlled release workflows",
+        ],
+        "seo-search-growth" | "local-seo-services" => vec![
+            "Technical SEO audits",
+            "Schema and metadata implementation",
+            "Internal linking architecture",
+            "Local search signal optimization",
+            "Content and page-intent planning",
+        ],
+        "digital-marketing" | "google-ads-agency" => vec![
+            "Google Ads campaign management",
+            "Landing page optimization",
+            "Conversion tracking setup",
+            "Audience and keyword research",
+            "Performance reporting workflows",
+        ],
+        "software-development"
+        | "custom-software-development"
+        | "crm-software-development"
+        | "inventory-management-software"
+        | "booking-system-development" => vec![
+            "Role-based web application architecture",
+            "Admin dashboards and reporting layers",
+            "API and system integrations",
+            "Workflow and database modeling",
+            "Phased product delivery practices",
+        ],
+        "mobile-app-development" => vec![
+            "Android and iOS delivery planning",
+            "Cross-platform mobile architecture",
+            "API integration for app workflows",
+            "User-flow prototyping and QA",
+            "Admin and backend coordination",
+        ],
+        "ai-automation-solutions" => vec![
+            "Workflow automation design",
+            "Form and CRM integrations",
+            "Lead-routing logic",
+            "Operational dashboard support",
+            "AI-assisted process design",
+        ],
+        "it-consultation-digital-transformation" => vec![
+            "Technology roadmap planning",
+            "System architecture reviews",
+            "Workflow redesign analysis",
+            "Platform selection guidance",
+            "Implementation sequencing support",
+        ],
+        _ => vec![
+            "Discovery and roadmap planning",
+            "Responsive digital delivery",
+            "Workflow-aware implementation",
+            "Performance and quality control",
+            "Scalable technical foundations",
+        ],
+    }
+}
+
+fn solution_links_for(slug: &str) -> Vec<ServiceLink> {
+    match slug {
+        "web-development" | "website-redesign-services" => vec![
+            service_link(
+                "Business Website Package",
+                "/packages/business-website-package",
+                "A packaged starting point for companies that need a stronger business website with a clear delivery scope.",
+            ),
+            service_link(
+                "E-commerce Development Company",
+                "/solutions/ecommerce-development-company",
+                "For businesses that need product catalogues, online ordering, and operational e-commerce support.",
+            ),
+            service_link(
+                "Free Website SEO Audit",
+                "/free-website-seo-audit",
+                "A practical conversion path for teams evaluating why the current website is underperforming.",
+            ),
+        ],
+        "seo-search-growth" | "local-seo-services" | "google-ads-agency" | "digital-marketing" => {
+            vec![
+                service_link(
+                    "Business SEO Offer",
+                    "/packages/business-seo-offer",
+                    "A structured entry point for businesses that want focused SEO work tied to measurable growth priorities.",
+                ),
+                service_link(
+                    "Free Website SEO Audit",
+                    "/free-website-seo-audit",
+                    "Useful for identifying the technical and content issues weakening current search visibility.",
+                ),
+                service_link(
+                    "Website Redesign Services",
+                    "/services/website-redesign-services",
+                    "Useful when weak structure, outdated messaging, or conversion friction are limiting marketing performance.",
+                ),
+            ]
+        }
+        "inventory-management-software" => vec![
+            service_link(
+                "POS System Development",
+                "/solutions/pos-system-development",
+                "Natural next step when stock control and sales operations need to work from the same source of truth.",
+            ),
+            service_link(
+                "E-commerce Development Company",
+                "/solutions/ecommerce-development-company",
+                "Relevant when inventory needs to support online ordering and product availability sync.",
+            ),
+            service_link(
+                "Custom Software Development",
+                "/services/custom-software-development",
+                "Broader solution path for businesses that need inventory as one module inside a larger internal platform.",
+            ),
+        ],
+        "booking-system-development" => vec![
+            service_link(
+                "Mobile App Development",
+                "/services/mobile-app-development",
+                "Useful when bookings need a customer-facing or staff-facing mobile layer beyond the web experience.",
+            ),
+            service_link(
+                "CRM Software Development",
+                "/services/crm-software-development",
+                "Helpful when booking data should feed customer records, follow-up workflows, or service operations.",
+            ),
+            service_link(
+                "Custom Software Development",
+                "/services/custom-software-development",
+                "Relevant when booking is only one part of a broader operational system.",
+            ),
+        ],
+        "crm-software-development" => vec![
+            service_link(
+                "Booking System Development",
+                "/services/booking-system-development",
+                "For businesses that need CRM records and scheduling logic to work together.",
+            ),
+            service_link(
+                "AI & Automation Solutions",
+                "/services/ai-automation-solutions",
+                "Useful for routing leads, follow-up tasks, and repetitive handling after the CRM core is in place.",
+            ),
+            service_link(
+                "IT Consultation",
+                "/services/it-consultation-digital-transformation",
+                "Useful when CRM planning is part of a larger digital transformation roadmap.",
+            ),
+        ],
+        _ => vec![
+            service_link(
+                "Request a Quote",
+                "/request-quote",
+                "Move from research into a scoped commercial conversation about your exact requirements.",
+            ),
+            service_link(
+                "Case Studies",
+                "/case-studies",
+                "Review implementation proof across websites, software, SEO, and growth-focused projects.",
+            ),
+            service_link(
+                "Industries",
+                "/industries",
+                "See how LKProfessionals adapts delivery priorities across sectors and operating models.",
+            ),
+        ],
+    }
+}
+
+fn case_study_links_for(slug: &str) -> Vec<ServiceLink> {
+    match slug {
+        "web-development" | "website-redesign-services" | "website-maintenance-services" => vec![
+            service_link(
+                "Website and Digital Presence Case Studies",
+                "/case-studies?category=websites",
+                "Relevant proof for businesses comparing site quality, trust, and conversion improvements.",
+            ),
+            service_link(
+                "SEO and Search Visibility Projects",
+                "/case-studies?category=seo",
+                "Examples of how stronger structure and optimization work together in live projects.",
+            ),
+        ],
+        "software-development"
+        | "custom-software-development"
+        | "crm-software-development"
+        | "inventory-management-software"
+        | "booking-system-development"
+        | "mobile-app-development" => vec![
+            service_link(
+                "Software and Platform Case Studies",
+                "/case-studies?category=software",
+                "Implementation proof for internal systems, platforms, dashboards, and business workflow products.",
+            ),
+            service_link(
+                "Automation and Operations Projects",
+                "/case-studies?category=automation",
+                "Useful when the buyer cares about process improvement, operational control, or integration logic.",
+            ),
+        ],
+        _ => vec![
+            service_link(
+                "Full Case Study Library",
+                "/case-studies",
+                "Browse portfolio proof across service lines, sectors, and commercial use cases.",
+            ),
+            service_link(
+                "Industry Delivery Examples",
+                "/industries",
+                "See how project direction changes based on the operational realities of each sector.",
+            ),
+        ],
+    }
+}
+
+fn insight_links_for(slug: &str) -> Vec<ServiceLink> {
+    match slug {
+        "seo-search-growth" => vec![
+            service_link(
+                "On-page SEO for service businesses",
+                "/insights/on-page-seo-for-service-businesses-how-to-write-pages-that-rank-and-convert",
+                "A practical look at how service pages should be structured for both rankings and conversion.",
+            ),
+            service_link(
+                "How FAQs help service pages rank and convert",
+                "/insights/how-do-faqs-help-service-pages-rank-and-convert",
+                "Explains why commercially useful FAQs strengthen both SEO coverage and buyer confidence.",
+            ),
+            service_link(
+                "How internal links help AI and search engines understand your website",
+                "/insights/how-do-internal-links-help-ai-and-search-engines-understand-your-website",
+                "Relevant for building stronger topical authority and clearer page relationships.",
+            ),
+        ],
+        "local-seo-services" => vec![
+            service_link(
+                "Why service-area pages matter for local SEO",
+                "/insights/why-do-service-area-pages-matter-for-local-seo",
+                "Useful context for how local relevance should be built without producing weak duplicate pages.",
+            ),
+            service_link(
+                "How to write location pages without thin content",
+                "/insights/how-do-you-write-location-pages-without-thin-content",
+                "Explains how to scale local SEO pages while preserving quality and search intent fit.",
+            ),
+            service_link(
+                "What is the difference between local SEO and national SEO",
+                "/insights/what-is-the-difference-between-local-seo-and-national-seo",
+                "Clarifies when local search strategy should take priority over broader organic targeting.",
+            ),
+        ],
+        "website-redesign-services" | "web-development" => vec![
+            service_link(
+                "How to plan a website redesign without losing rankings",
+                "/insights/how-do-you-plan-a-website-redesign-without-losing-rankings",
+                "A relevant guide for businesses balancing modernization with SEO continuity.",
+            ),
+            service_link(
+                "What should be on a homepage above the fold for a B2B IT brand",
+                "/insights/what-should-be-on-a-homepage-above-the-fold-for-a-b2b-it-brand",
+                "Useful for understanding how trust and conversion begin before the scroll.",
+            ),
+            service_link(
+                "What makes a software company website feel trustworthy",
+                "/insights/what-makes-a-software-company-website-feel-trustworthy",
+                "Explores the credibility signals buyers expect from a serious digital services firm.",
+            ),
+        ],
+        "website-maintenance-services" | "hosting-domain-cloud-services" => vec![
+            service_link(
+                "Website maintenance in Sri Lanka",
+                "/insights/website-maintenance-in-sri-lanka-why-launch-is-only-the-beginning",
+                "A useful explainer on why websites need support after launch to preserve trust and performance.",
+            ),
+            service_link(
+                "How fast hosting supports better SEO and conversions",
+                "/insights/how-fast-hosting-supports-better-seo-and-better-conversions",
+                "Connects infrastructure decisions directly to search visibility and enquiry quality.",
+            ),
+            service_link(
+                "Security basics for business websites",
+                "/insights/security-basics-for-business-websites-what-hosting-alone-will-not-solve",
+                "Clarifies what businesses should expect beyond a basic hosting package.",
+            ),
+        ],
+        "crm-software-development" => vec![
+            service_link(
+                "CRM development vs CRM setup",
+                "/insights/crm-development-vs-crm-setup-which-path-is-right-for-your-team",
+                "Useful for buyers deciding whether they need custom development or a lighter implementation path.",
+            ),
+            service_link(
+                "What questions buyers ask before hiring a software company",
+                "/insights/what-questions-do-buyers-ask-before-hiring-a-software-company",
+                "Helpful for teams evaluating vendor fit and software delivery discipline.",
+            ),
+            service_link(
+                "Content strategy for software companies",
+                "/insights/content-strategy-for-software-companies-how-insights-support-commercial-rankings",
+                "Shows how authority-building content supports harder commercial software keywords.",
+            ),
+        ],
+        "inventory-management-software" => vec![
+            service_link(
+                "Inventory management software in Sri Lanka",
+                "/insights/inventory-management-software-in-sri-lanka-when-spreadsheets-stop-being-enough",
+                "Explains the operational tipping point where manual stock tracking starts holding the business back.",
+            ),
+            service_link(
+                "Barcode inventory and reporting",
+                "/insights/barcode-inventory-and-reporting-the-pos-features-that-actually-save-time",
+                "Relevant when the buyer is evaluating stock handling and reporting workflows together.",
+            ),
+            service_link(
+                "E-commerce and POS integration",
+                "/insights/e-commerce-and-pos-integration-why-retail-businesses-need-one-source-of-truth",
+                "Useful context when inventory, sales, and online channels must stay aligned.",
+            ),
+        ],
+        "booking-system-development" => vec![
+            service_link(
+                "Booking system development in Sri Lanka",
+                "/insights/booking-system-development-in-sri-lanka-what-hospitality-and-service-brands-need",
+                "Useful for buyers thinking through schedule complexity, customer expectations, and operational control.",
+            ),
+            service_link(
+                "Booking apps for service companies",
+                "/insights/booking-apps-for-service-companies-what-needs-to-be-simple-from-day-one",
+                "Explains the customer experience details that make booking software easier to adopt.",
+            ),
+            service_link(
+                "Customer portal vs mobile app",
+                "/insights/customer-portal-vs-mobile-app-the-better-first-step-for-some-businesses",
+                "Helpful when deciding whether booking should live on the web, in an app, or across both.",
+            ),
+        ],
+        _ => vec![
+            service_link(
+                "How many service pages should a growing IT company publish",
+                "/insights/how-many-service-pages-should-a-growing-it-company-publish",
+                "Explains the role of focused commercial pages in building long-term topical authority.",
+            ),
+            service_link(
+                "How do you turn search traffic into qualified leads",
+                "/insights/how-do-you-turn-search-traffic-into-qualified-leads",
+                "Useful for understanding how page quality and conversion logic must work together.",
+            ),
+            service_link(
+                "What should be included on a high-converting request-a-quote form",
+                "/insights/what-should-be-included-on-a-high-converting-request-a-quote-form",
+                "Relevant for businesses trying to improve lead quality after attracting more traffic.",
+            ),
+        ],
+    }
 }

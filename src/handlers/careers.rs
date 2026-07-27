@@ -22,7 +22,7 @@ use super::{
     templates::{
         CareerApplicationShowTemplate, CareerApplyTemplate, CareerSingleTemplate, CareersTemplate,
         DashboardCareerApplicationsTemplate, DashboardCareerCreateTemplate,
-        DashboardCareerEditTemplate, DashboardCareersTemplate, WhyWorkTemplate,
+        DashboardCareerEditTemplate, DashboardCareersTemplate, NotFoundTemplate, WhyWorkTemplate,
     },
 };
 
@@ -278,6 +278,7 @@ async fn fetch_public_careers(state: &AppState) -> Result<Vec<CareerRecord>, sql
         SELECT *
         FROM careers
         WHERE published = TRUE
+          AND (published_at IS NULL OR published_at <= NOW())
         ORDER BY featured DESC, sort_order ASC, published_at DESC NULLS LAST, created_at DESC
         "#,
     )
@@ -306,6 +307,7 @@ async fn fetch_career_by_slug(
         SELECT *
         FROM careers
         WHERE slug = $1 AND published = TRUE
+          AND (published_at IS NULL OR published_at <= NOW())
         LIMIT 1
         "#,
     )
@@ -381,6 +383,7 @@ async fn fetch_related_careers(
         SELECT *
         FROM careers
         WHERE published = TRUE
+          AND (published_at IS NULL OR published_at <= NOW())
           AND id <> $1
           AND team = $2
         ORDER BY featured DESC, sort_order ASC, published_at DESC NULLS LAST, created_at DESC
@@ -399,6 +402,7 @@ async fn fetch_related_careers(
             SELECT *
             FROM careers
             WHERE published = TRUE
+              AND (published_at IS NULL OR published_at <= NOW())
               AND id <> $1
             ORDER BY featured DESC, sort_order ASC, published_at DESC NULLS LAST, created_at DESC
             LIMIT 3
@@ -465,7 +469,7 @@ pub async fn career_single(
 
             render(CareerSingleTemplate { career, related }).into_response()
         }
-        Ok(None) => (StatusCode::NOT_FOUND, "Career not found.").into_response(),
+        Ok(None) => (StatusCode::NOT_FOUND, render(NotFoundTemplate)).into_response(),
         Err(error) => {
             eprintln!("Failed to load career: {error}");
             (StatusCode::INTERNAL_SERVER_ERROR, "Failed to load career.").into_response()
@@ -485,7 +489,7 @@ pub async fn career_apply(
             success: query.success.as_deref() == Some("1"),
         })
         .into_response(),
-        Ok(None) => (StatusCode::NOT_FOUND, "Career not found.").into_response(),
+        Ok(None) => (StatusCode::NOT_FOUND, render(NotFoundTemplate)).into_response(),
         Err(error) => {
             eprintln!("Failed to load application page: {error}");
             (

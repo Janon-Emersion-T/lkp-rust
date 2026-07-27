@@ -54,6 +54,7 @@ pub async fn robots_txt() -> impl IntoResponse {
     text_response("text/plain; charset=utf-8", body)
 }
 
+#[allow(dead_code)]
 pub async fn robot_txt() -> impl IntoResponse {
     robots_txt().await
 }
@@ -70,7 +71,7 @@ Primary contact: {SITE_URL}/contact
 Project intake: {SITE_URL}/request-quote
 Services overview: {SITE_URL}/services
 Insights archive: {SITE_URL}/insights
-Portfolio: {SITE_URL}/portfolio
+Case studies: {SITE_URL}/case-studies
 Careers: {SITE_URL}/careers
 Human-readable sitemap: {SITE_URL}/sitemap.html
 XML sitemap: {SITE_URL}/sitemap.xml
@@ -137,7 +138,7 @@ LKProfessionals helps businesses improve digital credibility, operational effici
 
 ## Best pages for proof and expertise
 
-- Portfolio hub: {SITE_URL}/portfolio
+- Case studies hub: {SITE_URL}/case-studies
 - Insights archive: {SITE_URL}/insights
 - Founder profile: {SITE_URL}/founder/janon-emersion-t
 - Sitemap: {SITE_URL}/sitemap.html
@@ -158,7 +159,7 @@ LKProfessionals helps businesses improve digital credibility, operational effici
 - Use `/services` when the user needs capability discovery.
 - Use `/solutions/...` when the user has a specific commercial keyword or buyer problem in mind.
 - Use `/pricing/...` and `/compare/...` when the user is still evaluating budget or fit.
-- Use `/portfolio` when the user needs implementation proof.
+- Use `/case-studies` when the user needs implementation proof.
 - Use `/insights` when the user needs education, frameworks, or strategic analysis.
 - Use `/contact` or `/request-quote` when the user has clear buying intent.
 "
@@ -167,6 +168,7 @@ LKProfessionals helps businesses improve digital credibility, operational effici
     text_response("text/plain; charset=utf-8", body)
 }
 
+#[allow(dead_code)]
 pub async fn llmo_txt() -> impl IntoResponse {
     llms_txt().await
 }
@@ -482,8 +484,8 @@ fn static_sitemap_pages() -> &'static [StaticSitemapPage] {
             priority: "0.95",
         },
         StaticSitemapPage {
-            title: "Portfolio",
-            path: "/portfolio",
+            title: "Case Studies",
+            path: "/case-studies",
             description: "Project delivery examples and portfolio outcomes.",
             changefreq: "weekly",
             priority: "0.88",
@@ -536,6 +538,27 @@ fn static_sitemap_pages() -> &'static [StaticSitemapPage] {
             description: "Project intake form for qualified quote requests.",
             changefreq: "monthly",
             priority: "0.84",
+        },
+        StaticSitemapPage {
+            title: "Packages",
+            path: "/packages",
+            description: "Current LKProfessionals website and search growth package offers.",
+            changefreq: "weekly",
+            priority: "0.72",
+        },
+        StaticSitemapPage {
+            title: "Business Website Package",
+            path: "/packages/business-website-package",
+            description: "Fixed-scope business website package with hosting, domain, and launch support.",
+            changefreq: "weekly",
+            priority: "0.68",
+        },
+        StaticSitemapPage {
+            title: "AI Search Growth Package",
+            path: "/packages/business-seo-offer",
+            description: "Monthly SEO, AEO, GEO, LLMO, and SXO package for ongoing search growth work.",
+            changefreq: "weekly",
+            priority: "0.68",
         },
         StaticSitemapPage {
             title: "Free Website and SEO Audit",
@@ -592,6 +615,20 @@ fn static_service_pages() -> &'static [StaticSitemapPage] {
             priority: "0.94",
         },
         StaticSitemapPage {
+            title: "Google Ads Agency",
+            path: "/services/google-ads-agency",
+            description: "Google Ads campaign strategy, management, and landing page alignment.",
+            changefreq: "monthly",
+            priority: "0.86",
+        },
+        StaticSitemapPage {
+            title: "Local SEO Services",
+            path: "/services/local-seo-services",
+            description: "Local search visibility support for service-area and city-based demand capture.",
+            changefreq: "monthly",
+            priority: "0.88",
+        },
+        StaticSitemapPage {
             title: "Hosting, Domain, and Cloud Services",
             path: "/services/hosting-domain-cloud-services",
             description: "Hosting, domains, cloud setup, and ongoing infrastructure support.",
@@ -599,11 +636,46 @@ fn static_service_pages() -> &'static [StaticSitemapPage] {
             priority: "0.76",
         },
         StaticSitemapPage {
+            title: "Website Maintenance Services",
+            path: "/services/website-maintenance-services",
+            description: "Ongoing website updates, support, monitoring, and technical upkeep.",
+            changefreq: "monthly",
+            priority: "0.78",
+        },
+        StaticSitemapPage {
+            title: "Website Redesign Services",
+            path: "/services/website-redesign-services",
+            description: "Website redesign projects focused on stronger trust, conversion, and SEO continuity.",
+            changefreq: "monthly",
+            priority: "0.86",
+        },
+        StaticSitemapPage {
             title: "AI Automation Solutions",
             path: "/services/ai-automation-solutions",
             description: "Workflow automation and AI-enabled delivery improvements.",
             changefreq: "monthly",
             priority: "0.90",
+        },
+        StaticSitemapPage {
+            title: "CRM Software Development",
+            path: "/services/crm-software-development",
+            description: "Custom CRM systems for customer records, pipelines, and relationship workflows.",
+            changefreq: "monthly",
+            priority: "0.88",
+        },
+        StaticSitemapPage {
+            title: "Inventory Management Software",
+            path: "/services/inventory-management-software",
+            description: "Inventory software for stock control, purchasing, and operational reporting.",
+            changefreq: "monthly",
+            priority: "0.88",
+        },
+        StaticSitemapPage {
+            title: "Booking System Development",
+            path: "/services/booking-system-development",
+            description: "Booking, reservation, and scheduling systems for customer and staff workflows.",
+            changefreq: "monthly",
+            priority: "0.88",
         },
         StaticSitemapPage {
             title: "IT Consultation and Digital Transformation",

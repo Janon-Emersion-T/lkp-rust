@@ -6,7 +6,7 @@ use axum::{
 
 use super::{
     render::render,
-    templates::{MarketingLandingTemplate, MarketingLandingView},
+    templates::{MarketingLandingTemplate, MarketingLandingView, NotFoundTemplate},
 };
 
 #[derive(Debug, Clone)]
@@ -282,7 +282,7 @@ fn render_marketing_page(path: &str, page: Option<MarketingLandingPage>) -> Resp
             },
         })
         .into_response(),
-        None => (StatusCode::NOT_FOUND, "Page not found.").into_response(),
+        None => (StatusCode::NOT_FOUND, render(NotFoundTemplate)).into_response(),
     }
 }
 

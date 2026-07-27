@@ -1,4 +1,4 @@
-use axum::response::IntoResponse;
+use axum::response::{IntoResponse, Redirect};
 
 use super::{
     render::render,
@@ -26,4 +26,24 @@ pub async fn privacy_policy() -> impl IntoResponse {
 
 pub async fn cookie_policy() -> impl IntoResponse {
     render(CookiePolicyTemplate)
+}
+
+pub async fn terms_alias() -> impl IntoResponse {
+    Redirect::permanent("/terms-and-conditions")
+}
+
+pub async fn sla_alias() -> impl IntoResponse {
+    Redirect::permanent("/service-level-agreement")
+}
+
+pub async fn refund_policy_alias() -> impl IntoResponse {
+    Redirect::permanent("/refund-policy")
+}
+
+pub async fn privacy_policy_alias() -> impl IntoResponse {
+    Redirect::permanent("/privacy-policy")
+}
+
+pub async fn cookie_policy_alias() -> impl IntoResponse {
+    Redirect::permanent("/cookie-policy")
 }

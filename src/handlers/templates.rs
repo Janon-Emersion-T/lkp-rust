@@ -34,6 +34,15 @@ pub struct HomeTemplate {
 }
 page!(AboutTemplate, "pages/aboutus.html");
 page!(FounderPortfolioTemplate, "pages/founder-portfolio.html");
+page!(PackagesTemplate, "pages/packages/index.html");
+page!(
+    BusinessWebsitePackageTemplate,
+    "pages/packages/business_website_package.html"
+);
+page!(
+    BusinessSeoOfferTemplate,
+    "pages/packages/business_seo_offer.html"
+);
 #[derive(Template)]
 #[template(path = "pages/services.html")]
 pub struct ServicesTemplate {
@@ -246,6 +255,7 @@ pub struct SitemapTemplate {
     pub sections: Vec<SitemapSectionView>,
     pub total_urls: usize,
 }
+page!(NotFoundTemplate, "pages/404.html");
 
 #[derive(Template)]
 #[template(path = "pages/marketing/landing.html")]
@@ -294,6 +304,48 @@ pub struct DigitalMarketingTemplate {
 #[derive(Template)]
 #[template(path = "pages/services/detail.html")]
 pub struct SeoSearchGrowthTemplate {
+    pub page: ServicePageContext,
+}
+
+#[derive(Template)]
+#[template(path = "pages/services/detail.html")]
+pub struct GoogleAdsAgencyTemplate {
+    pub page: ServicePageContext,
+}
+
+#[derive(Template)]
+#[template(path = "pages/services/detail.html")]
+pub struct WebsiteMaintenanceTemplate {
+    pub page: ServicePageContext,
+}
+
+#[derive(Template)]
+#[template(path = "pages/services/detail.html")]
+pub struct CrmSoftwareDevelopmentTemplate {
+    pub page: ServicePageContext,
+}
+
+#[derive(Template)]
+#[template(path = "pages/services/detail.html")]
+pub struct InventoryManagementSoftwareTemplate {
+    pub page: ServicePageContext,
+}
+
+#[derive(Template)]
+#[template(path = "pages/services/detail.html")]
+pub struct BookingSystemDevelopmentTemplate {
+    pub page: ServicePageContext,
+}
+
+#[derive(Template)]
+#[template(path = "pages/services/detail.html")]
+pub struct LocalSeoServicesTemplate {
+    pub page: ServicePageContext,
+}
+
+#[derive(Template)]
+#[template(path = "pages/services/detail.html")]
+pub struct WebsiteRedesignTemplate {
     pub page: ServicePageContext,
 }
 

@@ -7,7 +7,7 @@ pub mod services;
 use axum::Router;
 use tower_http::services::ServeDir;
 
-use crate::state::AppState;
+use crate::{handlers::not_found, state::AppState};
 
 pub fn app_routes(state: AppState) -> Router {
     Router::new()
@@ -17,5 +17,6 @@ pub fn app_routes(state: AppState) -> Router {
         .merge(services::service_routes())
         .merge(dashboard::dashboard_routes())
         .nest_service("/static", ServeDir::new("static"))
+        .fallback(axum::routing::get(not_found))
         .with_state(state)
 }

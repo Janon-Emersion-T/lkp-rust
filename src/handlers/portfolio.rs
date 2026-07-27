@@ -20,7 +20,7 @@ use super::{
     render::render,
     templates::{
         CaseStudiesTemplate, DashboardPortfolioCreateTemplate, DashboardPortfolioEditTemplate,
-        DashboardPortfoliosTemplate, PortfolioSingleTemplate,
+        DashboardPortfoliosTemplate, NotFoundTemplate, PortfolioSingleTemplate,
     },
 };
 
@@ -192,6 +192,7 @@ pub(crate) async fn fetch_home_featured_portfolios(state: &AppState) -> Vec<Port
         SELECT *
         FROM portfolios
         WHERE published = TRUE
+          AND (published_at IS NULL OR published_at <= NOW())
         ORDER BY featured DESC, sort_order ASC, published_at DESC NULLS LAST, created_at DESC
         LIMIT 3
         "#,
@@ -216,6 +217,7 @@ async fn fetch_public_portfolios(state: &AppState) -> Result<Vec<PortfolioRecord
         SELECT *
         FROM portfolios
         WHERE published = TRUE
+          AND (published_at IS NULL OR published_at <= NOW())
         ORDER BY featured DESC, sort_order ASC, published_at DESC NULLS LAST, created_at DESC
         "#,
     )
@@ -244,6 +246,7 @@ async fn fetch_portfolio_by_slug(
         SELECT *
         FROM portfolios
         WHERE slug = $1 AND published = TRUE
+          AND (published_at IS NULL OR published_at <= NOW())
         LIMIT 1
         "#,
     )
@@ -280,6 +283,7 @@ async fn fetch_related_portfolios(
             SELECT *
             FROM portfolios
             WHERE published = TRUE
+              AND (published_at IS NULL OR published_at <= NOW())
               AND id <> $1
               AND industry = $2
             ORDER BY featured DESC, sort_order ASC, published_at DESC NULLS LAST, created_at DESC
@@ -307,6 +311,7 @@ async fn fetch_related_portfolios(
         SELECT *
         FROM portfolios
         WHERE published = TRUE
+          AND (published_at IS NULL OR published_at <= NOW())
           AND id <> $1
         ORDER BY featured DESC, sort_order ASC, published_at DESC NULLS LAST, created_at DESC
         LIMIT 3
@@ -379,7 +384,7 @@ pub async fn case_study_single(
             })
             .into_response()
         }
-        Ok(None) => (StatusCode::NOT_FOUND, "Case study not found.").into_response(),
+        Ok(None) => (StatusCode::NOT_FOUND, render(NotFoundTemplate)).into_response(),
         Err(error) => {
             eprintln!("Failed to load case study: {error}");
             (

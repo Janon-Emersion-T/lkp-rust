@@ -19,8 +19,8 @@ use super::{
     render::render,
     templates::{
         DashboardServiceAreaCreateTemplate, DashboardServiceAreaEditTemplate,
-        DashboardServiceAreasTemplate, ServiceAreaCardView, ServiceAreaDetailTemplate,
-        ServiceAreaGroupView, ServiceAreasTemplate,
+        DashboardServiceAreasTemplate, NotFoundTemplate, ServiceAreaCardView,
+        ServiceAreaDetailTemplate, ServiceAreaGroupView, ServiceAreasTemplate,
     },
 };
 
@@ -170,6 +170,7 @@ pub async fn fetch_public_service_areas(
         SELECT *
         FROM service_areas
         WHERE published = TRUE
+          AND (published_at IS NULL OR published_at <= NOW())
         ORDER BY market_region ASC, featured DESC, sort_order ASC, area_name ASC
         "#,
     )
@@ -200,6 +201,7 @@ pub async fn fetch_service_area_by_slug(
         SELECT *
         FROM service_areas
         WHERE slug = $1 AND published = TRUE
+          AND (published_at IS NULL OR published_at <= NOW())
         LIMIT 1
         "#,
     )
@@ -292,7 +294,7 @@ pub async fn service_area_single(
             })
             .into_response()
         }
-        Ok(None) => (StatusCode::NOT_FOUND, "Service area not found.").into_response(),
+        Ok(None) => (StatusCode::NOT_FOUND, render(NotFoundTemplate)).into_response(),
         Err(error) => {
             eprintln!("Failed to load service area: {error}");
             (

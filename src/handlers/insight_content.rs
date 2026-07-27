@@ -24,7 +24,7 @@ use super::{
         DashboardInsightCategoryView, DashboardInsightCreateTemplate, DashboardInsightEditTemplate,
         DashboardInsightMetric, DashboardInsightTimelineView, DashboardInsightsTemplate,
         InsightCategoryLink, InsightSingleTemplate, InsightSnapshotMetric, InsightsTemplate,
-        PaginationLink, PaginationView,
+        NotFoundTemplate, PaginationLink, PaginationView,
     },
 };
 
@@ -671,8 +671,12 @@ pub async fn insights(
                 .map(InsightRecord::to_card_view)
                 .collect();
             let popular_insights = build_popular_insights(&all_records, 5);
-            let recommended_insights =
-                build_recommended_insights(hero_record.as_ref(), &featured_records, &all_records, 5);
+            let recommended_insights = build_recommended_insights(
+                hero_record.as_ref(),
+                &featured_records,
+                &all_records,
+                5,
+            );
 
             let categories = build_insight_category_links(&all_records, None);
 
@@ -764,7 +768,7 @@ pub async fn insights_by_category(
         .into_iter()
         .find(|label| slugify(label) == category_slug)
     else {
-        return (StatusCode::NOT_FOUND, "Insight category not found.").into_response();
+        return (StatusCode::NOT_FOUND, render(NotFoundTemplate)).into_response();
     };
 
     let filtered_records: Vec<InsightRecord> = all_records
@@ -810,8 +814,12 @@ pub async fn insights_by_category(
         .map(InsightRecord::to_card_view)
         .collect::<Vec<_>>();
     let popular_insights = build_popular_insights(&filtered_records, 5);
-    let recommended_insights =
-        build_recommended_insights(hero_record.as_ref(), &featured_records, &filtered_records, 5);
+    let recommended_insights = build_recommended_insights(
+        hero_record.as_ref(),
+        &featured_records,
+        &filtered_records,
+        5,
+    );
     let category_article_count = filtered_records.len();
     let category_total_reads = filtered_records
         .iter()
@@ -894,7 +902,7 @@ pub async fn insight_single(
 
             render(InsightSingleTemplate { insight, related }).into_response()
         }
-        Ok(None) => (StatusCode::NOT_FOUND, "Insight not found.").into_response(),
+        Ok(None) => (StatusCode::NOT_FOUND, render(NotFoundTemplate)).into_response(),
         Err(error) => {
             eprintln!("Failed to load insight: {error}");
             (StatusCode::INTERNAL_SERVER_ERROR, "Failed to load insight.").into_response()
