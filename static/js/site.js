@@ -337,6 +337,8 @@
       return;
     }
 
+    document.documentElement.classList.add("insights-enhanced");
+
     const progressBar = document.querySelector("[data-insights-progress]");
     const cards = Array.from(hub.querySelectorAll("[data-insight-card]"));
     const filterButtons = Array.from(hub.querySelectorAll("[data-category-filter]"));
