@@ -348,14 +348,18 @@
   };
 
   const initFooter = () => {
-    const footer = document.querySelector(".site-footer");
-    if (!footer) {
+    const footers = Array.from(document.querySelectorAll(".site-footer"));
+    if (footers.length === 0) {
       return;
     }
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const accordionGroups = Array.from(footer.querySelectorAll("[data-footer-accordion]"));
-    const revealItems = Array.from(footer.querySelectorAll("[data-footer-reveal]"));
+    const accordionGroups = footers.flatMap((footer) =>
+      Array.from(footer.querySelectorAll("[data-footer-accordion]"))
+    );
+    const revealItems = footers.flatMap((footer) =>
+      Array.from(footer.querySelectorAll("[data-footer-reveal]"))
+    );
 
     const syncAccordion = () => {
       const mobile = window.innerWidth < 1024;
