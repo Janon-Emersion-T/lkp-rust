@@ -438,6 +438,11 @@
       for (const item of revealItems) {
         observer.observe(item);
       }
+
+      // Content is visible by default. Only hide it once motion is initialized.
+      for (const footer of footers) {
+        footer.classList.add("footer-motion-ready");
+      }
     } else {
       for (const item of revealItems) {
         item.classList.add("is-visible");
