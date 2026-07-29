@@ -289,6 +289,10 @@
                 linear-gradient(180deg, #020617 0%, #050b18 45%, #020617 100%);
         }
 
+        .site-footer-shell {
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
         .site-footer-grid {
             position: absolute;
             inset: 0;
@@ -349,6 +353,57 @@
 
         .site-footer-panel {
             border-radius: 1.85rem;
+        }
+
+        .site-footer-intro {
+            display: grid;
+            gap: 1.25rem;
+            align-items: end;
+        }
+
+        .site-footer-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .site-footer-badge {
+            display: inline-flex;
+            min-height: 2.5rem;
+            align-items: center;
+            border-radius: 9999px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.55rem 0.95rem;
+            font-size: 0.75rem;
+            font-weight: 900;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: rgb(226 232 240);
+        }
+
+        .site-footer-brand-panel {
+            background:
+                radial-gradient(circle at top left, rgba(34, 211, 238, 0.08), transparent 18rem),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.05));
+        }
+
+        .site-footer-aside {
+            display: grid;
+            gap: 0;
+            align-content: start;
+        }
+
+        .site-footer-aside-card {
+            border-radius: 1.45rem;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.04);
+            padding: 1.15rem;
+        }
+
+        .site-footer-aside-grid {
+            display: grid;
+            gap: 0.75rem;
         }
 
         .site-footer-signal-card {
@@ -483,7 +538,7 @@
         .site-footer-link-group {
             border-radius: 1.2rem;
             border: 1px solid rgba(255, 255, 255, 0.08);
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(255, 255, 255, 0.035);
         }
 
         .site-footer-group-toggle {
@@ -511,7 +566,7 @@
         .site-footer-link-list {
             display: grid;
             gap: 0.75rem;
-            font-size: 0.94rem;
+            font-size: 0.9rem;
             line-height: 1.6;
             color: rgb(203 213 225);
         }
@@ -597,6 +652,10 @@
                 padding: 2.25rem;
             }
 
+            .site-footer-intro {
+                grid-template-columns: minmax(0, 1fr) auto;
+            }
+
             .site-footer-group-toggle {
                 cursor: default;
                 pointer-events: none;
@@ -609,6 +668,13 @@
 
             .site-footer-group-panel {
                 padding-top: 0;
+            }
+        }
+
+        @media (min-width: 1280px) {
+            .site-footer-aside {
+                position: sticky;
+                top: 1rem;
             }
         }
 
@@ -632,6 +698,7 @@
             .site-footer-primary-cta,
             .site-footer-secondary-cta,
             .site-footer-social-link,
+            .site-footer-badge,
             .site-footer-mini-card,
             .site-footer-contact-link,
             .site-footer-link-list a {
@@ -668,6 +735,7 @@
         {% block content %}{% endblock %}
     </main>
 
+    {% include "partials/footer-cta.html" %}
     {% include "partials/footer.html" %}
 
     <div
