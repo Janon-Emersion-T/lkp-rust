@@ -1,188 +1,201 @@
-<footer class="relative overflow-hidden bg-[#050b18] text-white">
-  <!-- Premium background glow -->
-  <div class="pointer-events-none absolute inset-0">
-    <div class="absolute -top-32 left-10 h-80 w-80 rounded-full bg-cyan-500/20 blur-3xl"></div>
-    <div class="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-blue-600/20 blur-3xl"></div>
-    <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(34,211,238,0.10),transparent_35%)]"></div>
+<footer class="site-footer relative overflow-hidden text-white">
+  <div class="site-footer-bg pointer-events-none absolute inset-0">
+    <div class="site-footer-orb site-footer-orb-cyan"></div>
+    <div class="site-footer-orb site-footer-orb-blue"></div>
+    <div class="site-footer-grid"></div>
   </div>
 
-  <div class="relative mx-auto max-w-7xl px-6 py-14 lg:px-8">
-
-    <!-- CTA -->
-    <section class="mb-14 rounded-3xl border border-white/10 bg-white/10 p-8 shadow-2xl backdrop-blur-xl lg:flex lg:items-center lg:justify-between">
-      <div class="max-w-2xl">
-        <p class="text-sm font-semibold uppercase tracking-[0.25em] text-cyan-300">
-          Global delivery capability · Sri Lanka to worldwide
-        </p>
-
-        <h2 class="mt-4 text-3xl font-black tracking-tight md:text-5xl">
-          Ready to build something that scales globally?
+  <div class="relative mx-auto max-w-7xl px-5 py-8 sm:px-6 sm:py-10 lg:px-8 lg:py-14">
+    <section class="site-footer-cta" data-footer-reveal>
+      <div class="max-w-3xl">
+        <p class="site-footer-kicker">Sri Lanka delivery team · Global execution standard</p>
+        <h2 class="mt-4 text-3xl font-black tracking-tight text-white md:text-5xl">
+          Build the next serious version of your business.
         </h2>
-
-        <p class="mt-5 text-base leading-8 text-slate-300">
-          We design secure digital systems, custom software, and growth-ready platforms for businesses that need precision, momentum, and long-term reliability.
+        <p class="mt-5 max-w-2xl text-base leading-8 text-slate-300">
+          LKProfessionals designs websites, software systems, AI workflows, and growth infrastructure for companies that need commercial clarity and dependable execution.
         </p>
       </div>
 
-      <div class="mt-8 flex flex-col gap-4 sm:flex-row lg:mt-0">
-        <a href="/request-quote" class="rounded-full bg-cyan-400 px-7 py-3 text-center font-bold text-slate-950 shadow-lg shadow-cyan-500/30 transition hover:-translate-y-1 hover:bg-white">
+      <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+        <a href="/request-quote" class="site-footer-primary-cta">
+          <i class="fa-regular fa-paper-plane text-sm"></i>
           Request Quote
         </a>
-
-        <a href="https://wa.me/94761234321" target="_blank" rel="noopener noreferrer" class="rounded-full border border-white/20 px-7 py-3 text-center font-bold text-white transition hover:-translate-y-1 hover:border-cyan-300 hover:text-cyan-300">
-          Chat on WhatsApp
+        <a href="/contact" class="site-footer-secondary-cta">
+          <i class="fa-regular fa-comments text-sm"></i>
+          Talk to Our Team
         </a>
       </div>
     </section>
 
-    <!-- Main Footer -->
-    <div class="grid gap-12 lg:grid-cols-[1.4fr_1fr_1fr_1fr_1.2fr]">
+    <div class="mt-6 grid gap-4 md:grid-cols-3" data-nosnippet>
+      <article class="site-footer-signal-card" data-footer-reveal>
+        <span class="site-footer-signal-label">Delivery</span>
+        <strong class="site-footer-signal-title">Web, software, mobile, AI, and growth systems</strong>
+        <p class="site-footer-signal-copy">Cross-functional builds designed to move from strategy to launch without fragmented vendors.</p>
+      </article>
+      <article class="site-footer-signal-card" data-footer-reveal>
+        <span class="site-footer-signal-label">Coverage</span>
+        <strong class="site-footer-signal-title">Sri Lanka-based team working for local and international clients</strong>
+        <p class="site-footer-signal-copy">Structured delivery for companies that need a capable execution partner, not just a design handoff.</p>
+      </article>
+      <article class="site-footer-signal-card" data-footer-reveal>
+        <span class="site-footer-signal-label">Focus</span>
+        <strong class="site-footer-signal-title">Performance, maintainability, and business traction</strong>
+        <p class="site-footer-signal-copy">Every engagement is shaped around long-term usability, measurable outcomes, and operational fit.</p>
+      </article>
+    </div>
 
-      <!-- Brand -->
-      <div>
-        <a href="/" aria-label="LKProfessionals Home">
-          <img src="/static/images/logo-white.png" alt="LKProfessionals (Pvt) Ltd." class="h-12 w-auto" loading="lazy" decoding="async" width="898" height="632">
-        </a>
+    <div class="mt-6 grid gap-5 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
+      <section class="site-footer-panel p-6 sm:p-7" data-footer-reveal>
+        <div class="grid gap-8 xl:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
+          <div>
+            <a href="/" aria-label="LKProfessionals Home" class="inline-flex">
+              <img src="/static/images/logo-white.png" alt="LKProfessionals (Pvt) Ltd." class="h-12 w-auto" loading="lazy" decoding="async" width="898" height="632">
+            </a>
 
-        <p data-nosnippet class="mt-6 max-w-sm text-sm leading-7 text-slate-300">
-          Engineering the digital future with bespoke software, cloud delivery, automation, AI systems, and business platforms built for serious growth.
-        </p>
+            <p data-nosnippet class="mt-6 max-w-md text-sm leading-7 text-slate-300">
+              Engineering digital systems that look premium, perform reliably, and support serious business growth over time.
+            </p>
 
-        <div class="mt-6 space-y-3 text-sm text-slate-300">
-          <a href="mailto:info@lkprofessionals.com" class="flex items-center gap-3 hover:text-cyan-300">
-            <i class="fa-regular fa-envelope"></i>
-            info@lkprofessionals.com
-          </a>
+            <div class="mt-6 grid gap-3 text-sm text-slate-200">
+              <a href="mailto:info@lkprofessionals.com" class="site-footer-contact-link">
+                <span class="site-footer-contact-icon"><i class="fa-regular fa-envelope"></i></span>
+                <span>info@lkprofessionals.com</span>
+              </a>
+              <a href="tel:+94761234321" class="site-footer-contact-link">
+                <span class="site-footer-contact-icon"><i class="fa-solid fa-phone-volume"></i></span>
+                <span>+94 76 123 4321</span>
+              </a>
+              <p class="site-footer-contact-link items-start">
+                <span class="site-footer-contact-icon mt-0.5"><i class="fa-solid fa-location-dot"></i></span>
+                <span>6/7, Vidhan's Lane, Eachchamoddai, Jaffna - 40000, Sri Lanka</span>
+              </p>
+            </div>
 
-          <a href="tel:+94761234321" class="flex items-center gap-3 hover:text-cyan-300">
-            <i class="fa-solid fa-phone-volume"></i>
-            +94 76 123 4321
-          </a>
+            <div class="mt-6 flex flex-wrap gap-3">
+              <a href="https://www.linkedin.com/company/lkprofessionals" target="_blank" rel="noopener noreferrer" aria-label="LKProfessionals on LinkedIn" class="site-footer-social-link">
+                <i class="fa-brands fa-linkedin-in"></i>
+              </a>
+              <a href="https://web.facebook.com/lkprofessionals" target="_blank" rel="noopener noreferrer" aria-label="LKProfessionals on Facebook" class="site-footer-social-link">
+                <i class="fa-brands fa-facebook-f"></i>
+              </a>
+              <a href="https://www.instagram.com/lkprofessionalspvtltd/" target="_blank" rel="noopener noreferrer" aria-label="LKProfessionals on Instagram" class="site-footer-social-link">
+                <i class="fa-brands fa-instagram"></i>
+              </a>
+              <a href="https://x.com/lkprofess" target="_blank" rel="noopener noreferrer" aria-label="LKProfessionals on X" class="site-footer-social-link">
+                <i class="fa-brands fa-x-twitter"></i>
+              </a>
+              <a href="https://www.youtube.com/@lkprofessionals" target="_blank" rel="noopener noreferrer" aria-label="LKProfessionals on YouTube" class="site-footer-social-link">
+                <i class="fa-brands fa-youtube"></i>
+              </a>
+              <a href="https://www.tiktok.com/@lkprofessionals" target="_blank" rel="noopener noreferrer" aria-label="LKProfessionals on TikTok" class="site-footer-social-link">
+                <i class="fa-brands fa-tiktok"></i>
+              </a>
+            </div>
+          </div>
 
-          <p class="flex items-start gap-3">
-            <i class="fa-solid fa-location-dot mt-1"></i>
-            6/7, Vidhan's Lane, Eachchamoddai, Jaffna - 40000, Sri Lanka
-          </p>
+          <div class="grid gap-4" data-footer-accordion>
+            <div class="site-footer-link-group">
+              <button type="button" class="site-footer-group-toggle" data-footer-toggle aria-expanded="true">
+                <span>Services</span>
+                <i class="fa-solid fa-plus text-xs transition-transform duration-300"></i>
+              </button>
+              <div class="site-footer-group-panel" data-footer-panel>
+                <ul class="site-footer-link-list">
+                  <li><a href="/services/web-development">Web Development</a></li>
+                  <li><a href="/services/software-development">Software Development</a></li>
+                  <li><a href="/services/mobile-app-development">Mobile App Development</a></li>
+                  <li><a href="/services/custom-software-development">Custom Software</a></li>
+                  <li><a href="/solutions/offshore-software-development-company">Offshore Development</a></li>
+                  <li><a href="/solutions/ai-seo-geo-optimization-services">AI SEO & GEO</a></li>
+                  <li><a href="/services">All Services</a></li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="site-footer-link-group">
+              <button type="button" class="site-footer-group-toggle" data-footer-toggle aria-expanded="false">
+                <span>Company</span>
+                <i class="fa-solid fa-plus text-xs transition-transform duration-300"></i>
+              </button>
+              <div class="site-footer-group-panel" data-footer-panel>
+                <ul class="site-footer-link-list">
+                  <li><a href="/about">About Us</a></li>
+                  <li><a href="/case-studies">Case Studies</a></li>
+                  <li><a href="/industries">Industries</a></li>
+                  <li><a href="/service-areas">Service Areas</a></li>
+                  <li><a href="/insights">Insights</a></li>
+                  <li><a href="/careers">Careers</a></li>
+                  <li><a href="/contact">Contact</a></li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="site-footer-link-group">
+              <button type="button" class="site-footer-group-toggle" data-footer-toggle aria-expanded="false">
+                <span>Legal</span>
+                <i class="fa-solid fa-plus text-xs transition-transform duration-300"></i>
+              </button>
+              <div class="site-footer-group-panel" data-footer-panel>
+                <ul class="site-footer-link-list">
+                  <li><a href="/privacy-policy">Privacy Policy</a></li>
+                  <li><a href="/terms-and-conditions">Terms & Conditions</a></li>
+                  <li><a href="/cookie-policy">Cookie Policy</a></li>
+                  <li><a href="/refund-policy">Refund Policy</a></li>
+                  <li><a href="/service-level-agreement">Service Level Agreement</a></li>
+                  <li><a href="/faq">FAQ</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
+      </section>
 
-        <div class="mt-6 flex gap-3">
-          <a href="https://www.linkedin.com/company/lkprofessionals" target="_blank" rel="noopener noreferrer" aria-label="LKProfessionals on LinkedIn" class="grid h-10 w-10 place-items-center rounded-full bg-white/10 transition hover:bg-cyan-400 hover:text-slate-950">
-            <i class="fa-brands fa-linkedin-in"></i>
-          </a>
-          <a href="https://web.facebook.com/lkprofessionals" target="_blank" rel="noopener noreferrer" aria-label="LKProfessionals on Facebook" class="grid h-10 w-10 place-items-center rounded-full bg-white/10 transition hover:bg-cyan-400 hover:text-slate-950">
-            <i class="fa-brands fa-facebook-f"></i>
-          </a>
-          <a href="https://www.instagram.com/lkprofessionalspvtltd/" target="_blank" rel="noopener noreferrer" aria-label="LKProfessionals on Instagram" class="grid h-10 w-10 place-items-center rounded-full bg-white/10 transition hover:bg-cyan-400 hover:text-slate-950">
-            <i class="fa-brands fa-instagram"></i>
-          </a>
-          <a href="https://x.com/lkprofess" target="_blank" rel="noopener noreferrer" aria-label="LKProfessionals on X" class="grid h-10 w-10 place-items-center rounded-full bg-white/10 transition hover:bg-cyan-400 hover:text-slate-950">
-            <i class="fa-brands fa-x-twitter"></i>
-          </a>
-          <a href="https://www.youtube.com/@lkprofessionals" target="_blank" rel="noopener noreferrer" aria-label="LKProfessionals on YouTube" class="grid h-10 w-10 place-items-center rounded-full bg-white/10 transition hover:bg-cyan-400 hover:text-slate-950">
-            <i class="fa-brands fa-youtube"></i>
-          </a>
-          <a href="https://www.tiktok.com/@lkprofessionals" target="_blank" rel="noopener noreferrer" aria-label="LKProfessionals on TikTok" class="grid h-10 w-10 place-items-center rounded-full bg-white/10 transition hover:bg-cyan-400 hover:text-slate-950">
-            <i class="fa-brands fa-tiktok"></i>
-          </a>
-        </div>
-      </div>
-
-      <!-- Services -->
-      <div>
-        <h3 class="text-sm font-bold uppercase tracking-widest text-white">Services</h3>
-        <ul class="mt-5 space-y-3 text-sm text-slate-300">
-          <li><a class="hover:text-cyan-300" href="/services/web-development">Web Development</a></li>
-          <li><a class="hover:text-cyan-300" href="/services/software-development">Software Development</a></li>
-          <li><a class="hover:text-cyan-300" href="/services/mobile-app-development">Mobile Apps</a></li>
-          <li><a class="hover:text-cyan-300" href="/services/custom-software-development">Custom Software</a></li>
-          <li><a class="hover:text-cyan-300" href="/solutions/offshore-software-development-company">Offshore Development</a></li>
-          <li><a class="hover:text-cyan-300" href="/solutions/ai-seo-geo-optimization-services">AI SEO & GEO</a></li>
-          <li><a class="hover:text-cyan-300" href="/services">All Services</a></li>
-        </ul>
-      </div>
-
-      <!-- Company -->
-      <div>
-        <h3 class="text-sm font-bold uppercase tracking-widest text-white">Company</h3>
-        <ul class="mt-5 space-y-3 text-sm text-slate-300">
-          <li><a class="hover:text-cyan-300" href="/about">About Us</a></li>
-          <li><a class="hover:text-cyan-300" href="/case-studies">Case Studies</a></li>
-          <li><a class="hover:text-cyan-300" href="/service-areas">Service Areas</a></li>
-          <li><a class="hover:text-cyan-300" href="/pricing/software-development-cost-guide">Pricing Guide</a></li>
-          <li><a class="hover:text-cyan-300" href="/free-website-seo-audit">Free Audit</a></li>
-          <li><a class="hover:text-cyan-300" href="/insights">Insights</a></li>
-          <li><a class="hover:text-cyan-300" href="/careers">Careers</a></li>
-          <li><a class="hover:text-cyan-300" href="/contact">Contact</a></li>
-        </ul>
-      </div>
-
-      <!-- Legal -->
-      <div>
-        <h3 class="text-sm font-bold uppercase tracking-widest text-white">Legal</h3>
-        <ul class="mt-5 space-y-3 text-sm text-slate-300">
-          <li><a class="hover:text-cyan-300" href="/privacy-policy">Privacy Policy</a></li>
-          <li><a class="hover:text-cyan-300" href="/terms-and-conditions">Terms & Conditions</a></li>
-          <li><a class="hover:text-cyan-300" href="/cookie-policy">Cookie Policy</a></li>
-          <li><a class="hover:text-cyan-300" href="/refund-policy">Refund Policy</a></li>
-          <li><a class="hover:text-cyan-300" href="/service-level-agreement">SLA</a></li>
-          <li><a class="hover:text-cyan-300" href="/faq">FAQ</a></li>
-        </ul>
-      </div>
-
-      <!-- Insight Card -->
-      <div class="rounded-3xl border border-white/10 bg-white/10 p-6 backdrop-blur-xl">
-        <p class="text-xs font-bold uppercase tracking-[0.25em] text-cyan-300">
-          Stay Updated
-        </p>
-
-        <h3 class="mt-4 text-xl font-black">
-          Get digital growth insights straight to your inbox.
+      <aside class="site-footer-panel p-6 sm:p-7" data-footer-reveal>
+        <p class="site-footer-kicker">Stay connected</p>
+        <h3 class="mt-4 text-2xl font-black tracking-tight text-white">
+          Practical insights for companies building online seriously.
         </h3>
-
         <p data-nosnippet class="mt-4 text-sm leading-7 text-slate-300">
-          Practical thinking on software, AI, SEO, automation, and digital transformation.
+          Short, useful thinking on software, AI, SEO, systems, and digital growth. No filler.
         </p>
 
         <form class="mt-6 grid gap-3" data-newsletter-form>
           <input type="hidden" name="source" value="Website Footer" />
           <label class="sr-only" for="footer-newsletter-email">Email address</label>
-          <input id="footer-newsletter-email" name="email" type="email" required autocomplete="email" placeholder="Enter your email" class="rounded-full border border-white/15 bg-white/10 px-5 py-3 text-sm text-white outline-none transition placeholder:text-slate-400 focus:border-cyan-300" />
-          <button type="submit" class="rounded-full bg-cyan-400 px-5 py-3 text-center text-sm font-bold text-slate-950 transition hover:bg-white">
-            Subscribe
+          <input id="footer-newsletter-email" name="email" type="email" required autocomplete="email" placeholder="Enter your email address" class="site-footer-input" />
+          <button type="submit" class="site-footer-primary-cta justify-center">
+            Subscribe to Insights
           </button>
-          <p hidden class="rounded-2xl border px-4 py-3 text-sm font-semibold" data-newsletter-message></p>
+          <p hidden class="rounded-[1.15rem] border px-4 py-3 text-sm font-semibold" data-newsletter-message></p>
         </form>
 
-        <a href="/insights" class="mt-4 inline-flex text-sm font-bold text-cyan-300 transition hover:text-white">
-          Browse insights
-        </a>
-      </div>
+        <div class="mt-6 grid gap-3 sm:grid-cols-2">
+          <a href="/insights" class="site-footer-mini-card">
+            <span class="site-footer-mini-label">Knowledge</span>
+            <strong class="site-footer-mini-title">Browse insights</strong>
+            <span class="site-footer-mini-copy">Read strategy, SEO, software, and AI articles.</span>
+          </a>
+          <a href="/request-quote" class="site-footer-mini-card">
+            <span class="site-footer-mini-label">Next step</span>
+            <strong class="site-footer-mini-title">Start a project</strong>
+            <span class="site-footer-mini-copy">Tell us what you need and get a focused response.</span>
+          </a>
+        </div>
+      </aside>
     </div>
 
-    <!-- Stats -->
-    <div data-nosnippet class="mt-12 grid gap-4 border-y border-white/10 py-8 sm:grid-cols-3">
-      <div>
-        <strong class="text-3xl font-black text-cyan-300">Web</strong>
-        <p class="mt-1 text-sm text-slate-300">Business websites and conversion-focused digital presence work.</p>
-      </div>
-      <div>
-        <strong class="text-3xl font-black text-cyan-300">Software</strong>
-        <p class="mt-1 text-sm text-slate-300">Operational platforms, dashboards, and custom workflow systems.</p>
-      </div>
-      <div>
-        <strong class="text-3xl font-black text-cyan-300">Growth</strong>
-        <p class="mt-1 text-sm text-slate-300">SEO, Google Ads, hosting support, and long-term optimization.</p>
-      </div>
-    </div>
-
-    <!-- Bottom -->
-    <div data-nosnippet class="flex flex-col gap-4 pt-8 text-sm text-slate-300 md:flex-row md:items-center md:justify-between">
-      <p>&copy; 2026 LKProfessionals (Pvt) Ltd. All rights reserved.</p>
-
-      <div class="flex flex-wrap gap-3">
-        <span>Built in Sri Lanka for global clients</span>
-        <span class="hidden md:inline">·</span>
-        <span>Secure · Scalable · Supportive</span>
+    <div class="mt-6 border-t border-white/10 pt-5" data-nosnippet>
+      <div class="flex flex-col gap-3 text-sm text-slate-300 md:flex-row md:items-center md:justify-between">
+        <p>&copy; 2026 LKProfessionals (Pvt) Ltd. All rights reserved.</p>
+        <div class="flex flex-wrap gap-x-4 gap-y-2">
+          <span>Built in Sri Lanka for global clients</span>
+          <span>Secure delivery</span>
+          <span>Scalable systems</span>
+          <span>Long-term support</span>
+        </div>
       </div>
     </div>
   </div>
