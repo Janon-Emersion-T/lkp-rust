@@ -12,6 +12,7 @@ use crate::{
         dashboard_career_applications, dashboard_career_create, dashboard_career_delete,
         dashboard_career_edit, dashboard_career_store, dashboard_career_update, dashboard_careers,
         dashboard_contact_message_block_sender, dashboard_contact_message_delete,
+        dashboard_contact_message_bulk_delete,
         dashboard_contact_message_quick_status, dashboard_contact_message_reply,
         dashboard_contact_message_show, dashboard_contact_message_update,
         dashboard_contact_messages, dashboard_faq_create, dashboard_faq_edit, dashboard_faqs,
@@ -240,6 +241,10 @@ pub fn dashboard_routes() -> Router<AppState> {
         .route(
             "/dashboard/contact-messages/{id}/delete",
             post(dashboard_contact_message_delete),
+        )
+        .route(
+            "/dashboard/contact-messages/bulk-delete",
+            post(dashboard_contact_message_bulk_delete),
         )
         .route(
             "/dashboard/contact-messages/{id}/block-sender",

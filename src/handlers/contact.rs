@@ -645,6 +645,28 @@ pub async fn dashboard_contact_message_delete(
     Redirect::to("/dashboard/contact-messages")
 }
 
+#[derive(Debug, Deserialize)]
+pub struct BulkDeleteMessagesForm {
+    pub ids: Vec<Uuid>,
+}
+
+pub async fn dashboard_contact_message_bulk_delete(
+    State(state): State<AppState>,
+    Form(form): Form<BulkDeleteMessagesForm>,
+) -> impl IntoResponse {
+    if !form.ids.is_empty() {
+        if let Err(error) = sqlx::query("DELETE FROM contact_messages WHERE id = ANY($1)")
+            .bind(&form.ids)
+            .execute(&state.db)
+            .await
+        {
+            eprintln!("Failed to bulk-delete contact messages: {error}");
+        }
+    }
+
+    Redirect::to("/dashboard/contact-messages")
+}
+
 pub async fn dashboard_contact_message_block_sender(
     State(state): State<AppState>,
     Path(id): Path<Uuid>,
