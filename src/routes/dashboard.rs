@@ -1,5 +1,6 @@
 use axum::{
     Router, middleware,
+    response::Redirect,
     routing::{get, post},
 };
 
@@ -20,7 +21,7 @@ use crate::{
         dashboard_insight_category_edit, dashboard_insight_create, dashboard_insight_delete,
         dashboard_insight_edit, dashboard_insight_store, dashboard_insight_tag_create,
         dashboard_insight_tag_edit, dashboard_insight_tags, dashboard_insight_update,
-        dashboard_insights, dashboard_leads, dashboard_media, dashboard_menus,
+        dashboard_insights, dashboard_media, dashboard_menus,
         dashboard_milestone_create, dashboard_milestone_edit, dashboard_milestones,
         dashboard_newsletter_delete, dashboard_newsletter_store,
         dashboard_newsletter_subscriber_bulk_import, dashboard_newsletter_subscriber_delete,
@@ -104,7 +105,10 @@ pub fn dashboard_routes() -> Router<AppState> {
         .route("/dashboard/products", get(dashboard_products))
         .route("/dashboard/products/create", get(dashboard_product_create))
         .route("/dashboard/products/{id}/edit", get(dashboard_product_edit))
-        .route("/dashboard/leads", get(dashboard_leads))
+        .route(
+            "/dashboard/leads",
+            get(|| async { Redirect::to("/dashboard/contact-messages") }),
+        )
         .route(
             "/dashboard/contact-messages",
             get(dashboard_contact_messages),

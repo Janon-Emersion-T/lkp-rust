@@ -11,16 +11,14 @@
             <div>
                 <p class="text-sm font-black uppercase tracking-[0.28em] text-cyan-700">CRM Inbox</p>
                 <h1 class="mt-3 max-w-3xl text-3xl font-black tracking-tight text-slate-950 md:text-4xl">
-                    Every contact message in one review queue, with lead context baked into every card.
+                    Every lead and contact message in one review queue.
                 </h1>
                 <p class="mt-4 max-w-2xl text-sm leading-7 text-slate-600 md:text-base">
-                    This inbox is optimized for response quality. Read the inquiry, see score and status instantly,
-                    store follow-up notes, and move the best conversations deeper into the pipeline.
+                    Read inquiries, update status and notes, and manage each record from one responsive table.
                 </p>
 
                 <div class="crm-subnav mt-6">
-                    <a href="/dashboard/leads" class="crm-subnav-link">Leads Pipeline</a>
-                    <a href="/dashboard/contact-messages" class="crm-subnav-link crm-subnav-link-active">Contact Inbox</a>
+                    <span class="crm-subnav-link crm-subnav-link-active">Leads &amp; Contact Messages</span>
                 </div>
             </div>
 
@@ -144,10 +142,9 @@
                 <h2 class="mt-2 text-2xl font-black text-slate-950">Contact messages</h2>
                 <p class="mt-2 text-sm text-slate-500">Scan, prioritize, and update inquiries from one compact view.</p>
             </div>
-
-            <a href="/dashboard/leads"
-                class="inline-flex items-center rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-black text-slate-700 transition hover:border-cyan-300 hover:bg-cyan-50 hover:text-cyan-700">
-                Open Leads Pipeline
+            <a href="/contact" target="_blank" rel="noopener"
+                class="inline-flex items-center justify-center rounded-xl bg-slate-950 px-4 py-2 text-sm font-black text-white transition hover:bg-cyan-600">
+                Create message
             </a>
         </div>
 
@@ -159,56 +156,18 @@
             </p>
         </div>
         {% else %}
-        <div class="space-y-3 md:hidden">
-            {% for message in messages %}
-            <article class="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm">
-                <div class="flex items-start justify-between gap-3">
-                    <div class="min-w-0">
-                        <h3 class="truncate text-base font-black text-slate-950">{{ message.subject }}</h3>
-                        <p class="mt-1 truncate text-sm font-bold text-slate-700">{{ message.name }}</p>
-                        <a href="mailto:{{ message.email }}" class="mt-1 block truncate text-xs text-cyan-700">{{ message.email }}</a>
-                    </div>
-                    <span class="shrink-0 rounded-full px-3 py-1 text-[10px] font-black uppercase ring-1 {{ message.status_badge_class() }}">
-                        {{ message.status_label() }}
-                    </span>
-                </div>
-
-                <p class="mt-3 line-clamp-2 text-sm leading-6 text-slate-600">{{ message.message }}</p>
-
-                <div class="mt-4 grid grid-cols-2 gap-3 rounded-2xl bg-slate-50 p-3 text-xs">
-                    <div>
-                        <p class="font-black uppercase tracking-wider text-slate-400">Service</p>
-                        <p class="mt-1 font-bold text-slate-700">{{ message.service_label() }}</p>
-                    </div>
-                    <div>
-                        <p class="font-black uppercase tracking-wider text-slate-400">Received</p>
-                        <p class="mt-1 font-bold text-slate-700">{{ message.created_at }}</p>
-                    </div>
-                </div>
-
-                <div class="mt-4 flex items-center justify-between gap-3">
-                    <div class="flex items-center gap-2">
-                        <span class="rounded-full px-2.5 py-1 text-[10px] font-black uppercase ring-1 {{ message.priority_badge_class() }}">{{ message.priority_label() }}</span>
-                        <span class="text-xs font-black text-slate-500">Score {{ message.lead_score }}</span>
-                    </div>
-                    <a href="/dashboard/contact-messages/{{ message.id }}" class="rounded-xl bg-slate-950 px-4 py-2 text-xs font-black text-white">Open</a>
-                </div>
-            </article>
-            {% endfor %}
-        </div>
-
-        <div class="hidden overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-sm md:block">
+        <div class="overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-sm">
             <div class="overflow-x-auto">
                 <table class="w-full min-w-[960px] table-fixed text-left">
                     <thead class="border-b border-slate-200 bg-slate-50 text-[11px] font-black uppercase tracking-[0.16em] text-slate-500">
                         <tr>
-                            <th class="w-[20%] px-5 py-4">Contact</th>
-                            <th class="w-[23%] px-5 py-4">Inquiry</th>
+                            <th class="w-[18%] px-5 py-4">Contact</th>
+                            <th class="w-[22%] px-5 py-4">Inquiry</th>
                             <th class="w-[12%] px-5 py-4">Service</th>
                             <th class="w-[17%] px-5 py-4">Status</th>
                             <th class="w-[7%] px-5 py-4">Score</th>
-                            <th class="w-[10%] px-5 py-4">Received</th>
-                            <th class="w-[11%] px-5 py-4">Actions</th>
+                            <th class="w-[9%] px-5 py-4">Received</th>
+                            <th class="w-[16%] px-5 py-4">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100">
@@ -259,6 +218,9 @@
                                         <input type="hidden" name="reason" value="Blocked from inbox after spam/scam review">
                                         <button class="text-xs font-black text-rose-700 hover:underline">Block sender</button>
                                     </form>
+                                    <form action="/dashboard/contact-messages/{{ message.id }}/delete" method="post" onsubmit="return confirm('Delete this message permanently?');">
+                                        <button class="text-xs font-black text-rose-700 hover:underline">Delete</button>
+                                    </form>
                                 </div>
                             </td>
                         </tr>
@@ -266,6 +228,7 @@
                     </tbody>
                 </table>
             </div>
+
         </div>
         {% endif %}
     </section>
