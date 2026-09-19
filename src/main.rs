@@ -189,7 +189,9 @@ async fn set_response_headers(
 }
 
 fn cache_control_value(path: &str) -> &'static str {
-    if path.starts_with("/static/") {
+    if path == "/login" || path.starts_with("/dashboard") {
+        "private, no-store, max-age=0"
+    } else if path.starts_with("/static/") {
         if has_extension(path, &["png", "jpg", "jpeg", "webp", "avif", "svg", "ico"]) {
             "public, max-age=2592000, stale-while-revalidate=604800"
         } else if has_extension(path, &["css", "js"]) {
