@@ -5,224 +5,152 @@
 {% endblock %}
 
 {% block content %}
-<div class="min-h-screen">
 
-    <!-- =========================================================
-         PAGE HEADER
-    ========================================================== -->
-    <header class="mb-6">
-        <div class="flex flex-col gap-5 xl:flex-row xl:items-end xl:justify-between">
+<div class="mx-auto w-full max-w-[1600px] space-y-5">
+
+    <!-- ============================================================
+         HEADER
+    ============================================================= -->
+    <section>
+        <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
             <div>
                 <div class="flex flex-wrap items-center gap-3">
-                    <h1 class="text-3xl font-bold tracking-tight text-slate-950">
+                    <h1 class="text-2xl font-black tracking-tight text-slate-950 sm:text-3xl">
                         Contact Inbox
                     </h1>
 
                     {% if stats.new_count > 0 %}
-                    <span class="inline-flex items-center gap-1.5 rounded-full bg-cyan-50 px-2.5 py-1 text-xs font-semibold text-cyan-700 ring-1 ring-inset ring-cyan-200">
-                        <span class="h-1.5 w-1.5 rounded-full bg-cyan-500"></span>
+                    <span class="inline-flex items-center gap-2 rounded-full border border-cyan-200 bg-cyan-50 px-3 py-1 text-xs font-bold text-cyan-700">
+                        <span class="h-2 w-2 rounded-full bg-cyan-500"></span>
                         {{ stats.new_count }} new
                     </span>
                     {% endif %}
                 </div>
 
-                <p class="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
-                    Review incoming enquiries, qualify opportunities and keep every conversation moving.
+                <p class="mt-2 text-sm text-slate-500">
+                    Review, qualify and manage website enquiries from one workspace.
                 </p>
             </div>
 
             <div class="flex flex-wrap items-center gap-2">
+                <button
+                    type="button"
+                    onclick="toggleContactFilters()"
+                    class="inline-flex h-10 items-center justify-center rounded-xl border border-slate-300 bg-white px-4 text-sm font-bold text-slate-700 shadow-sm transition hover:border-slate-400 hover:bg-slate-50"
+                >
+                    Filters
+                    {% if filters.is_active() %}
+                    <span class="ml-2 h-2 w-2 rounded-full bg-cyan-500"></span>
+                    {% endif %}
+                </button>
+
                 <a
                     href="/contact"
                     target="_blank"
                     rel="noopener"
-                    class="inline-flex h-10 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 hover:bg-slate-50"
+                    class="inline-flex h-10 items-center justify-center rounded-xl bg-slate-950 px-4 text-sm font-bold text-white shadow-sm transition hover:bg-cyan-600"
                 >
-                    <svg
-                        class="h-4 w-4"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                    >
-                        <path d="M14 3h7v7"></path>
-                        <path d="M10 14 21 3"></path>
-                        <path d="M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5"></path>
-                    </svg>
-
-                    Contact page
+                    Open contact page
                 </a>
-
-                <button
-                    type="button"
-                    onclick="toggleFilters()"
-                    class="inline-flex h-10 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 hover:bg-slate-50"
-                >
-                    <svg
-                        class="h-4 w-4"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                    >
-                        <path d="M4 6h16"></path>
-                        <path d="M7 12h10"></path>
-                        <path d="M10 18h4"></path>
-                    </svg>
-
-                    Filters
-
-                    {% if filters.is_active() %}
-                    <span class="h-2 w-2 rounded-full bg-cyan-500"></span>
-                    {% endif %}
-                </button>
             </div>
         </div>
-    </header>
+    </section>
 
 
-    <!-- =========================================================
-         COMPACT STATS
-    ========================================================== -->
-    <section class="mb-5 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-        <div class="grid grid-cols-2 md:grid-cols-4">
+    <!-- ============================================================
+         KPI STRIP
+    ============================================================= -->
+    <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <div class="grid grid-cols-2 lg:grid-cols-4">
 
-            <div class="border-b border-r border-slate-100 px-5 py-4 md:border-b-0">
-                <div class="flex items-center justify-between gap-4">
-                    <div>
-                        <p class="text-xs font-medium text-slate-500">
-                            Total enquiries
-                        </p>
+            <div class="border-b border-r border-slate-100 p-4 sm:p-5 lg:border-b-0">
+                <p class="text-xs font-semibold text-slate-500">
+                    Total enquiries
+                </p>
 
-                        <p class="mt-1 text-2xl font-bold tracking-tight text-slate-950">
-                            {{ stats.total }}
-                        </p>
-                    </div>
-
-                    <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-600">
-                        <svg
-                            class="h-4 w-4"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                        >
-                            <path d="M4 4h16v16H4z"></path>
-                            <path d="m4 6 8 6 8-6"></path>
-                        </svg>
-                    </div>
-                </div>
+                <p class="mt-1 text-2xl font-black tracking-tight text-slate-950">
+                    {{ stats.total }}
+                </p>
             </div>
 
-            <div class="border-b border-slate-100 px-5 py-4 md:border-b-0 md:border-r">
-                <div class="flex items-center justify-between gap-4">
-                    <div>
-                        <p class="text-xs font-medium text-slate-500">
-                            New
-                        </p>
+            <div class="border-b border-slate-100 p-4 sm:p-5 lg:border-b-0 lg:border-r">
+                <div class="flex items-center gap-2">
+                    <span class="h-2 w-2 rounded-full bg-cyan-500"></span>
 
-                        <p class="mt-1 text-2xl font-bold tracking-tight text-slate-950">
-                            {{ stats.new_count }}
-                        </p>
-                    </div>
-
-                    <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-cyan-50 text-cyan-600">
-                        <span class="h-2.5 w-2.5 rounded-full bg-current"></span>
-                    </div>
+                    <p class="text-xs font-semibold text-slate-500">
+                        New
+                    </p>
                 </div>
+
+                <p class="mt-1 text-2xl font-black tracking-tight text-slate-950">
+                    {{ stats.new_count }}
+                </p>
             </div>
 
-            <div class="border-r border-slate-100 px-5 py-4">
-                <div class="flex items-center justify-between gap-4">
-                    <div>
-                        <p class="text-xs font-medium text-slate-500">
-                            Qualified
-                        </p>
+            <div class="border-r border-slate-100 p-4 sm:p-5">
+                <div class="flex items-center gap-2">
+                    <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
 
-                        <p class="mt-1 text-2xl font-bold tracking-tight text-slate-950">
-                            {{ stats.qualified_count }}
-                        </p>
-                    </div>
-
-                    <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600">
-                        <svg
-                            class="h-4 w-4"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                        >
-                            <path d="m5 12 4 4L19 6"></path>
-                        </svg>
-                    </div>
+                    <p class="text-xs font-semibold text-slate-500">
+                        Qualified
+                    </p>
                 </div>
+
+                <p class="mt-1 text-2xl font-black tracking-tight text-slate-950">
+                    {{ stats.qualified_count }}
+                </p>
             </div>
 
-            <div class="px-5 py-4">
-                <div class="flex items-center justify-between gap-4">
-                    <div>
-                        <p class="text-xs font-medium text-slate-500">
-                            High priority
-                        </p>
+            <div class="p-4 sm:p-5">
+                <div class="flex items-center gap-2">
+                    <span class="h-2 w-2 rounded-full bg-amber-500"></span>
 
-                        <p class="mt-1 text-2xl font-bold tracking-tight text-slate-950">
-                            {{ stats.high_priority_count }}
-                        </p>
-                    </div>
-
-                    <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-amber-50 text-amber-600">
-                        <svg
-                            class="h-4 w-4"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                        >
-                            <path d="M12 9v4"></path>
-                            <path d="M12 17h.01"></path>
-                            <path d="M10.3 3.7 2.2 18a2 2 0 0 0 1.7 3h16.2a2 2 0 0 0 1.7-3L13.7 3.7a2 2 0 0 0-3.4 0Z"></path>
-                        </svg>
-                    </div>
+                    <p class="text-xs font-semibold text-slate-500">
+                        High priority
+                    </p>
                 </div>
+
+                <p class="mt-1 text-2xl font-black tracking-tight text-slate-950">
+                    {{ stats.high_priority_count }}
+                </p>
             </div>
 
         </div>
     </section>
 
 
-    <!-- =========================================================
-         FILTER PANEL
-         Askama-safe: no "not filters.is_active()"
-    ========================================================== -->
+    <!-- ============================================================
+         ADVANCED FILTERS
+    ============================================================= -->
 
     {% if filters.is_active() %}
     <section
-        id="filtersPanel"
-        class="mb-5 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
+        id="contactFilters"
+        class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5"
     >
     {% else %}
     <section
-        id="filtersPanel"
-        class="hidden mb-5 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
+        id="contactFilters"
+        class="hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5"
     >
     {% endif %}
 
-        <div class="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div class="mb-4 flex items-center justify-between gap-4">
             <div>
-                <h2 class="text-sm font-semibold text-slate-900">
-                    Filter inbox
+                <h2 class="text-sm font-black text-slate-950">
+                    Advanced filters
                 </h2>
 
                 <p class="mt-1 text-xs text-slate-500">
-                    Narrow the queue by status, priority or service.
+                    Narrow the inbox without changing the underlying records.
                 </p>
             </div>
 
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-4">
                 {% if filters.is_active() %}
                 <a
                     href="/dashboard/contact-messages"
-                    class="text-xs font-semibold text-cyan-700 transition hover:text-cyan-900"
+                    class="text-xs font-bold text-cyan-700 hover:text-cyan-900"
                 >
                     Clear all
                 </a>
@@ -230,8 +158,8 @@
 
                 <button
                     type="button"
-                    onclick="hideFilters()"
-                    class="text-xs font-semibold text-slate-500 transition hover:text-slate-900"
+                    onclick="hideContactFilters()"
+                    class="text-xs font-bold text-slate-500 hover:text-slate-900"
                 >
                     Close
                 </button>
@@ -245,117 +173,68 @@
             class="grid gap-3 md:grid-cols-2 xl:grid-cols-[1.5fr_0.8fr_0.8fr_1fr_auto]"
         >
 
-            <!-- SEARCH -->
-            <div>
-                <label class="mb-1.5 block text-xs font-medium text-slate-600">
+            <label class="block">
+                <span class="mb-1.5 block text-xs font-bold text-slate-600">
                     Search
-                </label>
+                </span>
 
-                <div class="relative">
-                    <svg
-                        class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                    >
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <path d="m21 21-4.3-4.3"></path>
-                    </svg>
-
-                    <input
-                        name="q"
-                        value="{{ filters.q }}"
-                        placeholder="Name, email, company, subject..."
-                        class="h-10 w-full rounded-xl border border-slate-200 bg-white pl-9 pr-3 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-cyan-500 focus:ring-4 focus:ring-cyan-500/10"
-                    >
-                </div>
-            </div>
+                <input
+                    type="search"
+                    name="q"
+                    value="{{ filters.q }}"
+                    placeholder="Name, email, company, subject..."
+                    class="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-cyan-500 focus:bg-white focus:ring-4 focus:ring-cyan-100"
+                >
+            </label>
 
 
-            <!-- STATUS -->
-            <div>
-                <label class="mb-1.5 block text-xs font-medium text-slate-600">
+            <label class="block">
+                <span class="mb-1.5 block text-xs font-bold text-slate-600">
                     Status
-                </label>
+                </span>
 
                 <select
                     name="status"
-                    class="h-10 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm text-slate-700 outline-none transition focus:border-cyan-500 focus:ring-4 focus:ring-cyan-500/10"
+                    class="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm text-slate-700 outline-none transition focus:border-cyan-500 focus:bg-white focus:ring-4 focus:ring-cyan-100"
                 >
-                    <option value="all" {% if filters.status == "all" %}selected{% endif %}>
-                        All statuses
-                    </option>
-
-                    <option value="new" {% if filters.status == "new" %}selected{% endif %}>
-                        New
-                    </option>
-
-                    <option value="contacted" {% if filters.status == "contacted" %}selected{% endif %}>
-                        Contacted
-                    </option>
-
-                    <option value="qualified" {% if filters.status == "qualified" %}selected{% endif %}>
-                        Qualified
-                    </option>
-
-                    <option value="converted" {% if filters.status == "converted" %}selected{% endif %}>
-                        Converted
-                    </option>
-
-                    <option value="archived" {% if filters.status == "archived" %}selected{% endif %}>
-                        Archived
-                    </option>
-
-                    <option value="spam" {% if filters.status == "spam" %}selected{% endif %}>
-                        Spam
-                    </option>
+                    <option value="all" {% if filters.status == "all" %}selected{% endif %}>All statuses</option>
+                    <option value="new" {% if filters.status == "new" %}selected{% endif %}>New</option>
+                    <option value="contacted" {% if filters.status == "contacted" %}selected{% endif %}>Contacted</option>
+                    <option value="qualified" {% if filters.status == "qualified" %}selected{% endif %}>Qualified</option>
+                    <option value="converted" {% if filters.status == "converted" %}selected{% endif %}>Converted</option>
+                    <option value="archived" {% if filters.status == "archived" %}selected{% endif %}>Archived</option>
+                    <option value="spam" {% if filters.status == "spam" %}selected{% endif %}>Spam</option>
                 </select>
-            </div>
+            </label>
 
 
-            <!-- PRIORITY -->
-            <div>
-                <label class="mb-1.5 block text-xs font-medium text-slate-600">
+            <label class="block">
+                <span class="mb-1.5 block text-xs font-bold text-slate-600">
                     Priority
-                </label>
+                </span>
 
                 <select
                     name="priority"
-                    class="h-10 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm text-slate-700 outline-none transition focus:border-cyan-500 focus:ring-4 focus:ring-cyan-500/10"
+                    class="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm text-slate-700 outline-none transition focus:border-cyan-500 focus:bg-white focus:ring-4 focus:ring-cyan-100"
                 >
-                    <option value="all" {% if filters.priority == "all" %}selected{% endif %}>
-                        All priorities
-                    </option>
-
-                    <option value="high" {% if filters.priority == "high" %}selected{% endif %}>
-                        High
-                    </option>
-
-                    <option value="medium" {% if filters.priority == "medium" %}selected{% endif %}>
-                        Medium
-                    </option>
-
-                    <option value="normal" {% if filters.priority == "normal" %}selected{% endif %}>
-                        Normal
-                    </option>
+                    <option value="all" {% if filters.priority == "all" %}selected{% endif %}>All priorities</option>
+                    <option value="high" {% if filters.priority == "high" %}selected{% endif %}>High</option>
+                    <option value="medium" {% if filters.priority == "medium" %}selected{% endif %}>Medium</option>
+                    <option value="normal" {% if filters.priority == "normal" %}selected{% endif %}>Normal</option>
                 </select>
-            </div>
+            </label>
 
 
-            <!-- SERVICE -->
-            <div>
-                <label class="mb-1.5 block text-xs font-medium text-slate-600">
+            <label class="block">
+                <span class="mb-1.5 block text-xs font-bold text-slate-600">
                     Service
-                </label>
+                </span>
 
                 <select
                     name="service"
-                    class="h-10 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm text-slate-700 outline-none transition focus:border-cyan-500 focus:ring-4 focus:ring-cyan-500/10"
+                    class="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm text-slate-700 outline-none transition focus:border-cyan-500 focus:bg-white focus:ring-4 focus:ring-cyan-100"
                 >
-                    <option value="all" {% if filters.service == "all" %}selected{% endif %}>
-                        All services
-                    </option>
+                    <option value="all" {% if filters.service == "all" %}selected{% endif %}>All services</option>
 
                     <option value="web_development" {% if filters.service == "web_development" %}selected{% endif %}>
                         Web Development
@@ -378,7 +257,7 @@
                     </option>
 
                     <option value="hosting_domain" {% if filters.service == "hosting_domain" %}selected{% endif %}>
-                        Hosting & Domain
+                        Hosting &amp; Domain
                     </option>
 
                     <option value="it_consultation" {% if filters.service == "it_consultation" %}selected{% endif %}>
@@ -389,14 +268,13 @@
                         AI Automation
                     </option>
                 </select>
-            </div>
+            </label>
 
 
-            <!-- APPLY -->
             <div class="flex items-end">
                 <button
                     type="submit"
-                    class="h-10 w-full rounded-xl bg-slate-950 px-5 text-sm font-semibold text-white transition hover:bg-cyan-600 xl:w-auto"
+                    class="h-11 w-full rounded-xl bg-slate-950 px-5 text-sm font-black text-white transition hover:bg-cyan-600 xl:w-auto"
                 >
                     Apply
                 </button>
@@ -406,21 +284,20 @@
     </section>
 
 
-    <!-- =========================================================
-         MAIN INBOX
-    ========================================================== -->
+    <!-- ============================================================
+         INBOX SHELL
+    ============================================================= -->
     <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
 
-        <!-- TOP TOOLBAR -->
-        <div class="border-b border-slate-200">
+        <!-- SEARCH -->
+        <div class="border-b border-slate-200 p-4">
 
-            <div class="flex flex-col gap-4 px-4 py-4 lg:flex-row lg:items-center lg:justify-between">
+            <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
 
-                <!-- QUICK SEARCH -->
                 <form
                     action="/dashboard/contact-messages"
                     method="get"
-                    class="relative w-full max-w-xl"
+                    class="w-full lg:max-w-2xl"
                 >
                     <input
                         type="hidden"
@@ -440,634 +317,627 @@
                         value="{{ filters.service }}"
                     >
 
-                    <svg
-                        class="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                    >
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <path d="m21 21-4.3-4.3"></path>
-                    </svg>
-
                     <input
+                        type="search"
                         name="q"
                         value="{{ filters.q }}"
-                        placeholder="Search contacts, companies or enquiries..."
-                        class="h-10 w-full rounded-xl border border-slate-200 bg-slate-50 pl-10 pr-4 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-cyan-500 focus:bg-white focus:ring-4 focus:ring-cyan-500/10"
+                        placeholder="Search by name, email, company, subject or message..."
+                        class="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-cyan-500 focus:bg-white focus:ring-4 focus:ring-cyan-100"
                     >
                 </form>
 
 
-                <div class="flex shrink-0 items-center gap-2 text-xs text-slate-500">
-                    <span class="font-semibold text-slate-900">
+                <div class="shrink-0 text-xs text-slate-500">
+                    <strong class="text-slate-950">
                         {{ stats.total }}
-                    </span>
-
+                    </strong>
                     total enquiries
                 </div>
+
             </div>
-
-
-            <!-- STATUS TABS -->
-            <div class="overflow-x-auto px-4">
-                <nav class="flex min-w-max gap-1">
-
-                    <!-- ALL -->
-                    {% if filters.status == "all" %}
-                    <a
-                        href="/dashboard/contact-messages"
-                        class="relative px-3 py-3 text-sm font-semibold text-slate-950"
-                    >
-                        All
-                        <span class="absolute inset-x-2 bottom-0 h-0.5 rounded-full bg-slate-950"></span>
-                    </a>
-                    {% else %}
-                    <a
-                        href="/dashboard/contact-messages"
-                        class="relative px-3 py-3 text-sm font-medium text-slate-500 transition hover:text-slate-900"
-                    >
-                        All
-                    </a>
-                    {% endif %}
-
-
-                    <!-- NEW -->
-                    {% if filters.status == "new" %}
-                    <a
-                        href="/dashboard/contact-messages?status=new"
-                        class="relative flex items-center gap-2 px-3 py-3 text-sm font-semibold text-slate-950"
-                    >
-                        New
-
-                        {% if stats.new_count > 0 %}
-                        <span class="rounded-full bg-cyan-50 px-1.5 py-0.5 text-[10px] font-bold text-cyan-700">
-                            {{ stats.new_count }}
-                        </span>
-                        {% endif %}
-
-                        <span class="absolute inset-x-2 bottom-0 h-0.5 rounded-full bg-cyan-500"></span>
-                    </a>
-                    {% else %}
-                    <a
-                        href="/dashboard/contact-messages?status=new"
-                        class="relative flex items-center gap-2 px-3 py-3 text-sm font-medium text-slate-500 transition hover:text-slate-900"
-                    >
-                        New
-
-                        {% if stats.new_count > 0 %}
-                        <span class="rounded-full bg-cyan-50 px-1.5 py-0.5 text-[10px] font-bold text-cyan-700">
-                            {{ stats.new_count }}
-                        </span>
-                        {% endif %}
-                    </a>
-                    {% endif %}
-
-
-                    <!-- CONTACTED -->
-                    {% if filters.status == "contacted" %}
-                    <a
-                        href="/dashboard/contact-messages?status=contacted"
-                        class="relative px-3 py-3 text-sm font-semibold text-slate-950"
-                    >
-                        Contacted
-                        <span class="absolute inset-x-2 bottom-0 h-0.5 rounded-full bg-slate-950"></span>
-                    </a>
-                    {% else %}
-                    <a
-                        href="/dashboard/contact-messages?status=contacted"
-                        class="relative px-3 py-3 text-sm font-medium text-slate-500 transition hover:text-slate-900"
-                    >
-                        Contacted
-                    </a>
-                    {% endif %}
-
-
-                    <!-- QUALIFIED -->
-                    {% if filters.status == "qualified" %}
-                    <a
-                        href="/dashboard/contact-messages?status=qualified"
-                        class="relative px-3 py-3 text-sm font-semibold text-slate-950"
-                    >
-                        Qualified
-                        <span class="absolute inset-x-2 bottom-0 h-0.5 rounded-full bg-slate-950"></span>
-                    </a>
-                    {% else %}
-                    <a
-                        href="/dashboard/contact-messages?status=qualified"
-                        class="relative px-3 py-3 text-sm font-medium text-slate-500 transition hover:text-slate-900"
-                    >
-                        Qualified
-                    </a>
-                    {% endif %}
-
-
-                    <!-- CONVERTED -->
-                    {% if filters.status == "converted" %}
-                    <a
-                        href="/dashboard/contact-messages?status=converted"
-                        class="relative px-3 py-3 text-sm font-semibold text-slate-950"
-                    >
-                        Converted
-                        <span class="absolute inset-x-2 bottom-0 h-0.5 rounded-full bg-slate-950"></span>
-                    </a>
-                    {% else %}
-                    <a
-                        href="/dashboard/contact-messages?status=converted"
-                        class="relative px-3 py-3 text-sm font-medium text-slate-500 transition hover:text-slate-900"
-                    >
-                        Converted
-                    </a>
-                    {% endif %}
-
-
-                    <!-- ARCHIVED -->
-                    {% if filters.status == "archived" %}
-                    <a
-                        href="/dashboard/contact-messages?status=archived"
-                        class="relative px-3 py-3 text-sm font-semibold text-slate-950"
-                    >
-                        Archived
-                        <span class="absolute inset-x-2 bottom-0 h-0.5 rounded-full bg-slate-950"></span>
-                    </a>
-                    {% else %}
-                    <a
-                        href="/dashboard/contact-messages?status=archived"
-                        class="relative px-3 py-3 text-sm font-medium text-slate-500 transition hover:text-slate-900"
-                    >
-                        Archived
-                    </a>
-                    {% endif %}
-
-
-                    <!-- SPAM -->
-                    {% if filters.status == "spam" %}
-                    <a
-                        href="/dashboard/contact-messages?status=spam"
-                        class="relative px-3 py-3 text-sm font-semibold text-slate-950"
-                    >
-                        Spam
-                        <span class="absolute inset-x-2 bottom-0 h-0.5 rounded-full bg-slate-950"></span>
-                    </a>
-                    {% else %}
-                    <a
-                        href="/dashboard/contact-messages?status=spam"
-                        class="relative px-3 py-3 text-sm font-medium text-slate-500 transition hover:text-slate-900"
-                    >
-                        Spam
-                    </a>
-                    {% endif %}
-
-                </nav>
-            </div>
-
         </div>
 
 
-        <!-- =====================================================
+        <!-- ========================================================
+             STATUS NAVIGATION
+        ========================================================= -->
+        <div class="overflow-x-auto border-b border-slate-200">
+            <nav class="flex min-w-max px-3">
+
+                {% if filters.status == "all" %}
+                <a
+                    href="/dashboard/contact-messages"
+                    class="relative px-4 py-3.5 text-sm font-black text-slate-950"
+                >
+                    All
+
+                    <span class="ml-1 text-xs font-semibold text-slate-400">
+                        {{ stats.total }}
+                    </span>
+
+                    <span class="absolute inset-x-3 bottom-0 h-0.5 bg-slate-950"></span>
+                </a>
+                {% else %}
+                <a
+                    href="/dashboard/contact-messages"
+                    class="px-4 py-3.5 text-sm font-semibold text-slate-500 transition hover:text-slate-950"
+                >
+                    All
+                    <span class="ml-1 text-xs text-slate-400">
+                        {{ stats.total }}
+                    </span>
+                </a>
+                {% endif %}
+
+
+                {% if filters.status == "new" %}
+                <a
+                    href="/dashboard/contact-messages?status=new"
+                    class="relative px-4 py-3.5 text-sm font-black text-cyan-700"
+                >
+                    New
+
+                    <span class="ml-1 text-xs font-bold text-cyan-600">
+                        {{ stats.new_count }}
+                    </span>
+
+                    <span class="absolute inset-x-3 bottom-0 h-0.5 bg-cyan-500"></span>
+                </a>
+                {% else %}
+                <a
+                    href="/dashboard/contact-messages?status=new"
+                    class="px-4 py-3.5 text-sm font-semibold text-slate-500 transition hover:text-slate-950"
+                >
+                    New
+
+                    <span class="ml-1 text-xs text-cyan-600">
+                        {{ stats.new_count }}
+                    </span>
+                </a>
+                {% endif %}
+
+
+                {% if filters.status == "contacted" %}
+                <a
+                    href="/dashboard/contact-messages?status=contacted"
+                    class="relative px-4 py-3.5 text-sm font-black text-slate-950"
+                >
+                    Contacted
+                    <span class="absolute inset-x-3 bottom-0 h-0.5 bg-slate-950"></span>
+                </a>
+                {% else %}
+                <a
+                    href="/dashboard/contact-messages?status=contacted"
+                    class="px-4 py-3.5 text-sm font-semibold text-slate-500 transition hover:text-slate-950"
+                >
+                    Contacted
+                </a>
+                {% endif %}
+
+
+                {% if filters.status == "qualified" %}
+                <a
+                    href="/dashboard/contact-messages?status=qualified"
+                    class="relative px-4 py-3.5 text-sm font-black text-slate-950"
+                >
+                    Qualified
+                    <span class="absolute inset-x-3 bottom-0 h-0.5 bg-slate-950"></span>
+                </a>
+                {% else %}
+                <a
+                    href="/dashboard/contact-messages?status=qualified"
+                    class="px-4 py-3.5 text-sm font-semibold text-slate-500 transition hover:text-slate-950"
+                >
+                    Qualified
+                </a>
+                {% endif %}
+
+
+                {% if filters.status == "converted" %}
+                <a
+                    href="/dashboard/contact-messages?status=converted"
+                    class="relative px-4 py-3.5 text-sm font-black text-slate-950"
+                >
+                    Converted
+                    <span class="absolute inset-x-3 bottom-0 h-0.5 bg-slate-950"></span>
+                </a>
+                {% else %}
+                <a
+                    href="/dashboard/contact-messages?status=converted"
+                    class="px-4 py-3.5 text-sm font-semibold text-slate-500 transition hover:text-slate-950"
+                >
+                    Converted
+                </a>
+                {% endif %}
+
+
+                {% if filters.status == "archived" %}
+                <a
+                    href="/dashboard/contact-messages?status=archived"
+                    class="relative px-4 py-3.5 text-sm font-black text-slate-950"
+                >
+                    Archived
+                    <span class="absolute inset-x-3 bottom-0 h-0.5 bg-slate-950"></span>
+                </a>
+                {% else %}
+                <a
+                    href="/dashboard/contact-messages?status=archived"
+                    class="px-4 py-3.5 text-sm font-semibold text-slate-500 transition hover:text-slate-950"
+                >
+                    Archived
+                </a>
+                {% endif %}
+
+
+                {% if filters.status == "spam" %}
+                <a
+                    href="/dashboard/contact-messages?status=spam"
+                    class="relative px-4 py-3.5 text-sm font-black text-rose-700"
+                >
+                    Spam
+                    <span class="absolute inset-x-3 bottom-0 h-0.5 bg-rose-500"></span>
+                </a>
+                {% else %}
+                <a
+                    href="/dashboard/contact-messages?status=spam"
+                    class="px-4 py-3.5 text-sm font-semibold text-slate-500 transition hover:text-slate-950"
+                >
+                    Spam
+                </a>
+                {% endif %}
+
+            </nav>
+        </div>
+
+
+        <!-- ========================================================
              EMPTY STATE
-        ====================================================== -->
+        ========================================================= -->
         {% if messages.len() == 0 %}
 
-        <div class="flex min-h-[420px] flex-col items-center justify-center px-6 py-16 text-center">
+        <div class="flex min-h-[360px] flex-col items-center justify-center px-6 py-16 text-center">
 
-            <div class="flex h-12 w-12 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-slate-500">
-                <svg
-                    class="h-5 w-5"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.8"
-                >
-                    <path d="M4 4h16v16H4z"></path>
-                    <path d="m4 6 8 6 8-6"></path>
-                </svg>
+            <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-100 text-lg font-black text-slate-500">
+                @
             </div>
 
-            <h3 class="mt-4 text-base font-semibold text-slate-950">
+            <h2 class="mt-4 text-base font-black text-slate-950">
                 No enquiries found
-            </h3>
+            </h2>
 
             {% if filters.is_active() %}
-            <p class="mt-2 max-w-sm text-sm leading-6 text-slate-500">
-                No contact messages match the filters currently applied.
+            <p class="mt-2 max-w-md text-sm leading-6 text-slate-500">
+                Nothing matches the current search or filters.
             </p>
 
             <a
                 href="/dashboard/contact-messages"
-                class="mt-5 inline-flex h-9 items-center rounded-lg border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+                class="mt-5 inline-flex h-10 items-center rounded-xl border border-slate-200 px-4 text-sm font-bold text-slate-700 transition hover:bg-slate-50"
             >
                 Clear filters
             </a>
             {% else %}
-            <p class="mt-2 max-w-sm text-sm leading-6 text-slate-500">
-                New enquiries submitted through the website will appear here automatically.
+            <p class="mt-2 max-w-md text-sm leading-6 text-slate-500">
+                New messages submitted through the website will appear here.
             </p>
             {% endif %}
 
         </div>
 
-
-        <!-- =====================================================
-             CONTACT TABLE
-        ====================================================== -->
         {% else %}
 
-        <div class="overflow-x-auto">
-            <table class="w-full min-w-[1050px] text-left">
 
-                <thead>
-                    <tr class="border-b border-slate-200 bg-slate-50/80 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+        <!-- ========================================================
+             DESKTOP TABLE
+        ========================================================= -->
+        <div class="hidden xl:block">
+            <div class="overflow-x-auto">
 
-                        <th class="w-12 px-4 py-3">
-                            <input
-                                type="checkbox"
-                                id="selectAll"
-                                class="h-4 w-4 rounded border-slate-300 text-cyan-600 focus:ring-cyan-500"
-                            >
-                        </th>
+                <table class="w-full table-fixed text-left">
 
-                        <th class="px-3 py-3">
-                            Contact
-                        </th>
+                    <thead>
+                        <tr class="border-b border-slate-200 bg-slate-50 text-[10px] font-black uppercase tracking-[0.12em] text-slate-500">
 
-                        <th class="px-3 py-3">
-                            Enquiry
-                        </th>
+                            <th class="w-[4%] px-4 py-3">
+                                <input
+                                    id="selectAllMessages"
+                                    type="checkbox"
+                                    class="h-4 w-4 rounded border-slate-300 text-cyan-600 focus:ring-cyan-500"
+                                >
+                            </th>
 
-                        <th class="px-3 py-3">
-                            Service
-                        </th>
+                            <th class="w-[22%] px-3 py-3">
+                                Contact
+                            </th>
 
-                        <th class="px-3 py-3">
-                            Status
-                        </th>
+                            <th class="w-[36%] px-3 py-3">
+                                Conversation
+                            </th>
 
-                        <th class="px-3 py-3 text-center">
-                            Score
-                        </th>
+                            <th class="w-[14%] px-3 py-3">
+                                Service
+                            </th>
 
-                        <th class="px-3 py-3">
-                            Received
-                        </th>
+                            <th class="w-[10%] px-3 py-3">
+                                Status
+                            </th>
 
-                        <th class="w-14 px-3 py-3"></th>
+                            <th class="w-[7%] px-3 py-3">
+                                Score
+                            </th>
 
-                    </tr>
-                </thead>
+                            <th class="w-[7%] px-3 py-3 text-right">
+                                Actions
+                            </th>
 
-
-                <tbody class="divide-y divide-slate-100">
-
-                    {% for message in messages %}
-
-                    <tr
-                        class="group cursor-pointer align-middle transition hover:bg-slate-50"
-                        onclick="window.location='/dashboard/contact-messages/{{ message.id }}'"
-                    >
-
-                        <!-- SELECT -->
-                        <td
-                            class="px-4 py-4"
-                            onclick="event.stopPropagation()"
-                        >
-                            <input
-                                type="checkbox"
-                                class="message-checkbox h-4 w-4 rounded border-slate-300 text-cyan-600 focus:ring-cyan-500"
-                            >
-                        </td>
+                        </tr>
+                    </thead>
 
 
-                        <!-- CONTACT -->
-                        <td class="px-3 py-4">
-                            <div class="flex items-center gap-3">
+                    <tbody class="divide-y divide-slate-100">
 
-                                <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-slate-100 text-xs font-bold uppercase text-slate-600">
-                                    {{ message.name }}
-                                </div>
+                        {% for message in messages %}
 
-                                <div class="min-w-0">
-                                    <p class="max-w-[190px] truncate text-sm font-semibold text-slate-950">
+                        <tr class="group align-top transition hover:bg-slate-50/80">
+
+                            <!-- CHECKBOX -->
+                            <td class="px-4 py-4">
+                                <input
+                                    type="checkbox"
+                                    class="message-checkbox h-4 w-4 rounded border-slate-300 text-cyan-600 focus:ring-cyan-500"
+                                >
+                            </td>
+
+
+                            <!-- CONTACT -->
+                            <td class="px-3 py-4">
+                                <a
+                                    href="/dashboard/contact-messages/{{ message.id }}"
+                                    class="block min-w-0"
+                                >
+                                    <p class="truncate text-sm font-black text-slate-950 transition group-hover:text-cyan-700">
                                         {{ message.name }}
                                     </p>
 
-                                    <a
-                                        href="mailto:{{ message.email }}"
-                                        onclick="event.stopPropagation()"
-                                        class="mt-0.5 block max-w-[190px] truncate text-xs text-slate-500 transition hover:text-cyan-700"
-                                    >
+                                    <p class="mt-1 truncate text-xs font-medium text-slate-500">
                                         {{ message.email }}
-                                    </a>
+                                    </p>
 
-                                    <p class="mt-0.5 max-w-[190px] truncate text-[11px] text-slate-400">
+                                    <p class="mt-1 truncate text-[11px] text-slate-400">
                                         {{ message.company_label() }}
                                     </p>
-                                </div>
-
-                            </div>
-                        </td>
+                                </a>
+                            </td>
 
 
-                        <!-- ENQUIRY -->
-                        <td class="px-3 py-4">
-                            <div class="max-w-[310px]">
-
-                                <p class="truncate text-sm font-semibold text-slate-900">
-                                    {{ message.subject }}
-                                </p>
-
-                                <p class="mt-1 line-clamp-1 text-xs leading-5 text-slate-500">
-                                    {{ message.message }}
-                                </p>
-
-                            </div>
-                        </td>
-
-
-                        <!-- SERVICE -->
-                        <td class="px-3 py-4">
-
-                            <p class="text-xs font-medium text-slate-700">
-                                {{ message.service_label() }}
-                            </p>
-
-                            <p class="mt-1 text-[11px] text-slate-400">
-                                {{ message.timeline_label() }}
-                            </p>
-
-                        </td>
-
-
-                        <!-- STATUS -->
-                        <td class="px-3 py-4">
-
-                            <div class="flex flex-col items-start gap-1.5">
-
-                                <span class="inline-flex rounded-full px-2.5 py-1 text-[10px] font-semibold ring-1 ring-inset {{ message.status_badge_class() }}">
-                                    {{ message.status_label() }}
-                                </span>
-
-                                <span class="inline-flex rounded-full px-2 py-0.5 text-[10px] font-semibold ring-1 ring-inset {{ message.priority_badge_class() }}">
-                                    {{ message.priority_label() }}
-                                </span>
-
-                            </div>
-
-                        </td>
-
-
-                        <!-- SCORE -->
-                        <td class="px-3 py-4 text-center">
-
-                            <span class="inline-flex min-w-[38px] items-center justify-center rounded-lg bg-slate-100 px-2 py-1.5 text-xs font-bold text-slate-700">
-                                {{ message.lead_score }}
-                            </span>
-
-                        </td>
-
-
-                        <!-- RECEIVED -->
-                        <td class="px-3 py-4">
-
-                            <p class="whitespace-nowrap text-xs font-medium text-slate-700">
-                                {{ message.created_at }}
-                            </p>
-
-                            <p class="mt-1 text-[10px] font-medium uppercase tracking-wide text-slate-400">
-                                {{ message.source_label() }}
-                            </p>
-
-                        </td>
-
-
-                        <!-- ACTION MENU -->
-                        <td
-                            class="relative px-3 py-4"
-                            onclick="event.stopPropagation()"
-                        >
-
-                            <button
-                                type="button"
-                                onclick="toggleMessageMenu(event, 'menu-{{ message.id }}')"
-                                class="flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
-                                aria-label="More actions"
-                            >
-                                <svg
-                                    class="h-5 w-5"
-                                    viewBox="0 0 24 24"
-                                    fill="currentColor"
-                                >
-                                    <circle cx="5" cy="12" r="1.7"></circle>
-                                    <circle cx="12" cy="12" r="1.7"></circle>
-                                    <circle cx="19" cy="12" r="1.7"></circle>
-                                </svg>
-                            </button>
-
-
-                            <div
-                                id="menu-{{ message.id }}"
-                                class="message-menu absolute right-4 top-12 z-40 hidden w-52 overflow-hidden rounded-xl border border-slate-200 bg-white py-1.5 shadow-xl"
-                            >
-
-                                <!-- OPEN -->
+                            <!-- CONVERSATION -->
+                            <td class="px-3 py-4">
                                 <a
                                     href="/dashboard/contact-messages/{{ message.id }}"
-                                    class="flex items-center gap-3 px-3 py-2.5 text-xs font-medium text-slate-700 transition hover:bg-slate-50"
+                                    class="block"
                                 >
-                                    <svg
-                                        class="h-4 w-4 text-slate-400"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="2"
-                                    >
-                                        <path d="M14 3h7v7"></path>
-                                        <path d="M10 14 21 3"></path>
-                                        <path d="M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5"></path>
-                                    </svg>
+                                    <p class="truncate text-sm font-black text-slate-950 transition group-hover:text-cyan-700">
+                                        {{ message.subject }}
+                                    </p>
 
-                                    Open enquiry
+                                    <p class="mt-1 line-clamp-2 text-xs leading-5 text-slate-500">
+                                        {{ message.message }}
+                                    </p>
+
+                                    <div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px] font-semibold text-slate-400">
+                                        <span>
+                                            {{ message.created_at }}
+                                        </span>
+
+                                        <span>
+                                            {{ message.source_label() }}
+                                        </span>
+
+                                        <span>
+                                            {{ message.timeline_label() }}
+                                        </span>
+                                    </div>
                                 </a>
+                            </td>
 
 
-                                <!-- EMAIL -->
-                                <a
-                                    href="mailto:{{ message.email }}"
-                                    class="flex items-center gap-3 px-3 py-2.5 text-xs font-medium text-slate-700 transition hover:bg-slate-50"
+                            <!-- SERVICE -->
+                            <td class="px-3 py-4">
+                                <p class="text-xs font-bold leading-5 text-slate-700">
+                                    {{ message.service_label() }}
+                                </p>
+                            </td>
+
+
+                            <!-- STATUS -->
+                            <td class="px-3 py-4">
+                                <div class="flex flex-col items-start gap-2">
+
+                                    <span class="inline-flex rounded-full px-2.5 py-1 text-[10px] font-black ring-1 ring-inset {{ message.status_badge_class() }}">
+                                        {{ message.status_label() }}
+                                    </span>
+
+                                    <span class="inline-flex rounded-full px-2.5 py-1 text-[10px] font-black ring-1 ring-inset {{ message.priority_badge_class() }}">
+                                        {{ message.priority_label() }}
+                                    </span>
+
+                                </div>
+                            </td>
+
+
+                            <!-- SCORE -->
+                            <td class="px-3 py-4">
+                                <div class="inline-flex min-w-10 items-center justify-center rounded-lg bg-slate-100 px-2 py-2 text-xs font-black text-slate-700">
+                                    {{ message.lead_score }}
+                                </div>
+                            </td>
+
+
+                            <!-- ACTIONS -->
+                            <td class="relative px-3 py-4 text-right">
+
+                                <button
+                                    type="button"
+                                    onclick="toggleInboxMenu(event, 'inbox-menu-{{ message.id }}')"
+                                    class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-transparent text-lg font-black leading-none text-slate-400 transition hover:border-slate-200 hover:bg-white hover:text-slate-900"
+                                    aria-label="Actions"
                                 >
-                                    <svg
-                                        class="h-4 w-4 text-slate-400"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="2"
-                                    >
-                                        <path d="M4 4h16v16H4z"></path>
-                                        <path d="m4 6 8 6 8-6"></path>
-                                    </svg>
-
-                                    Send email
-                                </a>
+                                    &middot;&middot;&middot;
+                                </button>
 
 
-                                <div class="my-1 border-t border-slate-100"></div>
-
-
-                                <!-- CONTACTED -->
-                                <form
-                                    action="/dashboard/contact-messages/{{ message.id }}/quick-status"
-                                    method="post"
+                                <div
+                                    id="inbox-menu-{{ message.id }}"
+                                    class="inbox-action-menu absolute right-3 top-12 z-50 hidden w-56 overflow-hidden rounded-xl border border-slate-200 bg-white py-1.5 text-left shadow-xl"
                                 >
-                                    <input
-                                        type="hidden"
-                                        name="status"
-                                        value="contacted"
+
+                                    <a
+                                        href="/dashboard/contact-messages/{{ message.id }}"
+                                        class="block px-4 py-2.5 text-xs font-bold text-slate-700 transition hover:bg-slate-50 hover:text-slate-950"
                                     >
+                                        Open full enquiry
+                                    </a>
 
-                                    <input
-                                        type="hidden"
-                                        name="redirect_to"
-                                        value="/dashboard/contact-messages"
+                                    <a
+                                        href="mailto:{{ message.email }}"
+                                        class="block px-4 py-2.5 text-xs font-bold text-slate-700 transition hover:bg-slate-50 hover:text-slate-950"
                                     >
+                                        Send email
+                                    </a>
 
-                                    <button
-                                        type="submit"
-                                        class="flex w-full items-center gap-3 px-3 py-2.5 text-left text-xs font-medium text-slate-700 transition hover:bg-slate-50"
+                                    <div class="my-1 border-t border-slate-100"></div>
+
+
+                                    <form
+                                        action="/dashboard/contact-messages/{{ message.id }}/quick-status"
+                                        method="post"
                                     >
-                                        <span class="h-2 w-2 rounded-full bg-blue-500"></span>
-                                        Mark contacted
-                                    </button>
-                                </form>
-
-
-                                <!-- QUALIFIED -->
-                                <form
-                                    action="/dashboard/contact-messages/{{ message.id }}/quick-status"
-                                    method="post"
-                                >
-                                    <input
-                                        type="hidden"
-                                        name="status"
-                                        value="qualified"
-                                    >
-
-                                    <input
-                                        type="hidden"
-                                        name="redirect_to"
-                                        value="/dashboard/contact-messages"
-                                    >
-
-                                    <button
-                                        type="submit"
-                                        class="flex w-full items-center gap-3 px-3 py-2.5 text-left text-xs font-medium text-slate-700 transition hover:bg-slate-50"
-                                    >
-                                        <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
-                                        Mark qualified
-                                    </button>
-                                </form>
-
-
-                                <div class="my-1 border-t border-slate-100"></div>
-
-
-                                <!-- BLOCK -->
-                                <form
-                                    action="/dashboard/contact-messages/{{ message.id }}/block-sender"
-                                    method="post"
-                                    onsubmit="return confirm('Block this sender?');"
-                                >
-                                    <input
-                                        type="hidden"
-                                        name="redirect_to"
-                                        value="/dashboard/contact-messages"
-                                    >
-
-                                    <input
-                                        type="hidden"
-                                        name="reason"
-                                        value="Blocked from inbox after spam/scam review"
-                                    >
-
-                                    <button
-                                        type="submit"
-                                        class="flex w-full items-center gap-3 px-3 py-2.5 text-left text-xs font-medium text-amber-700 transition hover:bg-amber-50"
-                                    >
-                                        <svg
-                                            class="h-4 w-4"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            stroke-width="2"
+                                        <input
+                                            type="hidden"
+                                            name="status"
+                                            value="contacted"
                                         >
-                                            <circle cx="12" cy="12" r="9"></circle>
-                                            <path d="m6 6 12 12"></path>
-                                        </svg>
 
-                                        Block sender
-                                    </button>
-                                </form>
-
-
-                                <!-- DELETE -->
-                                <form
-                                    action="/dashboard/contact-messages/{{ message.id }}/delete"
-                                    method="post"
-                                    onsubmit="return confirm('Delete this message permanently? This cannot be undone.');"
-                                >
-                                    <button
-                                        type="submit"
-                                        class="flex w-full items-center gap-3 px-3 py-2.5 text-left text-xs font-medium text-rose-600 transition hover:bg-rose-50"
-                                    >
-                                        <svg
-                                            class="h-4 w-4"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            stroke-width="2"
+                                        <input
+                                            type="hidden"
+                                            name="redirect_to"
+                                            value="/dashboard/contact-messages"
                                         >
-                                            <path d="M3 6h18"></path>
-                                            <path d="M8 6V4h8v2"></path>
-                                            <path d="M19 6l-1 14H6L5 6"></path>
-                                            <path d="M10 11v5"></path>
-                                            <path d="M14 11v5"></path>
-                                        </svg>
 
-                                        Delete permanently
-                                    </button>
-                                </form>
+                                        <button
+                                            type="submit"
+                                            class="block w-full px-4 py-2.5 text-left text-xs font-bold text-blue-700 transition hover:bg-blue-50"
+                                        >
+                                            Mark as contacted
+                                        </button>
+                                    </form>
 
-                            </div>
 
-                        </td>
+                                    <form
+                                        action="/dashboard/contact-messages/{{ message.id }}/quick-status"
+                                        method="post"
+                                    >
+                                        <input
+                                            type="hidden"
+                                            name="status"
+                                            value="qualified"
+                                        >
 
-                    </tr>
+                                        <input
+                                            type="hidden"
+                                            name="redirect_to"
+                                            value="/dashboard/contact-messages"
+                                        >
 
-                    {% endfor %}
+                                        <button
+                                            type="submit"
+                                            class="block w-full px-4 py-2.5 text-left text-xs font-bold text-emerald-700 transition hover:bg-emerald-50"
+                                        >
+                                            Mark as qualified
+                                        </button>
+                                    </form>
 
-                </tbody>
-            </table>
+
+                                    <div class="my-1 border-t border-slate-100"></div>
+
+
+                                    <form
+                                        action="/dashboard/contact-messages/{{ message.id }}/block-sender"
+                                        method="post"
+                                        onsubmit="return confirm('Block this sender?');"
+                                    >
+                                        <input
+                                            type="hidden"
+                                            name="redirect_to"
+                                            value="/dashboard/contact-messages"
+                                        >
+
+                                        <input
+                                            type="hidden"
+                                            name="reason"
+                                            value="Blocked from inbox after spam/scam review"
+                                        >
+
+                                        <button
+                                            type="submit"
+                                            class="block w-full px-4 py-2.5 text-left text-xs font-bold text-amber-700 transition hover:bg-amber-50"
+                                        >
+                                            Block sender
+                                        </button>
+                                    </form>
+
+
+                                    <form
+                                        action="/dashboard/contact-messages/{{ message.id }}/delete"
+                                        method="post"
+                                        onsubmit="return confirm('Delete this message permanently? This cannot be undone.');"
+                                    >
+                                        <button
+                                            type="submit"
+                                            class="block w-full px-4 py-2.5 text-left text-xs font-bold text-rose-700 transition hover:bg-rose-50"
+                                        >
+                                            Delete permanently
+                                        </button>
+                                    </form>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
         </div>
 
 
-        <!-- =====================================================
-             TABLE FOOTER
-        ====================================================== -->
-        <footer class="flex flex-col gap-3 border-t border-slate-200 bg-slate-50/50 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+        <!-- ========================================================
+             TABLET / MOBILE CARDS
+        ========================================================= -->
+        <div class="divide-y divide-slate-100 xl:hidden">
+
+            {% for message in messages %}
+
+            <article class="p-4 transition hover:bg-slate-50 sm:p-5">
+
+                <div class="flex items-start justify-between gap-4">
+
+                    <a
+                        href="/dashboard/contact-messages/{{ message.id }}"
+                        class="min-w-0 flex-1"
+                    >
+                        <div class="flex flex-wrap items-center gap-2">
+
+                            <h3 class="truncate text-sm font-black text-slate-950">
+                                {{ message.name }}
+                            </h3>
+
+                            <span class="inline-flex rounded-full px-2 py-0.5 text-[9px] font-black ring-1 ring-inset {{ message.status_badge_class() }}">
+                                {{ message.status_label() }}
+                            </span>
+
+                            <span class="inline-flex rounded-full px-2 py-0.5 text-[9px] font-black ring-1 ring-inset {{ message.priority_badge_class() }}">
+                                {{ message.priority_label() }}
+                            </span>
+
+                        </div>
+
+                        <p class="mt-1 truncate text-xs text-slate-500">
+                            {{ message.email }}
+                        </p>
+                    </a>
+
+
+                    <div class="shrink-0 rounded-lg bg-slate-100 px-2.5 py-1.5 text-xs font-black text-slate-700">
+                        {{ message.lead_score }}
+                    </div>
+
+                </div>
+
+
+                <a
+                    href="/dashboard/contact-messages/{{ message.id }}"
+                    class="mt-4 block"
+                >
+                    <p class="text-sm font-black text-slate-900">
+                        {{ message.subject }}
+                    </p>
+
+                    <p class="mt-1 line-clamp-2 text-xs leading-5 text-slate-500">
+                        {{ message.message }}
+                    </p>
+                </a>
+
+
+                <div class="mt-4 flex flex-wrap gap-2">
+                    <span class="rounded-lg bg-slate-100 px-2.5 py-1.5 text-[10px] font-bold text-slate-600">
+                        {{ message.service_label() }}
+                    </span>
+
+                    <span class="rounded-lg bg-slate-100 px-2.5 py-1.5 text-[10px] font-bold text-slate-600">
+                        {{ message.timeline_label() }}
+                    </span>
+                </div>
+
+
+                <div class="mt-4 flex flex-col gap-3 border-t border-slate-100 pt-3 sm:flex-row sm:items-center sm:justify-between">
+
+                    <div class="text-[10px] font-semibold text-slate-400">
+                        {{ message.created_at }}
+                        ·
+                        {{ message.source_label() }}
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-2">
+
+                        <a
+                            href="/dashboard/contact-messages/{{ message.id }}"
+                            class="rounded-lg bg-slate-950 px-3 py-2 text-xs font-bold text-white transition hover:bg-cyan-600"
+                        >
+                            Open
+                        </a>
+
+                        <a
+                            href="mailto:{{ message.email }}"
+                            class="rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-700 transition hover:bg-slate-50"
+                        >
+                            Email
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+            {% endfor %}
+
+        </div>
+
+
+        <!-- ========================================================
+             FOOTER
+        ========================================================= -->
+        <div class="flex flex-col gap-2 border-t border-slate-200 bg-slate-50/70 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
 
             <p class="text-xs text-slate-500">
                 Showing
-                <span class="font-semibold text-slate-700">
+                <strong class="text-slate-900">
                     {{ messages.len() }}
-                </span>
+                </strong>
                 enquiries
             </p>
 
             <p class="text-xs text-slate-400">
-                Click an enquiry to open the full record
+                Open a record to review the full conversation and notes.
             </p>
 
-        </footer>
+        </div>
 
         {% endif %}
 
@@ -1076,13 +946,13 @@
 </div>
 
 
-<!-- =============================================================
+<!-- ================================================================
      PAGE JAVASCRIPT
-     No Askama expressions inside JavaScript
-============================================================== -->
+     Intentionally contains ZERO Askama expressions.
+================================================================= -->
 <script>
-    function toggleFilters() {
-        const panel = document.getElementById("filtersPanel");
+    function toggleContactFilters() {
+        var panel = document.getElementById("contactFilters");
 
         if (!panel) {
             return;
@@ -1092,8 +962,8 @@
     }
 
 
-    function hideFilters() {
-        const panel = document.getElementById("filtersPanel");
+    function hideContactFilters() {
+        var panel = document.getElementById("contactFilters");
 
         if (!panel) {
             return;
@@ -1103,8 +973,8 @@
     }
 
 
-    function closeAllMessageMenus(exceptId) {
-        const menus = document.querySelectorAll(".message-menu");
+    function closeInboxMenus(exceptId) {
+        var menus = document.querySelectorAll(".inbox-action-menu");
 
         menus.forEach(function (menu) {
             if (!exceptId || menu.id !== exceptId) {
@@ -1114,21 +984,21 @@
     }
 
 
-    function toggleMessageMenu(event, id) {
+    function toggleInboxMenu(event, menuId) {
         event.preventDefault();
         event.stopPropagation();
 
-        const menu = document.getElementById(id);
+        var menu = document.getElementById(menuId);
 
         if (!menu) {
             return;
         }
 
-        const shouldOpen = menu.classList.contains("hidden");
+        var opening = menu.classList.contains("hidden");
 
-        closeAllMessageMenus(id);
+        closeInboxMenus(menuId);
 
-        if (shouldOpen) {
+        if (opening) {
             menu.classList.remove("hidden");
         } else {
             menu.classList.add("hidden");
@@ -1137,52 +1007,50 @@
 
 
     document.addEventListener("click", function (event) {
-        const menu = event.target.closest(".message-menu");
-
-        if (!menu) {
-            closeAllMessageMenus();
+        if (!event.target.closest(".inbox-action-menu")) {
+            closeInboxMenus();
         }
     });
 
 
     document.addEventListener("keydown", function (event) {
         if (event.key === "Escape") {
-            closeAllMessageMenus();
+            closeInboxMenus();
         }
     });
 
 
-    const selectAll = document.getElementById("selectAll");
+    var selectAllMessages = document.getElementById("selectAllMessages");
 
-    if (selectAll) {
-        selectAll.addEventListener("change", function () {
-            const checkboxes = document.querySelectorAll(".message-checkbox");
+    if (selectAllMessages) {
+        selectAllMessages.addEventListener("change", function () {
+            var checkboxes = document.querySelectorAll(".message-checkbox");
 
             checkboxes.forEach(function (checkbox) {
-                checkbox.checked = selectAll.checked;
+                checkbox.checked = selectAllMessages.checked;
             });
         });
     }
 
 
-    const messageCheckboxes = document.querySelectorAll(".message-checkbox");
+    var messageCheckboxes = document.querySelectorAll(".message-checkbox");
 
     messageCheckboxes.forEach(function (checkbox) {
         checkbox.addEventListener("change", function () {
-            if (!selectAll) {
+            if (!selectAllMessages) {
                 return;
             }
 
-            const allCheckboxes = document.querySelectorAll(".message-checkbox");
-            const checkedCheckboxes = document.querySelectorAll(".message-checkbox:checked");
+            var all = document.querySelectorAll(".message-checkbox");
+            var checked = document.querySelectorAll(".message-checkbox:checked");
 
-            selectAll.checked =
-                allCheckboxes.length > 0 &&
-                allCheckboxes.length === checkedCheckboxes.length;
+            selectAllMessages.checked =
+                all.length > 0 &&
+                checked.length === all.length;
 
-            selectAll.indeterminate =
-                checkedCheckboxes.length > 0 &&
-                checkedCheckboxes.length < allCheckboxes.length;
+            selectAllMessages.indeterminate =
+                checked.length > 0 &&
+                checked.length < all.length;
         });
     });
 </script>
