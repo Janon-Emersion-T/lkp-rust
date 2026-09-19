@@ -141,7 +141,8 @@
         <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
             <div>
                 <p class="text-sm font-black uppercase tracking-[0.24em] text-slate-500">Review Queue</p>
-                <h2 class="mt-2 text-2xl font-black text-slate-950">Message-first cards for better follow-up</h2>
+                <h2 class="mt-2 text-2xl font-black text-slate-950">Contact messages</h2>
+                <p class="mt-2 text-sm text-slate-500">Scan, prioritize, and update inquiries from one compact view.</p>
             </div>
 
             <a href="/dashboard/leads"
@@ -158,113 +159,113 @@
             </p>
         </div>
         {% else %}
-        <div class="grid gap-5 2xl:grid-cols-2">
+        <div class="space-y-3 md:hidden">
             {% for message in messages %}
-            <article class="crm-lead-card">
-                <div class="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+            <article class="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm">
+                <div class="flex items-start justify-between gap-3">
+                    <div class="min-w-0">
+                        <h3 class="truncate text-base font-black text-slate-950">{{ message.subject }}</h3>
+                        <p class="mt-1 truncate text-sm font-bold text-slate-700">{{ message.name }}</p>
+                        <a href="mailto:{{ message.email }}" class="mt-1 block truncate text-xs text-cyan-700">{{ message.email }}</a>
+                    </div>
+                    <span class="shrink-0 rounded-full px-3 py-1 text-[10px] font-black uppercase ring-1 {{ message.status_badge_class() }}">
+                        {{ message.status_label() }}
+                    </span>
+                </div>
+
+                <p class="mt-3 line-clamp-2 text-sm leading-6 text-slate-600">{{ message.message }}</p>
+
+                <div class="mt-4 grid grid-cols-2 gap-3 rounded-2xl bg-slate-50 p-3 text-xs">
                     <div>
-                        <div class="flex flex-wrap items-center gap-2">
-                            <span class="inline-flex rounded-full px-3 py-1 text-[11px] font-black uppercase ring-1 {{ message.status_badge_class() }}">
-                                {{ message.status_label() }}
-                            </span>
-                            <span class="inline-flex rounded-full px-3 py-1 text-[11px] font-black uppercase ring-1 {{ message.priority_badge_class() }}">
-                                {{ message.priority_label() }}
-                            </span>
-                            <span class="inline-flex rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-[11px] font-black uppercase tracking-[0.2em] text-slate-600">
-                                {{ message.lead_score }}/100
-                            </span>
-                        </div>
-
-                        <h3 class="mt-4 text-xl font-black text-slate-950">{{ message.subject }}</h3>
-                        <p class="mt-2 text-sm font-semibold text-slate-600">{{ message.name }} · {{ message.email }}</p>
-
-                        <div class="mt-4 grid gap-3 sm:grid-cols-3">
-                            <div class="crm-mini-stat">
-                                <p class="crm-mini-label">Service</p>
-                                <p class="crm-mini-value">{{ message.service_label() }}</p>
-                            </div>
-
-                            <div class="crm-mini-stat">
-                                <p class="crm-mini-label">Company</p>
-                                <p class="crm-mini-value">{{ message.company_label() }}</p>
-                            </div>
-
-                            <div class="crm-mini-stat">
-                                <p class="crm-mini-label">Timeline</p>
-                                <p class="crm-mini-value">{{ message.timeline_label() }}</p>
-                            </div>
-                        </div>
+                        <p class="font-black uppercase tracking-wider text-slate-400">Service</p>
+                        <p class="mt-1 font-bold text-slate-700">{{ message.service_label() }}</p>
                     </div>
-
-                    <div class="rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 lg:min-w-44">
-                        <p class="text-xs font-black uppercase tracking-[0.22em] text-slate-500">Captured</p>
-                        <p class="mt-2 text-sm font-bold leading-6 text-slate-900">{{ message.created_at }}</p>
-                        <p class="mt-3 text-xs font-bold uppercase tracking-[0.2em] text-slate-400">{{ message.source_label() }}</p>
+                    <div>
+                        <p class="font-black uppercase tracking-wider text-slate-400">Received</p>
+                        <p class="mt-1 font-bold text-slate-700">{{ message.created_at }}</p>
                     </div>
                 </div>
 
-                <div class="mt-6 rounded-3xl border border-slate-200 bg-white p-4">
-                    <p class="text-xs font-black uppercase tracking-[0.22em] text-slate-500">Message</p>
-                    <p class="mt-3 line-clamp-4 text-sm leading-7 text-slate-600">{{ message.message }}</p>
-                </div>
-
-                {% if let Some(note_preview) = message.note_preview() %}
-                <div class="mt-4 rounded-3xl border border-cyan-100 bg-cyan-50/70 p-4">
-                    <p class="text-xs font-black uppercase tracking-[0.22em] text-cyan-700">Latest Team Note</p>
-                    <p class="mt-2 line-clamp-2 text-sm leading-7 text-slate-700">{{ note_preview }}</p>
-                </div>
-                {% endif %}
-
-                <div class="mt-6 grid gap-3">
-                    <label class="text-sm font-black text-slate-950">Internal Reply / Follow-up Note</label>
-
-                    <form action="/dashboard/contact-messages/{{ message.id }}/reply" method="post" class="grid gap-3">
-                        <textarea name="admin_reply" rows="3"
-                            placeholder="Called client, requested scope, preparing quote, follow-up tomorrow..."
-                            class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-cyan-500 focus:bg-white focus:ring-4 focus:ring-cyan-100">{% if let Some(reply) = message.admin_reply %}{{ reply }}{% endif %}</textarea>
-
-                        <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-                            <div class="flex flex-wrap gap-3">
-                                <button class="rounded-full bg-slate-950 px-4 py-2 text-sm font-black text-white transition hover:bg-cyan-600">
-                                    Save Note
-                                </button>
-
-                                <a href="/dashboard/contact-messages/{{ message.id }}"
-                                    class="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-black text-slate-700 transition hover:border-cyan-300 hover:bg-cyan-50 hover:text-cyan-700">
-                                    Open Full Record
-                                </a>
-                            </div>
-                        </div>
-                    </form>
-
-                    <div class="flex flex-wrap gap-3">
-                        <form action="/dashboard/contact-messages/{{ message.id }}/quick-status" method="post">
-                            <input type="hidden" name="status" value="contacted">
-                            <input type="hidden" name="redirect_to" value="/dashboard/contact-messages">
-                            <button class="rounded-full border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-black text-blue-700 transition hover:bg-blue-100">
-                                Mark Contacted
-                            </button>
-                        </form>
-
-                        <form action="/dashboard/contact-messages/{{ message.id }}/quick-status" method="post">
-                            <input type="hidden" name="status" value="qualified">
-                            <input type="hidden" name="redirect_to" value="/dashboard/contact-messages">
-                            <button class="rounded-full border border-amber-200 bg-amber-50 px-4 py-2 text-sm font-black text-amber-700 transition hover:bg-amber-100">
-                                Mark Qualified
-                            </button>
-                        </form>
-
-                        <form action="/dashboard/contact-messages/{{ message.id }}/block-sender" method="post">
-                            <input type="hidden" name="redirect_to" value="/dashboard/contact-messages">
-                            <input type="hidden" name="reason" value="Blocked from inbox after spam/scam review">
-                            <button class="rounded-full border border-rose-200 bg-rose-50 px-4 py-2 text-sm font-black text-rose-700 transition hover:bg-rose-100">
-                                Block Sender
-                            </button>
-                        </form>
+                <div class="mt-4 flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-2">
+                        <span class="rounded-full px-2.5 py-1 text-[10px] font-black uppercase ring-1 {{ message.priority_badge_class() }}">{{ message.priority_label() }}</span>
+                        <span class="text-xs font-black text-slate-500">Score {{ message.lead_score }}</span>
                     </div>
+                    <a href="/dashboard/contact-messages/{{ message.id }}" class="rounded-xl bg-slate-950 px-4 py-2 text-xs font-black text-white">Open</a>
                 </div>
             </article>
             {% endfor %}
+        </div>
+
+        <div class="hidden overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-sm md:block">
+            <div class="overflow-x-auto">
+                <table class="w-full min-w-[960px] table-fixed text-left">
+                    <thead class="border-b border-slate-200 bg-slate-50 text-[11px] font-black uppercase tracking-[0.16em] text-slate-500">
+                        <tr>
+                            <th class="w-[20%] px-5 py-4">Contact</th>
+                            <th class="w-[23%] px-5 py-4">Inquiry</th>
+                            <th class="w-[12%] px-5 py-4">Service</th>
+                            <th class="w-[17%] px-5 py-4">Status</th>
+                            <th class="w-[7%] px-5 py-4">Score</th>
+                            <th class="w-[10%] px-5 py-4">Received</th>
+                            <th class="w-[11%] px-5 py-4">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        {% for message in messages %}
+                        <tr class="align-top transition hover:bg-cyan-50/40">
+                            <td class="px-5 py-5">
+                                <p class="truncate text-sm font-black text-slate-950">{{ message.name }}</p>
+                                <a href="mailto:{{ message.email }}" class="mt-1 block truncate text-xs font-semibold text-cyan-700 hover:text-cyan-900">{{ message.email }}</a>
+                                <p class="mt-2 truncate text-xs text-slate-500">{{ message.company_label() }}</p>
+                            </td>
+                            <td class="px-5 py-5">
+                                <a href="/dashboard/contact-messages/{{ message.id }}" class="block truncate text-sm font-black text-slate-950 hover:text-cyan-700">{{ message.subject }}</a>
+                                <p class="mt-2 line-clamp-2 text-xs leading-5 text-slate-500">{{ message.message }}</p>
+                            </td>
+                            <td class="px-5 py-5">
+                                <p class="text-xs font-bold leading-5 text-slate-700">{{ message.service_label() }}</p>
+                                <p class="mt-1 text-xs text-slate-400">{{ message.timeline_label() }}</p>
+                            </td>
+                            <td class="px-5 py-5">
+                                <span class="inline-flex rounded-full px-2.5 py-1 text-[10px] font-black uppercase ring-1 {{ message.status_badge_class() }}">{{ message.status_label() }}</span>
+                                <span class="mt-2 inline-flex rounded-full px-2.5 py-1 text-[10px] font-black uppercase ring-1 {{ message.priority_badge_class() }}">{{ message.priority_label() }}</span>
+                                <div class="mt-3 flex flex-col items-start gap-1">
+                                    <form action="/dashboard/contact-messages/{{ message.id }}/quick-status" method="post">
+                                        <input type="hidden" name="status" value="contacted">
+                                        <input type="hidden" name="redirect_to" value="/dashboard/contact-messages">
+                                        <button class="text-[11px] font-black text-blue-700 hover:underline">Mark contacted</button>
+                                    </form>
+                                    <form action="/dashboard/contact-messages/{{ message.id }}/quick-status" method="post">
+                                        <input type="hidden" name="status" value="qualified">
+                                        <input type="hidden" name="redirect_to" value="/dashboard/contact-messages">
+                                        <button class="text-[11px] font-black text-amber-700 hover:underline">Mark qualified</button>
+                                    </form>
+                                </div>
+                            </td>
+                            <td class="px-5 py-5">
+                                <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-xs font-black text-slate-700">{{ message.lead_score }}</span>
+                            </td>
+                            <td class="px-5 py-5">
+                                <p class="text-xs font-bold leading-5 text-slate-700">{{ message.created_at }}</p>
+                                <p class="mt-1 text-[10px] font-black uppercase tracking-wider text-slate-400">{{ message.source_label() }}</p>
+                            </td>
+                            <td class="px-5 py-5">
+                                <div class="flex flex-col items-start gap-2">
+                                    <a href="/dashboard/contact-messages/{{ message.id }}" class="rounded-xl bg-slate-950 px-3 py-2 text-xs font-black text-white transition hover:bg-cyan-600">Open record</a>
+                                    <a href="mailto:{{ message.email }}" class="text-xs font-black text-cyan-700 hover:underline">Send email</a>
+                                    <form action="/dashboard/contact-messages/{{ message.id }}/block-sender" method="post">
+                                        <input type="hidden" name="redirect_to" value="/dashboard/contact-messages">
+                                        <input type="hidden" name="reason" value="Blocked from inbox after spam/scam review">
+                                        <button class="text-xs font-black text-rose-700 hover:underline">Block sender</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
         {% endif %}
     </section>
