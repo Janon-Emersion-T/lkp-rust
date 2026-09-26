@@ -104,6 +104,94 @@ fn is_business_email(email: &str) -> bool {
     !free_email_domains.contains(&domain)
 }
 
+fn calculate_risk_penalty(form: &ContactMessageForm) -> i32 {
+    let mut penalty = 0;
+
+    let name = form.name.trim().to_lowercase();
+    let subject = form.subject.trim().to_lowercase();
+    let message = form.message.trim().to_lowercase();
+
+    let combined = format!("{subject} {message}");
+
+    // -------------------------------------------------
+    // 1. COMMON UNSOLICITED SALES / SEO SPAM
+    // -------------------------------------------------
+
+    let spam_phrases = [
+        "guest post",
+        "guest posting",
+        "link insertion",
+        "backlinks",
+        "backlink service",
+        "seo package",
+        "seo services",
+        "increase your traffic",
+        "increase website traffic",
+        "first page of google",
+        "rank on google",
+        "domain authority",
+        "domain rating",
+        "casino links",
+        "crypto investment",
+        "investment opportunity",
+    ];
+
+    let spam_matches = spam_phrases
+        .iter()
+        .filter(|phrase| combined.contains(**phrase))
+        .count();
+
+    if spam_matches >= 2 {
+        penalty += 25;
+    } else if spam_matches == 1 {
+        penalty += 10;
+    }
+
+    // -------------------------------------------------
+    // 2. SUSPICIOUSLY LARGE NUMBER OF LINKS
+    // -------------------------------------------------
+
+    let link_count =
+        combined.matches("http://").count()
+        + combined.matches("https://").count()
+        + combined.matches("www.").count();
+
+    if link_count >= 3 {
+        penalty += 20;
+    } else if link_count >= 2 {
+        penalty += 10;
+    }
+
+    // -------------------------------------------------
+    // 3. OBVIOUS PLACEHOLDER / FAKE VALUES
+    // -------------------------------------------------
+
+    let fake_names = [
+        "test",
+        "testing",
+        "asdf",
+        "qwerty",
+        "admin",
+        "unknown",
+        "none",
+        "n/a",
+    ];
+
+    if fake_names.contains(&name.as_str()) {
+        penalty += 20;
+    }
+
+    // -------------------------------------------------
+    // 4. EXTREMELY LOW INFORMATION
+    // -------------------------------------------------
+
+    if message.len() < 20 {
+        penalty += 5;
+    }
+
+    penalty
+}
+
 fn calculate_lead_score(form: &ContactMessageForm) -> i32 {
     let mut score: i32 = 10;
 
@@ -225,6 +313,12 @@ fn calculate_lead_score(form: &ContactMessageForm) -> i32 {
     if message.len() < 30 {
         score -= 5;
     }
+
+    // -------------------------------------------------
+    // 7. RISK / SPAM PENALTY
+    // -------------------------------------------------
+
+    score -= calculate_risk_penalty(form);
 
     // -------------------------------------------------
     // FINAL SCORE
