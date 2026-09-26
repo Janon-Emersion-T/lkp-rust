@@ -9,6 +9,7 @@ use uuid::Uuid;
 
 use crate::{
     models::{ContactMessage, LeadFilters, LeadStats},
+    services::lead_notifications::send_new_lead_notification,
     state::AppState,
 };
 
@@ -151,8 +152,7 @@ fn calculate_risk_penalty(form: &ContactMessageForm) -> i32 {
     // 2. SUSPICIOUSLY LARGE NUMBER OF LINKS
     // -------------------------------------------------
 
-    let link_count =
-        combined.matches("http://").count()
+    let link_count = combined.matches("http://").count()
         + combined.matches("https://").count()
         + combined.matches("www.").count();
 
@@ -167,14 +167,7 @@ fn calculate_risk_penalty(form: &ContactMessageForm) -> i32 {
     // -------------------------------------------------
 
     let fake_names = [
-        "test",
-        "testing",
-        "asdf",
-        "qwerty",
-        "admin",
-        "unknown",
-        "none",
-        "n/a",
+        "test", "testing", "asdf", "qwerty", "admin", "unknown", "none", "n/a",
     ];
 
     if fake_names.contains(&name.as_str()) {
@@ -454,7 +447,7 @@ async fn insert_contact_message(
     headers: &HeaderMap,
     form: &ContactMessageForm,
     fallback_source: &str,
-) -> Result<(), sqlx::Error> {
+) -> Result<ContactMessage, sqlx::Error> {
     let name = form.name.trim();
     let email = form.email.trim().to_lowercase();
     let subject = form.subject.trim();
@@ -585,11 +578,7 @@ async fn insert_contact_message(
     .await
     .unwrap_or(false);
 
-    let status = if sender_blocked {
-        "spam"
-    } else {
-        "new"
-    };
+    let status = if sender_blocked { "spam" } else { "new" };
 
     let lost_reason = if sender_blocked {
         Some("Automatically blocked sender".to_string())
@@ -601,7 +590,7 @@ async fn insert_contact_message(
     // STORE LEAD
     // -------------------------------------------------
 
-    sqlx::query(
+    let lead = sqlx::query_as::<_, ContactMessage>(
         r#"
         INSERT INTO contact_messages
         (
@@ -628,6 +617,7 @@ async fn insert_contact_message(
             CASE WHEN $11 = 'spam' THEN NOW() ELSE NULL END,
             $15, $16
         )
+        RETURNING *
         "#,
     )
     .bind(name)
@@ -646,10 +636,10 @@ async fn insert_contact_message(
     .bind(lost_reason)
     .bind(visitor_ip)
     .bind(user_agent(headers))
-    .execute(&state.db)
+    .fetch_one(&state.db)
     .await?;
 
-    Ok(())
+    Ok(lead)
 }
 
 pub async fn submit_contact_message(
@@ -687,7 +677,16 @@ pub async fn submit_contact_message(
     }
 
     match insert_contact_message(&state, &headers, &form, "contact_page").await {
-        Ok(_) => Redirect::to("/contact?success=1").into_response(),
+        Ok(lead) => {
+            if let Err(error) = send_new_lead_notification(&lead).await {
+                eprintln!(
+                    "Failed to send lead notification for contact message {}: {error}",
+                    lead.id
+                );
+            }
+
+            Redirect::to("/contact?success=1").into_response()
+        }
         Err(error) => {
             eprintln!("Failed to submit contact message: {error}");
 
@@ -737,7 +736,14 @@ pub async fn submit_request_quote(
     }
 
     match insert_contact_message(&state, &headers, &form, "request_quote_modal").await {
-        Ok(_) => {
+        Ok(lead) => {
+            if let Err(error) = send_new_lead_notification(&lead).await {
+                eprintln!(
+                    "Failed to send lead notification for quote request {}: {error}",
+                    lead.id
+                );
+            }
+
             let redirect_to =
                 safe_public_redirect(form.redirect_to.as_deref(), "/?request_quote=success");
             Redirect::to(&redirect_to).into_response()

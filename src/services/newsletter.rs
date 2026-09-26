@@ -1,19 +1,19 @@
-use std::{env, time::Duration};
+use std::time::Duration;
 
 use chrono::Utc;
 use lettre::{
-    AsyncSmtpTransport, AsyncTransport, Message, Tokio1Executor,
+    AsyncTransport, Message,
     message::{Mailbox, MultiPart, SinglePart, header::ContentType},
-    transport::smtp::authentication::Credentials,
 };
 use sqlx::{PgPool, Row};
 use tokio::time::sleep;
 use uuid::Uuid;
 
-type ServiceResult<T> = Result<T, Box<dyn std::error::Error + Send + Sync>>;
+use super::mail::{
+    MailConfig, ServiceResult, absolute_url, escape_html, mailer, read_mail_config, strip_html,
+    text_to_html, truncate_text,
+};
 
-const DEFAULT_BASE_URL: &str = "https://lkprofessionals.com";
-const DEFAULT_FROM_NAME: &str = "LKProfessionals";
 const DEFAULT_POLL_SECONDS: u64 = 20;
 const DEFAULT_SEND_DELAY_MS: u64 = 1400;
 const MAX_DELIVERY_ATTEMPTS: i32 = 5;
@@ -42,17 +42,6 @@ struct PendingDelivery {
     content_html: String,
     cta_label: Option<String>,
     cta_url: Option<String>,
-}
-
-#[derive(Debug, Clone)]
-struct MailConfig {
-    from_name: String,
-    from_email: String,
-    reply_to_email: Option<String>,
-    smtp_host: String,
-    smtp_port: u16,
-    smtp_username: String,
-    smtp_password: String,
 }
 
 pub async fn start_newsletter_worker(db: PgPool) {
@@ -296,7 +285,7 @@ async fn send_delivery(mail_config: &MailConfig, delivery: &PendingDelivery) -> 
             ),
     )?;
 
-    mailer(mail_config).send(email).await?;
+    mailer(mail_config)?.send(email).await?;
 
     Ok(())
 }
@@ -410,34 +399,6 @@ async fn finalize_campaign_status(pool: &PgPool, campaign_id: Uuid) -> ServiceRe
     Ok(())
 }
 
-fn mailer(mail_config: &MailConfig) -> AsyncSmtpTransport<Tokio1Executor> {
-    let credentials = Credentials::new(
-        mail_config.smtp_username.clone(),
-        mail_config.smtp_password.clone(),
-    );
-
-    AsyncSmtpTransport::<Tokio1Executor>::relay(&mail_config.smtp_host)
-        .unwrap()
-        .credentials(credentials)
-        .port(mail_config.smtp_port)
-        .build()
-}
-
-fn read_mail_config() -> Option<MailConfig> {
-    Some(MailConfig {
-        from_name: env::var("MAIL_FROM_NAME").unwrap_or_else(|_| DEFAULT_FROM_NAME.to_string()),
-        from_email: env::var("MAIL_FROM_ADDRESS").ok()?,
-        reply_to_email: env::var("MAIL_REPLY_TO_ADDRESS").ok(),
-        smtp_host: env::var("SMTP_HOST").ok()?,
-        smtp_port: env::var("SMTP_PORT")
-            .ok()
-            .and_then(|value| value.parse().ok())
-            .unwrap_or(587),
-        smtp_username: env::var("SMTP_USERNAME").ok()?,
-        smtp_password: env::var("SMTP_PASSWORD").ok()?,
-    })
-}
-
 fn render_content_email(intro: &str, body: &str) -> String {
     format!(
         "<p style=\"margin:0 0 16px;color:#334155;font-size:16px;line-height:1.7;\">{}</p>{}",
@@ -515,67 +476,4 @@ fn build_plain_text(delivery: &PendingDelivery) -> String {
     }
 
     content.join("\n\n")
-}
-
-fn text_to_html(value: &str) -> String {
-    value
-        .split("\n\n")
-        .filter_map(|paragraph| {
-            let trimmed = paragraph.trim();
-            (!trimmed.is_empty()).then(|| {
-                format!(
-                    "<p style=\"margin:0 0 16px;color:#334155;font-size:16px;line-height:1.7;\">{}</p>",
-                    escape_html(trimmed).replace('\n', "<br>")
-                )
-            })
-        })
-        .collect::<Vec<_>>()
-        .join("")
-}
-
-fn escape_html(value: &str) -> String {
-    value
-        .replace('&', "&amp;")
-        .replace('<', "&lt;")
-        .replace('>', "&gt;")
-        .replace('"', "&quot;")
-        .replace('\'', "&#39;")
-}
-
-fn strip_html(value: &str) -> String {
-    let mut stripped = String::with_capacity(value.len());
-    let mut in_tag = false;
-
-    for character in value.chars() {
-        match character {
-            '<' => in_tag = true,
-            '>' => in_tag = false,
-            _ if !in_tag => stripped.push(character),
-            _ => {}
-        }
-    }
-
-    stripped
-}
-
-fn truncate_text(value: &str, max_chars: usize) -> String {
-    let trimmed = value.trim();
-    if trimmed.chars().count() <= max_chars {
-        return trimmed.to_string();
-    }
-
-    let truncated = trimmed.chars().take(max_chars).collect::<String>();
-    format!("{}...", truncated.trim_end())
-}
-
-fn absolute_url(path_or_url: &str) -> String {
-    if path_or_url.starts_with("http://") || path_or_url.starts_with("https://") {
-        path_or_url.to_string()
-    } else {
-        format!(
-            "{}{}",
-            env::var("APP_URL").unwrap_or_else(|_| DEFAULT_BASE_URL.to_string()),
-            path_or_url
-        )
-    }
 }

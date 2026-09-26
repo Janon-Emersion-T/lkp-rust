@@ -78,14 +78,24 @@ impl ContactMessage {
 
     pub fn service_label(&self) -> &str {
         match self.service_interest.as_deref() {
+            Some("website_development") => "Website Development",
             Some("web_development") => "Website Development",
-            Some("custom_software") => "Custom Software",
-            Some("pos_erp") => "POS / ERP System",
-            Some("seo") => "SEO & Search Growth",
+            Some("custom_software") => "Custom Software Development",
+            Some("software_development") => "Software Development",
+            Some("mobile_app") => "Mobile App Development",
+            Some("mobile_apps") => "Mobile App Development",
+            Some("pos_erp") => "POS / ERP Systems",
+            Some("ecommerce") => "E-Commerce Development",
+            Some("seo") => "SEO",
             Some("digital_marketing") => "Digital Marketing",
-            Some("hosting_domain") => "Hosting & Domain",
+            Some("hosting") => "Hosting & Infrastructure",
+            Some("hosting_domain") => "Hosting & Infrastructure",
+            Some("hosting_domains") => "Hosting & Infrastructure",
             Some("it_consultation") => "IT Consultation",
-            Some("ai_automation") => "AI & Automation",
+            Some("it_consulting") => "IT Consultation",
+            Some("consultation") => "IT Consultation",
+            Some("automation") => "Automation",
+            Some("ai_automation") => "Automation",
             Some(_) => "Other Service",
             None => "General Inquiry",
         }
@@ -108,6 +118,9 @@ impl ContactMessage {
             Some("urgent") => "Urgent",
             Some("this_month") => "This Month",
             Some("1_3_months") => "1 - 3 Months",
+            Some("next_30_60_days") => "Next 30 to 60 Days",
+            Some("this_quarter") => "This Quarter",
+            Some("flexible") => "Flexible",
             Some("planning") => "Still Planning",
             Some(_) => "Custom Timeline",
             None => "Not Given",
@@ -175,6 +188,7 @@ impl ContactMessage {
     pub fn source_label(&self) -> &str {
         match self.source.as_str() {
             "contact_page" => "Contact Page",
+            "request_quote_modal" => "Request Quote",
             other if !other.trim().is_empty() => other,
             _ => "Unknown",
         }
