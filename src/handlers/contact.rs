@@ -426,7 +426,55 @@ async fn insert_contact_message(
     let message = form.message.trim();
 
     // Calculate lead quality score.
-    let lead_score = calculate_lead_score(form);
+    let mut lead_score = calculate_lead_score(form);
+
+    // Check for recent submissions from the same email address.
+    // Multiple submissions are not automatically spam because a
+    // genuine prospect may follow up or retry the form.
+    let recent_email_submissions = sqlx::query_scalar::<_, i64>(
+        r#"
+        SELECT COUNT(*)
+        FROM contact_messages
+        WHERE lower(email) = lower($1)
+        AND created_at >= NOW() - INTERVAL '24 hours'
+        "#,
+    )
+    .bind(&email)
+    .fetch_one(&state.db)
+    .await
+    .unwrap_or(0);
+
+    // Mild penalty for repeated submissions.
+    if recent_email_submissions >= 3 {
+        lead_score -= 20;
+    } else if recent_email_submissions >= 1 {
+        lead_score -= 5;
+    }
+
+    // Identical messages submitted repeatedly are a stronger
+    // indication of automated or low-quality submissions.
+    let identical_message_count = sqlx::query_scalar::<_, i64>(
+        r#"
+        SELECT COUNT(*)
+        FROM contact_messages
+        WHERE lower(email) = lower($1)
+        AND lower(btrim(message)) = lower(btrim($2))
+        AND created_at >= NOW() - INTERVAL '7 days'
+        "#,
+    )
+    .bind(&email)
+    .bind(message)
+    .fetch_one(&state.db)
+    .await
+    .unwrap_or(0);
+
+    if identical_message_count >= 2 {
+        lead_score -= 25;
+    } else if identical_message_count >= 1 {
+        lead_score -= 10;
+    }
+
+    // Keep the final score inside the validC
 
     // Priority is calculated separately from lead quality.
     // This allows an urgent but low-scoring enquiry to still
