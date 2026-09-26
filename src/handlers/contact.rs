@@ -79,6 +79,31 @@ fn clean_optional(value: &Option<String>) -> Option<String> {
         .map(ToOwned::to_owned)
 }
 
+fn is_business_email(email: &str) -> bool {
+    let email = email.trim().to_lowercase();
+
+    let Some((_, domain)) = email.rsplit_once('@') else {
+        return false;
+    };
+
+    let free_email_domains = [
+        "gmail.com",
+        "yahoo.com",
+        "yahoo.co.uk",
+        "hotmail.com",
+        "outlook.com",
+        "live.com",
+        "icloud.com",
+        "aol.com",
+        "proton.me",
+        "protonmail.com",
+        "gmx.com",
+        "mail.com",
+    ];
+
+    !free_email_domains.contains(&domain)
+}
+
 fn calculate_lead_score(form: &ContactMessageForm) -> i32 {
     let mut score: i32 = 10;
 
@@ -86,7 +111,17 @@ fn calculate_lead_score(form: &ContactMessageForm) -> i32 {
     // 1. CONTACT QUALITY
     // -------------------------------------------------
 
+    // A business-domain email is a useful trust signal.
+    // Free email accounts are NOT penalised because many
+    // legitimate small businesses still use Gmail/Outlook.
+    if is_business_email(&form.email) {
+        score += 7;
+    }
+
     // Phone number supplied
+    if clean_optional(&form.phone).is_some() {
+        score += 5;
+    }
     if clean_optional(&form.phone).is_some() {
         score += 5;
     }
