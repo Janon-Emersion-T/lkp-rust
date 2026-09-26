@@ -198,12 +198,30 @@ fn calculate_lead_score(form: &ContactMessageForm) -> i32 {
     score.clamp(0, 100)
 }
 
-fn calculate_priority(score: i32) -> &'static str {
-    match score {
-        70..=100 => "high",
-        40..=69 => "medium",
-        _ => "normal",
+fn calculate_priority(form: &ContactMessageForm, score: i32) -> &'static str {
+    let timeline = form
+        .project_timeline
+        .as_deref()
+        .unwrap_or("")
+        .to_lowercase();
+
+    // Urgent enquiries require quick attention regardless
+    // of whether they are fully qualified yet.
+    if timeline.contains("urgent") {
+        return "high";
     }
+
+    // Strongly qualified leads also deserve high priority.
+    if score >= 70 {
+        return "high";
+    }
+
+    // Near-term projects or reasonably qualified enquiries.
+    if timeline.contains("this_month") || score >= 40 {
+        return "medium";
+    }
+
+    "normal"
 }
 
 fn parse_filters(query: LeadQuery) -> LeadFilters {
@@ -277,8 +295,16 @@ async fn insert_contact_message(
     let email = form.email.trim().to_lowercase();
     let subject = form.subject.trim();
     let message = form.message.trim();
+
+    // Calculate lead quality score.
     let lead_score = calculate_lead_score(form);
-    let priority = calculate_priority(lead_score);
+
+    // Priority is calculated separately from lead quality.
+    // This allows an urgent but low-scoring enquiry to still
+    // receive high operational priority.
+    let priority = calculate_priority(form, lead_score);
+
+    // Check whether this sender has previously been blocked.
     let sender_blocked = sqlx::query_scalar::<_, bool>(
         r#"
         SELECT EXISTS(
@@ -292,13 +318,17 @@ async fn insert_contact_message(
     .fetch_one(&state.db)
     .await
     .unwrap_or(false);
+
+    // Automatically mark messages from blocked senders as spam.
     let status = if sender_blocked { "spam" } else { "new" };
+
     let lost_reason = if sender_blocked {
         Some("Automatically blocked sender".to_string())
     } else {
         None
     };
 
+    // Store the contact message / lead.
     sqlx::query(
         r#"
         INSERT INTO contact_messages
