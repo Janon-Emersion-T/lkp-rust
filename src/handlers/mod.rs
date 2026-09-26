@@ -7,6 +7,7 @@ pub mod insight_content;
 pub mod legal;
 pub mod marketing;
 pub mod newsletter;
+pub mod package_content;
 pub mod portfolio;
 pub mod public;
 pub mod render;

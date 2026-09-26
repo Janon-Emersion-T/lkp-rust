@@ -12,7 +12,8 @@ use crate::{
         region_page, request_quote, robot_alias, robots_txt, service_area_alias,
         service_area_single, service_area_single_alias, service_areas, services, sitemap_html,
         sitemap_xml, solution_page, submit_career_application, submit_contact_message,
-        submit_request_quote, subscribe_newsletter, why_work,
+        submit_request_quote, subscribe_newsletter, web_design_development_package,
+        web_design_development_packages, why_work,
     },
     state::AppState,
 };
@@ -29,6 +30,14 @@ pub fn public_routes() -> Router<AppState> {
         .route("/about", get(about))
         .route("/founder/janon-emersion-t", get(founder_portfolio))
         .route("/packages", get(packages))
+        .route(
+            "/packages/web-design-development",
+            get(web_design_development_packages),
+        )
+        .route(
+            "/packages/web-design-development/{slug}",
+            get(web_design_development_package),
+        )
         .route(
             "/packages/business-website-package",
             get(business_website_package),

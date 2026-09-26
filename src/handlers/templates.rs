@@ -3,6 +3,7 @@ use askama::Template;
 use crate::{
     handlers::{
         marketing::MarketingLandingPage,
+        package_content::{WebPackage, WebPackageFamily},
         service_content::{ServiceCard, ServicePageContext, ServicePoint, ServiceStep},
     },
     models::{
@@ -35,6 +36,16 @@ pub struct HomeTemplate {
 page!(AboutTemplate, "pages/aboutus.html");
 page!(FounderPortfolioTemplate, "pages/founder-portfolio.html");
 page!(PackagesTemplate, "pages/packages/index.html");
+#[derive(Template)]
+#[template(path = "pages/packages/web_design_development.html")]
+pub struct WebDesignPackagesTemplate {
+    pub family: WebPackageFamily,
+}
+#[derive(Template)]
+#[template(path = "pages/packages/web_design_package_detail.html")]
+pub struct WebDesignPackageDetailTemplate {
+    pub package: WebPackage,
+}
 page!(
     BusinessWebsitePackageTemplate,
     "pages/packages/business_website_package.html"

@@ -6,12 +6,14 @@ use axum::{
 use std::collections::HashMap;
 
 use super::{
+    package_content::{find_web_package, web_design_family},
     render::render,
     service_content::services_overview_context,
     templates::{
         AboutTemplate, BusinessSeoOfferTemplate, BusinessWebsitePackageTemplate, ContactTemplate,
         FaqTemplate, FounderPortfolioTemplate, NotFoundTemplate, PackagesTemplate,
-        RequestQuoteTemplate, ServicesTemplate,
+        RequestQuoteTemplate, ServicesTemplate, WebDesignPackageDetailTemplate,
+        WebDesignPackagesTemplate,
     },
 };
 
@@ -33,6 +35,19 @@ pub async fn business_website_package() -> impl IntoResponse {
 
 pub async fn business_seo_offer() -> impl IntoResponse {
     render(BusinessSeoOfferTemplate)
+}
+
+pub async fn web_design_development_packages() -> impl IntoResponse {
+    render(WebDesignPackagesTemplate {
+        family: web_design_family(),
+    })
+}
+
+pub async fn web_design_development_package(Path(slug): Path<String>) -> impl IntoResponse {
+    match find_web_package(&slug) {
+        Some(package) => render(WebDesignPackageDetailTemplate { package }).into_response(),
+        None => not_found().await.into_response(),
+    }
 }
 
 pub async fn services() -> impl IntoResponse {
