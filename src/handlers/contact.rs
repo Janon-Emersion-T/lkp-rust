@@ -80,37 +80,120 @@ fn clean_optional(value: &Option<String>) -> Option<String> {
 }
 
 fn calculate_lead_score(form: &ContactMessageForm) -> i32 {
-    let mut score = 10;
+    let mut score: i32 = 10;
 
+    // -------------------------------------------------
+    // 1. CONTACT QUALITY
+    // -------------------------------------------------
+
+    // Phone number supplied
     if clean_optional(&form.phone).is_some() {
-        score += 15;
+        score += 5;
     }
 
+    // Company supplied
     if clean_optional(&form.company).is_some() {
-        score += 10;
+        score += 3;
     }
 
+    // Service selected
     if clean_optional(&form.service_interest).is_some() {
-        score += 20;
+        score += 5;
     }
 
-    if form.budget_range.as_deref().is_some_and(|value| {
-        value.contains("500") || value.contains("1000") || value.contains("enterprise")
-    }) {
-        score += 20;
+    // -------------------------------------------------
+    // 2. BUDGET / COMMERCIAL VALUE
+    // -------------------------------------------------
+
+    if let Some(budget) = form.budget_range.as_deref() {
+        let budget = budget.to_lowercase();
+
+        if budget.contains("enterprise") {
+            score += 20;
+        } else if budget.contains("1000") {
+            score += 15;
+        } else if budget.contains("500") {
+            score += 10;
+        } else if budget.contains("custom") {
+            // Custom budget does NOT automatically mean
+            // that the customer has a strong budget.
+            score += 3;
+        }
     }
 
-    if form
-        .project_timeline
-        .as_deref()
-        .is_some_and(|value| value.contains("urgent") || value.contains("this_month"))
-    {
-        score += 20;
+    // -------------------------------------------------
+    // 3. PROJECT TIMELINE
+    // -------------------------------------------------
+
+    if let Some(timeline) = form.project_timeline.as_deref() {
+        let timeline = timeline.to_lowercase();
+
+        if timeline.contains("urgent") {
+            score += 12;
+        } else if timeline.contains("this_month") {
+            score += 10;
+        } else if timeline.contains("1_3") || timeline.contains("1-3") {
+            score += 6;
+        } else if timeline.contains("3_month") {
+            score += 3;
+        }
     }
 
-    if form.message.len() > 120 {
+    // -------------------------------------------------
+    // 4. MESSAGE / PROJECT DETAIL
+    // -------------------------------------------------
+
+    let message = form.message.trim();
+    let message_lower = message.to_lowercase();
+
+    // Reward actual project detail rather than simply
+    // rewarding the existence of a message.
+    if message.len() >= 300 {
+        score += 15;
+    } else if message.len() >= 150 {
         score += 10;
+    } else if message.len() >= 60 {
+        score += 5;
     }
+
+    // -------------------------------------------------
+    // 5. BUYING INTENT
+    // -------------------------------------------------
+
+    // Strong commercial actions
+    if message_lower.contains("quote")
+        || message_lower.contains("quotation")
+        || message_lower.contains("proposal")
+        || message_lower.contains("estimate")
+        || message_lower.contains("pricing")
+        || message_lower.contains("price")
+    {
+        score += 8;
+    }
+
+    // Customer wants direct communication
+    if message_lower.contains("call me")
+        || message_lower.contains("contact me")
+        || message_lower.contains("whatsapp")
+        || message_lower.contains("meeting")
+        || message_lower.contains("schedule a call")
+    {
+        score += 5;
+    }
+
+    // -------------------------------------------------
+    // 6. WEAK / LOW-INFORMATION ENQUIRIES
+    // -------------------------------------------------
+
+    // Very short messages should not become hot leads
+    // simply because every form field was completed.
+    if message.len() < 30 {
+        score -= 5;
+    }
+
+    // -------------------------------------------------
+    // FINAL SCORE
+    // -------------------------------------------------
 
     score.clamp(0, 100)
 }
