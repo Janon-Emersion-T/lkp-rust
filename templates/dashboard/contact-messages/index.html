@@ -340,7 +340,7 @@
         <div id="bulkMessageActions" class="hidden items-center justify-between gap-3 border-b border-cyan-100 bg-cyan-50 px-4 py-3">
             <p class="text-sm font-bold text-cyan-900"><span id="selectedMessageCount">0</span> enquiries selected</p>
             <form id="bulkDeleteMessagesForm" action="/dashboard/contact-messages/bulk-delete" method="post" data-confirm="Delete the selected enquiries permanently? This cannot be undone.">
-                <button id="bulkDeleteMessagesButton" type="submit" disabled class="rounded-lg bg-rose-600 px-3 py-2 text-xs font-black text-white transition hover:bg-rose-700 disabled:cursor-not-allowed disabled:opacity-50">Delete selected</button>
+                <button id="bulkDeleteMessagesButton" type="submit" class="rounded-lg bg-rose-600 px-3 py-2 text-xs font-black text-white transition hover:bg-rose-700 disabled:cursor-not-allowed disabled:opacity-50">Delete selected</button>
             </form>
         </div>
 
@@ -967,6 +967,6 @@
 </div>
 
 
-<script defer src="/static/js/contact-messages.js?v=20260919"></script>
+<script defer src="/static/js/contact-messages.js?v=20260927"></script>
 
 {% endblock %}

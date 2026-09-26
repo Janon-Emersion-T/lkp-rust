@@ -25,6 +25,16 @@
     if (count) count.textContent = selected.length;
     if (submitButton) submitButton.disabled = selected.length === 0;
     if (form) {
+      form.querySelectorAll("input[data-bulk-delete-id]").forEach((input) => input.remove());
+      selected.forEach((checkbox) => {
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = "ids";
+        input.value = checkbox.value;
+        input.dataset.bulkDeleteId = "true";
+        form.appendChild(input);
+      });
+
       const noun = selected.length === 1 ? "enquiry" : "enquiries";
       form.dataset.confirm = `Delete ${selected.length} selected ${noun} permanently? This cannot be undone.`;
     }
