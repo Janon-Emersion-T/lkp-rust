@@ -425,18 +425,28 @@ async fn insert_contact_message(
     let subject = form.subject.trim();
     let message = form.message.trim();
 
-    // Calculate lead quality score.
+    // Capture visitor IP once so it can be used for both
+    // abuse detection and database storage.
+    let visitor_ip = client_ip(headers);
+
+    // -------------------------------------------------
+    // INITIAL LEAD SCORE
+    // -------------------------------------------------
+
     let mut lead_score = calculate_lead_score(form);
 
-    // Check for recent submissions from the same email address.
-    // Multiple submissions are not automatically spam because a
-    // genuine prospect may follow up or retry the form.
+    // -------------------------------------------------
+    // REPEATED EMAIL DETECTION
+    // -------------------------------------------------
+
+    // Multiple submissions are not automatically spam.
+    // A genuine prospect may retry the form or follow up.
     let recent_email_submissions = sqlx::query_scalar::<_, i64>(
         r#"
         SELECT COUNT(*)
         FROM contact_messages
         WHERE lower(email) = lower($1)
-        AND created_at >= NOW() - INTERVAL '24 hours'
+          AND created_at >= NOW() - INTERVAL '24 hours'
         "#,
     )
     .bind(&email)
@@ -444,22 +454,25 @@ async fn insert_contact_message(
     .await
     .unwrap_or(0);
 
-    // Mild penalty for repeated submissions.
     if recent_email_submissions >= 3 {
         lead_score -= 20;
     } else if recent_email_submissions >= 1 {
         lead_score -= 5;
     }
 
-    // Identical messages submitted repeatedly are a stronger
-    // indication of automated or low-quality submissions.
+    // -------------------------------------------------
+    // IDENTICAL MESSAGE DETECTION
+    // -------------------------------------------------
+
+    // Repeated identical messages from the same email
+    // are a stronger spam / automation signal.
     let identical_message_count = sqlx::query_scalar::<_, i64>(
         r#"
         SELECT COUNT(*)
         FROM contact_messages
         WHERE lower(email) = lower($1)
-        AND lower(btrim(message)) = lower(btrim($2))
-        AND created_at >= NOW() - INTERVAL '7 days'
+          AND lower(btrim(message)) = lower(btrim($2))
+          AND created_at >= NOW() - INTERVAL '7 days'
         "#,
     )
     .bind(&email)
@@ -474,20 +487,57 @@ async fn insert_contact_message(
         lead_score -= 10;
     }
 
-    // Keep the final score inside the validC
+    // -------------------------------------------------
+    // IP-BASED ABUSE DETECTION
+    // -------------------------------------------------
 
-    // Priority is calculated separately from lead quality.
-    // This allows an urgent but low-scoring enquiry to still
-    // receive high operational priority.
+    if let Some(ref ip) = visitor_ip {
+        let recent_ip_submissions = sqlx::query_scalar::<_, i64>(
+            r#"
+            SELECT COUNT(*)
+            FROM contact_messages
+            WHERE client_ip = $1
+              AND created_at >= NOW() - INTERVAL '1 hour'
+            "#,
+        )
+        .bind(ip)
+        .fetch_one(&state.db)
+        .await
+        .unwrap_or(0);
+
+        // Be conservative because offices, mobile networks,
+        // schools and other organisations may share an IP.
+        if recent_ip_submissions >= 10 {
+            lead_score -= 35;
+        } else if recent_ip_submissions >= 5 {
+            lead_score -= 20;
+        } else if recent_ip_submissions >= 3 {
+            lead_score -= 10;
+        }
+    }
+
+    // -------------------------------------------------
+    // FINALISE SCORE
+    // -------------------------------------------------
+
+    // Ensure PostgreSQL always receives a valid 0-100 score.
+    lead_score = lead_score.clamp(0, 100);
+
+    // Priority is separate from lead quality.
+    // An urgent enquiry can therefore receive high operational
+    // priority even when it is not yet strongly qualified.
     let priority = calculate_priority(form, lead_score);
 
-    // Check whether this sender has previously been blocked.
+    // -------------------------------------------------
+    // BLOCKED SENDER CHECK
+    // -------------------------------------------------
+
     let sender_blocked = sqlx::query_scalar::<_, bool>(
         r#"
         SELECT EXISTS(
             SELECT 1
             FROM blocked_contact_senders
-            WHERE email = $1
+            WHERE lower(email) = lower($1)
         )
         "#,
     )
@@ -496,8 +546,11 @@ async fn insert_contact_message(
     .await
     .unwrap_or(false);
 
-    // Automatically mark messages from blocked senders as spam.
-    let status = if sender_blocked { "spam" } else { "new" };
+    let status = if sender_blocked {
+        "spam"
+    } else {
+        "new"
+    };
 
     let lost_reason = if sender_blocked {
         Some("Automatically blocked sender".to_string())
@@ -505,7 +558,10 @@ async fn insert_contact_message(
         None
     };
 
-    // Store the contact message / lead.
+    // -------------------------------------------------
+    // STORE LEAD
+    // -------------------------------------------------
+
     sqlx::query(
         r#"
         INSERT INTO contact_messages
@@ -536,7 +592,7 @@ async fn insert_contact_message(
         "#,
     )
     .bind(name)
-    .bind(email)
+    .bind(&email)
     .bind(clean_optional(&form.phone))
     .bind(clean_optional(&form.company))
     .bind(clean_optional(&form.service_interest))
@@ -549,7 +605,7 @@ async fn insert_contact_message(
     .bind(priority)
     .bind(lead_score)
     .bind(lost_reason)
-    .bind(client_ip(headers))
+    .bind(visitor_ip)
     .bind(user_agent(headers))
     .execute(&state.db)
     .await?;
