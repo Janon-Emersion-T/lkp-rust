@@ -199,23 +199,25 @@ fn calculate_lead_score(form: &ContactMessageForm, source: &str) -> i32 {
     // 1. CONTACT QUALITY
     // -------------------------------------------------
 
-    // Business-domain email is a positive trust signal.
+    // Business-domain email is a useful trust signal.
     // Free email providers are NOT penalised.
     if is_business_email(&form.email) {
         score += 7;
     }
 
-    // Phone number supplied.
+    // A phone / WhatsApp number gives us another
+    // legitimate way to contact the prospect.
     if clean_optional(&form.phone).is_some() {
         score += 5;
     }
 
-    // Company supplied.
+    // Company / brand information improves qualification.
     if clean_optional(&form.company).is_some() {
         score += 3;
     }
 
-    // Service selected.
+    // Selecting a service shows some understanding
+    // of what the prospect needs.
     if clean_optional(&form.service_interest).is_some() {
         score += 5;
     }
@@ -226,58 +228,65 @@ fn calculate_lead_score(form: &ContactMessageForm, source: &str) -> i32 {
 
     let source = source.trim().to_lowercase();
 
-    // A visitor deliberately opening the quote workflow
-    // demonstrates stronger commercial intent.
-    if source.contains("request_quote")
-        || source.contains("quote_modal")
-        || source.contains("quotation")
-    {
+    // Requesting a quote is stronger commercial intent
+    // than submitting a general contact message.
+    if source == "request_quote_modal" {
         score += 7;
     }
 
     // -------------------------------------------------
-    // 3. BUDGET / COMMERCIAL VALUE
-    // -------------------------------------------------
-
-    if let Some(budget) = form.budget_range.as_deref() {
-        let budget = budget.trim().to_lowercase();
-
-        if budget.contains("enterprise") {
-            score += 20;
-        } else if budget.contains("1000") {
-            score += 15;
-        } else if budget.contains("500") {
-            score += 10;
-        } else if budget.contains("custom") {
-            score += 3;
-        }
-    }
-
-    // -------------------------------------------------
-    // 4. PROJECT TIMELINE
+    // 3. PROJECT TIMELINE
     // -------------------------------------------------
 
     if let Some(timeline) = form.project_timeline.as_deref() {
-        let timeline = timeline.trim().to_lowercase();
+        match timeline.trim().to_lowercase().as_str() {
+            // Prospect says the project is urgent.
+            "urgent" => {
+                score += 12;
+            }
 
-        if timeline.contains("urgent") {
-            score += 12;
-        } else if timeline.contains("this_month") {
-            score += 10;
-        } else if timeline.contains("1_3") || timeline.contains("1-3") {
-            score += 6;
-        } else if timeline.contains("3_month") {
-            score += 3;
+            // Prospect expects to start this month.
+            "this_month" => {
+                score += 10;
+            }
+
+            // Contact-page option.
+            "1_3_months" => {
+                score += 6;
+            }
+
+            // Quote-modal option.
+            "next_30_60_days" => {
+                score += 7;
+            }
+
+            // Quote-modal option.
+            "this_quarter" => {
+                score += 5;
+            }
+
+            // Early-stage prospect.
+            "planning" => {
+                score += 2;
+            }
+
+            // Timeline exists but customer is flexible.
+            "flexible" => {
+                score += 2;
+            }
+
+            _ => {}
         }
     }
 
     // -------------------------------------------------
-    // 5. MESSAGE / PROJECT DETAIL
+    // 4. MESSAGE / PROJECT DETAIL
     // -------------------------------------------------
 
     let message = form.message.trim();
     let message_lower = message.to_lowercase();
 
+    // Reward useful project information.
     if message.len() >= 300 {
         score += 15;
     } else if message.len() >= 150 {
@@ -287,9 +296,11 @@ fn calculate_lead_score(form: &ContactMessageForm, source: &str) -> i32 {
     }
 
     // -------------------------------------------------
-    // 6. BUYING INTENT
+    // 5. COMMERCIAL / BUYING INTENT
     // -------------------------------------------------
 
+    // Prospect is asking about money, quotation,
+    // proposal, or commercial engagement.
     if message_lower.contains("quote")
         || message_lower.contains("quotation")
         || message_lower.contains("proposal")
@@ -301,6 +312,7 @@ fn calculate_lead_score(form: &ContactMessageForm, source: &str) -> i32 {
         score += 8;
     }
 
+    // Prospect explicitly wants direct communication.
     if message_lower.contains("call me")
         || message_lower.contains("contact me")
         || message_lower.contains("whatsapp")
@@ -311,6 +323,7 @@ fn calculate_lead_score(form: &ContactMessageForm, source: &str) -> i32 {
         score += 5;
     }
 
+    // Strong project-start language.
     if message_lower.contains("start project")
         || message_lower.contains("start the project")
         || message_lower.contains("get started")
@@ -320,20 +333,24 @@ fn calculate_lead_score(form: &ContactMessageForm, source: &str) -> i32 {
         || message_lower.contains("need a developer")
         || message_lower.contains("looking for a developer")
         || message_lower.contains("looking for an agency")
+        || message_lower.contains("looking for a company")
     {
         score += 7;
     }
 
     // -------------------------------------------------
-    // 7. WEAK / LOW-INFORMATION ENQUIRIES
+    // 6. WEAK / LOW-INFORMATION ENQUIRIES
     // -------------------------------------------------
 
+    // Very short enquiries provide little qualification
+    // information and should not become hot leads simply
+    // because optional fields were completed.
     if message.len() < 30 {
         score -= 5;
     }
 
     // -------------------------------------------------
-    // 8. RISK / SPAM PENALTY
+    // 7. RISK / SPAM SIGNALS
     // -------------------------------------------------
 
     score -= calculate_risk_penalty(form);
