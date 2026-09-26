@@ -192,44 +192,55 @@ fn calculate_risk_penalty(form: &ContactMessageForm) -> i32 {
     penalty
 }
 
-fn calculate_lead_score(form: &ContactMessageForm) -> i32 {
+fn calculate_lead_score(form: &ContactMessageForm, source: &str) -> i32 {
     let mut score: i32 = 10;
 
     // -------------------------------------------------
     // 1. CONTACT QUALITY
     // -------------------------------------------------
 
-    // A business-domain email is a useful trust signal.
-    // Free email accounts are NOT penalised because many
-    // legitimate small businesses still use Gmail/Outlook.
+    // Business-domain email is a positive trust signal.
+    // Free email providers are NOT penalised.
     if is_business_email(&form.email) {
         score += 7;
     }
 
-    // Phone number supplied
-    if clean_optional(&form.phone).is_some() {
-        score += 5;
-    }
+    // Phone number supplied.
     if clean_optional(&form.phone).is_some() {
         score += 5;
     }
 
-    // Company supplied
+    // Company supplied.
     if clean_optional(&form.company).is_some() {
         score += 3;
     }
 
-    // Service selected
+    // Service selected.
     if clean_optional(&form.service_interest).is_some() {
         score += 5;
     }
 
     // -------------------------------------------------
-    // 2. BUDGET / COMMERCIAL VALUE
+    // 2. ENQUIRY SOURCE / COMMERCIAL INTENT
+    // -------------------------------------------------
+
+    let source = source.trim().to_lowercase();
+
+    // A visitor deliberately opening the quote workflow
+    // demonstrates stronger commercial intent.
+    if source.contains("request_quote")
+        || source.contains("quote_modal")
+        || source.contains("quotation")
+    {
+        score += 7;
+    }
+
+    // -------------------------------------------------
+    // 3. BUDGET / COMMERCIAL VALUE
     // -------------------------------------------------
 
     if let Some(budget) = form.budget_range.as_deref() {
-        let budget = budget.to_lowercase();
+        let budget = budget.trim().to_lowercase();
 
         if budget.contains("enterprise") {
             score += 20;
@@ -238,18 +249,16 @@ fn calculate_lead_score(form: &ContactMessageForm) -> i32 {
         } else if budget.contains("500") {
             score += 10;
         } else if budget.contains("custom") {
-            // Custom budget does NOT automatically mean
-            // that the customer has a strong budget.
             score += 3;
         }
     }
 
     // -------------------------------------------------
-    // 3. PROJECT TIMELINE
+    // 4. PROJECT TIMELINE
     // -------------------------------------------------
 
     if let Some(timeline) = form.project_timeline.as_deref() {
-        let timeline = timeline.to_lowercase();
+        let timeline = timeline.trim().to_lowercase();
 
         if timeline.contains("urgent") {
             score += 12;
@@ -263,14 +272,12 @@ fn calculate_lead_score(form: &ContactMessageForm) -> i32 {
     }
 
     // -------------------------------------------------
-    // 4. MESSAGE / PROJECT DETAIL
+    // 5. MESSAGE / PROJECT DETAIL
     // -------------------------------------------------
 
     let message = form.message.trim();
     let message_lower = message.to_lowercase();
 
-    // Reward actual project detail rather than simply
-    // rewarding the existence of a message.
     if message.len() >= 300 {
         score += 15;
     } else if message.len() >= 150 {
@@ -280,42 +287,53 @@ fn calculate_lead_score(form: &ContactMessageForm) -> i32 {
     }
 
     // -------------------------------------------------
-    // 5. BUYING INTENT
+    // 6. BUYING INTENT
     // -------------------------------------------------
 
-    // Strong commercial actions
     if message_lower.contains("quote")
         || message_lower.contains("quotation")
         || message_lower.contains("proposal")
         || message_lower.contains("estimate")
         || message_lower.contains("pricing")
         || message_lower.contains("price")
+        || message_lower.contains("cost")
     {
         score += 8;
     }
 
-    // Customer wants direct communication
     if message_lower.contains("call me")
         || message_lower.contains("contact me")
         || message_lower.contains("whatsapp")
         || message_lower.contains("meeting")
         || message_lower.contains("schedule a call")
+        || message_lower.contains("book a call")
     {
         score += 5;
     }
 
+    if message_lower.contains("start project")
+        || message_lower.contains("start the project")
+        || message_lower.contains("get started")
+        || message_lower.contains("ready to start")
+        || message_lower.contains("need a website")
+        || message_lower.contains("need website")
+        || message_lower.contains("need a developer")
+        || message_lower.contains("looking for a developer")
+        || message_lower.contains("looking for an agency")
+    {
+        score += 7;
+    }
+
     // -------------------------------------------------
-    // 6. WEAK / LOW-INFORMATION ENQUIRIES
+    // 7. WEAK / LOW-INFORMATION ENQUIRIES
     // -------------------------------------------------
 
-    // Very short messages should not become hot leads
-    // simply because every form field was completed.
     if message.len() < 30 {
         score -= 5;
     }
 
     // -------------------------------------------------
-    // 7. RISK / SPAM PENALTY
+    // 8. RISK / SPAM PENALTY
     // -------------------------------------------------
 
     score -= calculate_risk_penalty(form);
@@ -425,6 +443,10 @@ async fn insert_contact_message(
     let subject = form.subject.trim();
     let message = form.message.trim();
 
+    // Resolve the source once and use the same value for
+    // scoring and database storage.
+    let source = clean_source(&form.source, fallback_source);
+
     // Capture visitor IP once so it can be used for both
     // abuse detection and database storage.
     let visitor_ip = client_ip(headers);
@@ -433,7 +455,7 @@ async fn insert_contact_message(
     // INITIAL LEAD SCORE
     // -------------------------------------------------
 
-    let mut lead_score = calculate_lead_score(form);
+    let mut lead_score = calculate_lead_score(form, &source);
 
     // -------------------------------------------------
     // REPEATED EMAIL DETECTION
@@ -600,7 +622,7 @@ async fn insert_contact_message(
     .bind(clean_optional(&form.project_timeline))
     .bind(subject)
     .bind(message)
-    .bind(clean_source(&form.source, fallback_source))
+    .bind(source)
     .bind(status)
     .bind(priority)
     .bind(lead_score)
