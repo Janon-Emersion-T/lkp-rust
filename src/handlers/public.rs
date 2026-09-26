@@ -6,7 +6,9 @@ use axum::{
 use std::collections::HashMap;
 
 use super::{
-    package_content::{find_web_package, web_design_family},
+    package_content::{
+        app_software_family, find_app_software_package, find_web_package, web_design_family,
+    },
     render::render,
     service_content::services_overview_context,
     templates::{
@@ -45,6 +47,19 @@ pub async fn web_design_development_packages() -> impl IntoResponse {
 
 pub async fn web_design_development_package(Path(slug): Path<String>) -> impl IntoResponse {
     match find_web_package(&slug) {
+        Some(package) => render(WebDesignPackageDetailTemplate { package }).into_response(),
+        None => not_found().await.into_response(),
+    }
+}
+
+pub async fn app_software_development_packages() -> impl IntoResponse {
+    render(WebDesignPackagesTemplate {
+        family: app_software_family(),
+    })
+}
+
+pub async fn app_software_development_package(Path(slug): Path<String>) -> impl IntoResponse {
+    match find_app_software_package(&slug) {
         Some(package) => render(WebDesignPackageDetailTemplate { package }).into_response(),
         None => not_found().await.into_response(),
     }

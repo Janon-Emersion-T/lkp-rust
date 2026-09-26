@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 
-{% block title %}Web Design & Development Packages Sri Lanka | LKProfessionals{% endblock %}
-{% block meta_description %}Compare LKProfessionals web design and development packages from LKR 10,000+, from single-page websites to corporate, e-commerce, custom, and multilingual platforms.{% endblock %}
-{% block canonical %}https://lkprofessionals.com/packages/web-design-development{% endblock %}
-{% block og_title %}Web Design & Development Packages Sri Lanka | LKProfessionals{% endblock %}
-{% block og_description %}Explore web design and development packages for freelancers, startups, local businesses, SMEs, e-commerce brands, corporations, and custom platforms.{% endblock %}
-{% block og_url %}https://lkprofessionals.com/packages/web-design-development{% endblock %}
-{% block twitter_title %}Web Design & Development Packages Sri Lanka | LKProfessionals{% endblock %}
-{% block twitter_description %}Compare LKProfessionals website packages from LKR 10,000+ and choose the right path for your launch, growth, commerce, corporate, or custom project.{% endblock %}
+{% block title %}{{ family.meta_title }}{% endblock %}
+{% block meta_description %}{{ family.meta_description }}{% endblock %}
+{% block canonical %}https://lkprofessionals.com{{ family.url }}{% endblock %}
+{% block og_title %}{{ family.meta_title }}{% endblock %}
+{% block og_description %}{{ family.meta_description }}{% endblock %}
+{% block og_url %}https://lkprofessionals.com{{ family.url }}{% endblock %}
+{% block twitter_title %}{{ family.meta_title }}{% endblock %}
+{% block twitter_description %}{{ family.meta_description }}{% endblock %}
 
 {% block structured_data %}
 <script type="application/ld+json">
@@ -16,26 +16,26 @@
   "@graph": [
     {
       "@type": "CollectionPage",
-      "@id": "https://lkprofessionals.com/packages/web-design-development#webpage",
-      "name": "Web Design & Development Packages Sri Lanka | LKProfessionals",
-      "url": "https://lkprofessionals.com/packages/web-design-development",
-      "description": "LKProfessionals web design and development packages for businesses that need websites, e-commerce, corporate platforms, custom development, or multilingual web architecture.",
+      "@id": "https://lkprofessionals.com{{ family.url }}#webpage",
+      "name": "{{ family.meta_title }}",
+      "url": "https://lkprofessionals.com{{ family.url }}",
+      "description": "{{ family.schema_description }}",
       "isPartOf": { "@id": "https://lkprofessionals.com/#website" },
       "about": { "@id": "https://lkprofessionals.com/#organization" },
-      "breadcrumb": { "@id": "https://lkprofessionals.com/packages/web-design-development#breadcrumb" }
+      "breadcrumb": { "@id": "https://lkprofessionals.com{{ family.url }}#breadcrumb" }
     },
     {
       "@type": "BreadcrumbList",
-      "@id": "https://lkprofessionals.com/packages/web-design-development#breadcrumb",
+      "@id": "https://lkprofessionals.com{{ family.url }}#breadcrumb",
       "itemListElement": [
         { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://lkprofessionals.com/" },
         { "@type": "ListItem", "position": 2, "name": "Packages", "item": "https://lkprofessionals.com/packages" },
-        { "@type": "ListItem", "position": 3, "name": "Web Design & Development", "item": "https://lkprofessionals.com/packages/web-design-development" }
+        { "@type": "ListItem", "position": 3, "name": "{{ family.short_name }}", "item": "https://lkprofessionals.com{{ family.url }}" }
       ]
     },
     {
       "@type": "ItemList",
-      "name": "LKProfessionals Web Design & Development Packages",
+      "name": "LKProfessionals {{ family.name }}",
       "itemListElement": [
         {% for package in family.packages %}
         {
@@ -49,32 +49,18 @@
     },
     {
       "@type": "FAQPage",
-      "@id": "https://lkprofessionals.com/packages/web-design-development#faq",
+      "@id": "https://lkprofessionals.com{{ family.url }}#faq",
       "mainEntity": [
+        {% for faq in family.faqs %}
         {
           "@type": "Question",
-          "name": "Which web design package should I choose?",
+          "name": "{{ faq.question }}",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Choose based on business stage and complexity. Digital Footprint is for a single-page presence, LaunchPad is for a complete first business website, Local Spark is for local businesses, Momentum and Growth Engine are for growth and leads, Omnichannel Commerce is for online stores, Flagship is for corporate websites, Apex Custom is for bespoke platforms, and Global Reach is for international or multilingual websites."
+            "text": "{{ faq.answer }}"
           }
-        },
-        {
-          "@type": "Question",
-          "name": "Are the prices fixed?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "All package prices are starting prices. Final pricing depends on page count, content, integrations, features, languages, migration, and custom development requirements."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Can LKProfessionals help if I am not sure which package fits?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes. Share your business type, goals, required pages, timeline, and any existing website details. LKProfessionals can recommend the closest package or prepare a custom quotation."
-          }
-        }
+        }{% if !loop.last %},{% endif %}
+        {% endfor %}
       ]
     }
   ]
@@ -84,7 +70,7 @@
 
 {% block content %}
 <div class="fixed inset-x-0 bottom-3 z-40 px-4 md:hidden">
-  <a href="https://wa.me/94761234321?text=Hello%20LKProfessionals%2C%20I%20want%20help%20choosing%20a%20web%20design%20and%20development%20package." target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-3 rounded-full bg-cyan-400 px-6 py-4 text-sm font-black uppercase tracking-wide text-slate-950 shadow-[0_18px_50px_rgba(6,182,212,0.35)]">
+  <a href="https://wa.me/94761234321?text={{ family.whatsapp_text }}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-3 rounded-full bg-cyan-400 px-6 py-4 text-sm font-black uppercase tracking-wide text-slate-950 shadow-[0_18px_50px_rgba(6,182,212,0.35)]">
     <i class="fa-brands fa-whatsapp text-base"></i>
     WhatsApp Now
   </a>
@@ -112,16 +98,16 @@
       <div>
         <p class="text-sm font-black uppercase tracking-[0.24em] text-cyan-300">{{ family.name }}</p>
         <h1 class="mt-5 text-4xl font-black tracking-tight md:text-6xl">
-          Choose a website package that fits where your business is going.
+          {{ family.hero_title }}
         </h1>
         <p class="mt-6 max-w-3xl text-lg leading-8 text-slate-300">
-          LKProfessionals packages progress from affordable online presence builds to growth websites, e-commerce, corporate platforms, bespoke web engineering, and international multilingual websites.
+          {{ family.hero_description }}
         </p>
         <div class="mt-8 flex flex-col gap-4 sm:flex-row">
           <a href="/request-quote" class="inline-flex items-center justify-center rounded-full bg-cyan-400 px-7 py-4 text-sm font-black uppercase tracking-wide text-slate-950 transition hover:bg-white">
             Get Guidance
           </a>
-          <a href="https://wa.me/94761234321?text=Hello%20LKProfessionals%2C%20I%20want%20help%20choosing%20a%20web%20design%20and%20development%20package." target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center rounded-full border border-white/15 px-7 py-4 text-sm font-black uppercase tracking-wide text-white transition hover:border-cyan-300 hover:text-cyan-300">
+          <a href="https://wa.me/94761234321?text={{ family.whatsapp_text }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center rounded-full border border-white/15 px-7 py-4 text-sm font-black uppercase tracking-wide text-white transition hover:border-cyan-300 hover:text-cyan-300">
             WhatsApp
           </a>
         </div>
@@ -130,9 +116,9 @@
       <aside class="rounded-[2rem] border border-white/10 bg-white/10 p-8 shadow-2xl backdrop-blur-xl">
         <p class="text-sm font-black uppercase tracking-[0.24em] text-cyan-300">How Packages Work</p>
         <ul class="mt-5 space-y-4 text-sm leading-7 text-slate-200">
-          <li>Each price is a starting point, not a promise that every possible feature fits inside one fixed scope.</li>
-          <li>Choose by business stage, website purpose, page depth, integrations, and future growth needs.</li>
-          <li>If the requirements do not fit neatly, LKProfessionals can prepare a custom quotation.</li>
+          {% for item in family.how_it_works %}
+          <li>{{ item }}</li>
+          {% endfor %}
         </ul>
       </aside>
     </div>
@@ -143,7 +129,7 @@
   <div class="mx-auto max-w-7xl">
     <div class="max-w-3xl">
       <p class="text-sm font-black uppercase tracking-[0.24em] text-cyan-600">Package Range</p>
-      <h2 class="mt-4 text-3xl font-black tracking-tight md:text-5xl">From first presence to custom web platform.</h2>
+      <h2 class="mt-4 text-3xl font-black tracking-tight md:text-5xl">{{ family.range_heading }}</h2>
     </div>
 
     <div class="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
@@ -198,35 +184,41 @@
   <div class="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.9fr_1.1fr]">
     <aside class="rounded-[2rem] border border-cyan-200 bg-cyan-50 p-8">
       <p class="text-sm font-black uppercase tracking-[0.24em] text-cyan-700">Not sure?</p>
-      <h2 class="mt-4 text-3xl font-black tracking-tight">Start with the business goal.</h2>
+      <h2 class="mt-4 text-3xl font-black tracking-tight">{{ family.guidance_title }}</h2>
       <ul class="mt-6 space-y-4 text-sm leading-7 text-slate-700">
-        <li>Need credibility fast? Start with Digital Footprint or LaunchPad.</li>
-        <li>Need nearby customers? Review Local Spark.</li>
-        <li>Need leads, corporate authority, commerce, or international structure? Compare Growth Engine, Flagship, Omnichannel Commerce, and Global Reach.</li>
-        <li>Need users, workflows, dashboards, databases, or integrations? Apex Custom is the right conversation.</li>
+        {% for item in family.guidance_items %}
+        <li>{{ item }}</li>
+        {% endfor %}
       </ul>
     </aside>
     <div class="rounded-[2rem] border border-slate-200 bg-slate-50 p-8">
       <p class="text-sm font-black uppercase tracking-[0.24em] text-cyan-600">Useful Next Links</p>
       <h2 class="mt-4 text-3xl font-black tracking-tight">Review services and proof before you enquire.</h2>
       <div class="mt-6 grid gap-4 sm:grid-cols-2">
-        <a href="/services/web-development" class="rounded-[1.4rem] border border-slate-200 bg-white p-5 transition hover:border-cyan-300">
-          <strong class="block text-slate-950">Web Development</strong>
-          <span class="mt-2 block text-sm leading-7 text-slate-600">See the broader service capability behind these packages.</span>
+        {% for link in family.useful_links %}
+        <a href="{{ link.href }}" class="rounded-[1.4rem] border border-slate-200 bg-white p-5 transition hover:border-cyan-300">
+          <strong class="block text-slate-950">{{ link.title }}</strong>
+          <span class="mt-2 block text-sm leading-7 text-slate-600">{{ link.note }}</span>
         </a>
-        <a href="/case-studies" class="rounded-[1.4rem] border border-slate-200 bg-white p-5 transition hover:border-cyan-300">
-          <strong class="block text-slate-950">Case Studies</strong>
-          <span class="mt-2 block text-sm leading-7 text-slate-600">Review selected work and implementation context.</span>
-        </a>
-        <a href="/services/custom-software-development" class="rounded-[1.4rem] border border-slate-200 bg-white p-5 transition hover:border-cyan-300">
-          <strong class="block text-slate-950">Custom Software</strong>
-          <span class="mt-2 block text-sm leading-7 text-slate-600">Useful for Apex Custom and platform-style requirements.</span>
-        </a>
-        <a href="/packages/business-seo-offer" class="rounded-[1.4rem] border border-slate-200 bg-white p-5 transition hover:border-cyan-300">
-          <strong class="block text-slate-950">AI Search Growth</strong>
-          <span class="mt-2 block text-sm leading-7 text-slate-600">Consider after launch when visibility becomes the priority.</span>
-        </a>
+        {% endfor %}
       </div>
+    </div>
+  </div>
+</section>
+
+<section class="bg-slate-50 px-6 py-20 text-slate-950 lg:px-8">
+  <div class="mx-auto max-w-7xl rounded-[2.2rem] border border-slate-200 bg-white p-8 shadow-[0_22px_50px_rgba(15,23,42,0.06)] md:p-10">
+    <div class="max-w-3xl">
+      <p class="text-sm font-black uppercase tracking-[0.24em] text-cyan-600">Lifecycle</p>
+      <h2 class="mt-4 text-3xl font-black tracking-tight md:text-4xl">How this collection fits the wider delivery path.</h2>
+    </div>
+    <div class="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-5">
+      {% for step in family.lifecycle_steps %}
+      <div class="rounded-[1.4rem] border border-slate-200 bg-slate-50 p-5">
+        <h3 class="text-lg font-black text-slate-950">{{ step.title }}</h3>
+        <p class="mt-2 text-sm leading-7 text-slate-600">{{ step.description }}</p>
+      </div>
+      {% endfor %}
     </div>
   </div>
 </section>
@@ -238,18 +230,12 @@
       <h2 class="mt-4 text-3xl font-black tracking-tight md:text-5xl">Frequently asked questions</h2>
     </div>
     <div class="mt-10 space-y-4">
-      <details class="rounded-[1.6rem] border border-slate-200 bg-white p-6 shadow-[0_16px_35px_rgba(8,47,73,0.05)]" open>
-        <summary class="cursor-pointer text-lg font-black text-slate-950">Which package should I choose?</summary>
-        <p class="mt-4 text-sm leading-7 text-slate-600">Choose by business stage and complexity. Entry-level presence, first business website, local discovery, growth, redesign, lead generation, e-commerce, corporate authority, custom platform needs, and international expansion each point to a different package.</p>
+      {% for faq in family.faqs %}
+      <details class="rounded-[1.6rem] border border-slate-200 bg-white p-6 shadow-[0_16px_35px_rgba(8,47,73,0.05)]" {% if loop.first %}open{% endif %}>
+        <summary class="cursor-pointer text-lg font-black text-slate-950">{{ faq.question }}</summary>
+        <p class="mt-4 text-sm leading-7 text-slate-600">{{ faq.answer }}</p>
       </details>
-      <details class="rounded-[1.6rem] border border-slate-200 bg-white p-6 shadow-[0_16px_35px_rgba(8,47,73,0.05)]">
-        <summary class="cursor-pointer text-lg font-black text-slate-950">Are prices fixed?</summary>
-        <p class="mt-4 text-sm leading-7 text-slate-600">All listed prices are starting prices. Final pricing depends on pages, content, integrations, languages, migration needs, and custom functionality.</p>
-      </details>
-      <details class="rounded-[1.6rem] border border-slate-200 bg-white p-6 shadow-[0_16px_35px_rgba(8,47,73,0.05)]">
-        <summary class="cursor-pointer text-lg font-black text-slate-950">Can LKProfessionals recommend a package?</summary>
-        <p class="mt-4 text-sm leading-7 text-slate-600">Yes. Share your business type, current website status, must-have pages, target launch date, and any integrations you need. The team can recommend a package or scope a custom quotation.</p>
-      </details>
+      {% endfor %}
     </div>
   </div>
 </section>
@@ -259,14 +245,14 @@
     <div class="grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
       <div>
         <p class="text-sm font-black uppercase tracking-[0.24em] text-cyan-300">Consultation</p>
-        <h2 class="mt-4 text-3xl font-black tracking-tight md:text-5xl">Need a recommendation before choosing?</h2>
-        <p class="mt-5 text-base leading-8 text-slate-300">Send your business type, existing website link if any, target pages, features, and budget direction. LKProfessionals will help map the requirement to the closest package or prepare a custom quote.</p>
+        <h2 class="mt-4 text-3xl font-black tracking-tight md:text-5xl">{{ family.final_cta_heading }}</h2>
+        <p class="mt-5 text-base leading-8 text-slate-300">{{ family.final_cta_description }}</p>
       </div>
       <div class="rounded-[2rem] border border-white/10 bg-slate-950/40 p-8">
         <p class="text-sm font-black uppercase tracking-[0.22em] text-cyan-300">Next Step</p>
         <div class="mt-6 flex flex-col gap-4">
           <a href="/request-quote" class="inline-flex items-center justify-center rounded-full bg-cyan-400 px-7 py-4 text-sm font-black uppercase tracking-wide text-slate-950 transition hover:bg-white">Request Quote</a>
-          <a href="https://wa.me/94761234321?text=Hello%20LKProfessionals%2C%20I%20want%20help%20choosing%20a%20web%20design%20and%20development%20package." target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center rounded-full border border-white/15 px-7 py-4 text-sm font-black uppercase tracking-wide text-white transition hover:border-cyan-300 hover:text-cyan-300">Chat on WhatsApp</a>
+          <a href="https://wa.me/94761234321?text={{ family.whatsapp_text }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center rounded-full border border-white/15 px-7 py-4 text-sm font-black uppercase tracking-wide text-white transition hover:border-cyan-300 hover:text-cyan-300">Chat on WhatsApp</a>
         </div>
       </div>
     </div>

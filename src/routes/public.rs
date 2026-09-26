@@ -5,7 +5,8 @@ use axum::{
 
 use crate::{
     handlers::{
-        about, business_seo_offer, business_website_package, career_apply, career_single, careers,
+        about, app_software_development_package, app_software_development_packages,
+        business_seo_offer, business_website_package, career_apply, career_single, careers,
         case_studies, case_study_single, comparison_page, contact, faq, founder_portfolio,
         free_audit_page, home, industries, insight_single, insights, insights_by_category,
         llmo_alias, llms_txt, packages, portfolio_alias, portfolio_single_alias, pricing_page,
@@ -37,6 +38,14 @@ pub fn public_routes() -> Router<AppState> {
         .route(
             "/packages/web-design-development/{slug}",
             get(web_design_development_package),
+        )
+        .route(
+            "/packages/app-software-development",
+            get(app_software_development_packages),
+        )
+        .route(
+            "/packages/app-software-development/{slug}",
+            get(app_software_development_package),
         )
         .route(
             "/packages/business-website-package",

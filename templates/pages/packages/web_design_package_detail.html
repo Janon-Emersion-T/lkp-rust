@@ -30,19 +30,19 @@
       "itemListElement": [
         { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://lkprofessionals.com/" },
         { "@type": "ListItem", "position": 2, "name": "Packages", "item": "https://lkprofessionals.com/packages" },
-        { "@type": "ListItem", "position": 3, "name": "Web Design & Development", "item": "https://lkprofessionals.com/packages/web-design-development" },
+        { "@type": "ListItem", "position": 3, "name": "{{ package.family_label }}", "item": "https://lkprofessionals.com{{ package.family_url }}" },
         { "@type": "ListItem", "position": 4, "name": "{{ package.name }}", "item": "{{ package.canonical_url() }}" }
       ]
     },
     {
-      "@type": "Product",
-      "@id": "{{ package.canonical_url() }}#product",
+      "@type": "Service",
+      "@id": "{{ package.canonical_url() }}#service",
       "name": "{{ package.catalog_name }}",
-      "sku": "{{ package.item_code }}",
-      "brand": { "@id": "https://lkprofessionals.com/#organization" },
+      "identifier": "{{ package.item_code }}",
       "description": "{{ package.description }}",
-      "category": "{{ package.category }}",
-      "url": "{{ package.canonical_url() }}",
+      "provider": { "@id": "https://lkprofessionals.com/#organization" },
+      "serviceType": "{{ package.category }}",
+      "areaServed": ["Jaffna", "Sri Lanka", "Worldwide"],
       "offers": {
         "@type": "Offer",
         "@id": "{{ package.canonical_url() }}#offer",
@@ -56,18 +56,8 @@
           "description": "Starting from price. Final quotation depends on agreed scope."
         },
         "availability": "https://schema.org/InStock",
-        "itemCondition": "https://schema.org/NewCondition",
         "seller": { "@id": "https://lkprofessionals.com/#organization" }
       }
-    },
-    {
-      "@type": "Service",
-      "@id": "{{ package.canonical_url() }}#service",
-      "name": "{{ package.catalog_name }}",
-      "provider": { "@id": "https://lkprofessionals.com/#organization" },
-      "serviceType": "{{ package.category }}",
-      "areaServed": ["Jaffna", "Sri Lanka", "Worldwide"],
-      "offers": { "@id": "{{ package.canonical_url() }}#offer" }
     },
     {
       "@type": "FAQPage",
@@ -112,7 +102,7 @@
         <li aria-hidden="true" class="text-cyan-300">/</li>
         <li><a href="/packages" class="transition hover:text-white">Packages</a></li>
         <li aria-hidden="true" class="text-cyan-300">/</li>
-        <li><a href="/packages/web-design-development" class="transition hover:text-white">Web Design &amp; Development</a></li>
+        <li><a href="{{ package.family_url }}" class="transition hover:text-white">{{ package.family_label }}</a></li>
         <li aria-hidden="true" class="text-cyan-300">/</li>
         <li class="text-white">{{ package.name }}</li>
       </ol>
@@ -122,14 +112,15 @@
       <div>
         <p class="text-sm font-black uppercase tracking-[0.24em] text-cyan-300">{{ package.category }}</p>
         <h1 class="mt-5 text-4xl font-black tracking-tight md:text-6xl">
-          {{ package.name }} web design and development package.
+          {{ package.name }} {{ package.hero_suffix }}.
         </h1>
         <p class="mt-6 max-w-3xl text-xl font-bold leading-8 text-cyan-100">{{ package.core_message }}</p>
         <p class="mt-4 max-w-3xl text-lg leading-8 text-slate-300">{{ package.description }}</p>
         <div class="mt-8 flex flex-wrap gap-3">
           <span class="rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm font-bold text-cyan-100">Item code: {{ package.item_code }}</span>
+          <span class="rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm font-bold text-cyan-100">{{ package.family_name }}</span>
           <span class="rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm font-bold text-cyan-100">Starting from {{ package.price }}</span>
-          <span class="rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm font-bold text-cyan-100">Responsive website build</span>
+          <span class="rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm font-bold text-cyan-100">{{ package.delivery_label }}</span>
         </div>
         <div class="mt-8 flex flex-col gap-4 sm:flex-row">
           <a href="{{ package.quote_url() }}" class="inline-flex items-center justify-center rounded-full bg-cyan-400 px-7 py-4 text-sm font-black uppercase tracking-wide text-slate-950 transition hover:bg-white">
@@ -228,7 +219,7 @@
 
     <article class="rounded-[2rem] border border-slate-200 bg-slate-50 p-8">
       <p class="text-sm font-black uppercase tracking-[0.24em] text-cyan-600">Example Structure</p>
-      <h2 class="mt-4 text-3xl font-black tracking-tight">Typical website structure or feature set.</h2>
+      <h2 class="mt-4 text-3xl font-black tracking-tight">{{ package.structure_heading }}</h2>
       <div class="mt-6 grid gap-3 sm:grid-cols-2">
         {% for item in package.example_structure %}
         <div class="rounded-[1.2rem] border border-slate-200 bg-white p-4 text-sm font-bold leading-7 text-slate-700">{{ item }}</div>
@@ -242,33 +233,15 @@
   <div class="mx-auto max-w-7xl rounded-[2.2rem] border border-slate-200 bg-white p-8 shadow-[0_22px_50px_rgba(15,23,42,0.06)] md:p-10">
     <div class="max-w-3xl">
       <p class="text-sm font-black uppercase tracking-[0.24em] text-cyan-600">Process</p>
-      <h2 class="mt-4 text-3xl font-black tracking-tight md:text-4xl">A clear path from requirement to launch.</h2>
+      <h2 class="mt-4 text-3xl font-black tracking-tight md:text-4xl">{{ package.process_heading }}</h2>
     </div>
-    <div class="mt-10 grid gap-4 md:grid-cols-3 xl:grid-cols-6">
+    <div class="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+      {% for step in package.process %}
       <div class="rounded-[1.4rem] border border-slate-200 bg-slate-50 p-5">
-        <h3 class="text-lg font-black text-slate-950">Discovery</h3>
-        <p class="mt-2 text-sm leading-7 text-slate-600">Clarify goals, users, constraints, content, and commercial priorities.</p>
+        <h3 class="text-lg font-black text-slate-950">{{ step.title }}</h3>
+        <p class="mt-2 text-sm leading-7 text-slate-600">{{ step.description }}</p>
       </div>
-      <div class="rounded-[1.4rem] border border-slate-200 bg-slate-50 p-5">
-        <h3 class="text-lg font-black text-slate-950">Planning</h3>
-        <p class="mt-2 text-sm leading-7 text-slate-600">Define pages, features, information architecture, and scope boundaries.</p>
-      </div>
-      <div class="rounded-[1.4rem] border border-slate-200 bg-slate-50 p-5">
-        <h3 class="text-lg font-black text-slate-950">Design</h3>
-        <p class="mt-2 text-sm leading-7 text-slate-600">Create responsive layouts aligned with brand, buyers, and content.</p>
-      </div>
-      <div class="rounded-[1.4rem] border border-slate-200 bg-slate-50 p-5">
-        <h3 class="text-lg font-black text-slate-950">Development</h3>
-        <p class="mt-2 text-sm leading-7 text-slate-600">Build the site, forms, CMS, integrations, SEO foundations, and tracking.</p>
-      </div>
-      <div class="rounded-[1.4rem] border border-slate-200 bg-slate-50 p-5">
-        <h3 class="text-lg font-black text-slate-950">Review</h3>
-        <p class="mt-2 text-sm leading-7 text-slate-600">Test content, responsiveness, forms, performance, and important user paths.</p>
-      </div>
-      <div class="rounded-[1.4rem] border border-slate-200 bg-slate-50 p-5">
-        <h3 class="text-lg font-black text-slate-950">Launch</h3>
-        <p class="mt-2 text-sm leading-7 text-slate-600">Deploy securely, connect essentials, and hand over the agreed setup.</p>
-      </div>
+      {% endfor %}
     </div>
   </div>
 </section>
@@ -331,7 +304,7 @@
       <div>
         <p class="text-sm font-black uppercase tracking-[0.24em] text-cyan-300">Final Enquiry</p>
         <h2 class="mt-4 text-3xl font-black tracking-tight md:text-5xl">Discuss {{ package.name }} with LKProfessionals.</h2>
-        <p class="mt-5 text-base leading-8 text-slate-300">Share your business type, target pages, current website if any, must-have functionality, and launch timeline. The team will confirm whether {{ package.short_name }} fits or whether another package is more sensible.</p>
+        <p class="mt-5 text-base leading-8 text-slate-300">Share your business type, package code {{ package.item_code }}, starting price {{ package.price }}, source page {{ package.url() }}, required users, platforms, pages, workflows, integrations, and launch timeline. The team will confirm whether {{ package.short_name }} fits or whether another package is more sensible.</p>
       </div>
       <div class="rounded-[2rem] border border-white/10 bg-slate-950/40 p-8">
         <p class="text-sm font-black uppercase tracking-[0.22em] text-cyan-300">Package Context</p>
