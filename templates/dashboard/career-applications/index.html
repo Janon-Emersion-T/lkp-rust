@@ -57,46 +57,166 @@
         <p class="text-sm text-slate-500">{{ applications.len() }} total records</p>
     </div>
 
-    <div class="mt-8 grid gap-5">
+    <div class="mt-8">
         {% if applications.len() == 0 %}
-        <div class="rounded-[1.75rem] border border-dashed border-slate-300 bg-slate-50 px-6 py-12 text-center">
-            <h3 class="text-xl font-black text-slate-950">No applications yet</h3>
+
+        <div class="rounded-[1.75rem] border border-dashed border-slate-300 bg-slate-50 px-6 py-16 text-center">
+            <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-100 text-slate-400">
+                <i class="fa-solid fa-user-group text-xl"></i>
+            </div>
+
+            <h3 class="mt-5 text-xl font-black text-slate-950">
+                No applications yet
+            </h3>
+
             <p class="mt-3 text-sm leading-7 text-slate-600">
                 Applications submitted through public career pages will appear here automatically.
             </p>
         </div>
-        {% endif %}
 
-        {% for application in applications %}
-        <article class="rounded-[1.75rem] border border-slate-200 bg-slate-50 p-5">
-            <div class="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
-                <div class="max-w-4xl">
-                    <div class="flex flex-wrap items-center gap-3">
-                        <span class="inline-flex rounded-full px-3 py-1 text-[11px] font-black uppercase ring-1 {{ application.status_badge_class() }}">
-                            {{ application.status_label() }}
-                        </span>
-                        <span class="text-xs font-bold uppercase tracking-[0.22em] text-slate-400">
-                            {{ application.submitted_date_label() }}
-                        </span>
-                    </div>
-                    <h3 class="mt-4 text-2xl font-black text-slate-950">{{ application.full_name }}</h3>
-                    <p class="mt-2 text-sm font-semibold text-slate-600">{{ application.role_title_snapshot }} · {{ application.email }}</p>
-                    <p class="mt-4 max-w-3xl text-sm leading-7 text-slate-600">{{ application.cover_letter }}</p>
-                </div>
+        {% else %}
 
-                <div class="flex flex-wrap gap-3 lg:justify-end">
-                    <a href="{{ application.admin_show_url() }}" class="rounded-full bg-slate-950 px-4 py-2 text-sm font-bold text-white transition hover:bg-cyan-600">
-                        Review
-                    </a>
-                    <form action="{{ application.admin_delete_url() }}" method="post" onsubmit="return confirm('Delete this application?');">
-                        <button type="submit" class="rounded-full border border-rose-200 px-4 py-2 text-sm font-bold text-rose-700 transition hover:bg-rose-50">
-                            Delete
-                        </button>
-                    </form>
-                </div>
+        <div class="overflow-hidden rounded-[1.5rem] border border-slate-200">
+
+            <div class="overflow-x-auto">
+
+                <table class="w-full min-w-[1000px] border-collapse text-left">
+
+                    <thead class="bg-slate-50">
+                        <tr class="border-b border-slate-200">
+
+                            <th class="px-5 py-4 text-xs font-black uppercase tracking-[0.18em] text-slate-500">
+                                Candidate
+                            </th>
+
+                            <th class="px-5 py-4 text-xs font-black uppercase tracking-[0.18em] text-slate-500">
+                                Position
+                            </th>
+
+                            <th class="px-5 py-4 text-xs font-black uppercase tracking-[0.18em] text-slate-500">
+                                Contact
+                            </th>
+
+                            <th class="px-5 py-4 text-xs font-black uppercase tracking-[0.18em] text-slate-500">
+                                Applied
+                            </th>
+
+                            <th class="px-5 py-4 text-xs font-black uppercase tracking-[0.18em] text-slate-500">
+                                Status
+                            </th>
+
+                            <th class="px-5 py-4 text-right text-xs font-black uppercase tracking-[0.18em] text-slate-500">
+                                Actions
+                            </th>
+
+                        </tr>
+                    </thead>
+
+                    <tbody class="divide-y divide-slate-100 bg-white">
+
+                        {% for application in applications %}
+
+                        <tr class="group transition hover:bg-slate-50">
+
+                            <!-- Candidate -->
+                            <td class="px-5 py-5">
+
+                                <a
+                                    href="{{ application.admin_show_url() }}"
+                                    class="font-black text-slate-950 transition group-hover:text-cyan-700"
+                                >
+                                    {{ application.full_name }}
+                                </a>
+
+                                <p class="mt-1 text-xs text-slate-400">
+                                    Applicant
+                                </p>
+
+                            </td>
+
+                            <!-- Position -->
+                            <td class="px-5 py-5">
+
+                                <p class="text-sm font-bold text-slate-700">
+                                    {{ application.role_title_snapshot }}
+                                </p>
+
+                            </td>
+
+                            <!-- Contact -->
+                            <td class="px-5 py-5">
+
+                                <a
+                                    href="mailto:{{ application.email }}"
+                                    class="text-sm font-semibold text-slate-600 transition hover:text-cyan-700"
+                                >
+                                    {{ application.email }}
+                                </a>
+
+                            </td>
+
+                            <!-- Applied -->
+                            <td class="whitespace-nowrap px-5 py-5">
+
+                                <span class="text-sm font-semibold text-slate-600">
+                                    {{ application.submitted_date_label() }}
+                                </span>
+
+                            </td>
+
+                            <!-- Status -->
+                            <td class="px-5 py-5">
+
+                                <span class="inline-flex rounded-full px-3 py-1 text-[11px] font-black uppercase ring-1 {{ application.status_badge_class() }}">
+                                    {{ application.status_label() }}
+                                </span>
+
+                            </td>
+
+                            <!-- Actions -->
+                            <td class="px-5 py-5">
+
+                                <div class="flex items-center justify-end gap-2">
+
+                                    <a
+                                        href="{{ application.admin_show_url() }}"
+                                        class="inline-flex items-center gap-2 rounded-xl bg-slate-950 px-4 py-2 text-xs font-black text-white transition hover:bg-cyan-600"
+                                    >
+                                        <i class="fa-solid fa-eye"></i>
+                                        Review
+                                    </a>
+
+                                    <form
+                                        action="{{ application.admin_delete_url() }}"
+                                        method="post"
+                                        onsubmit="return confirm('Delete this application?');"
+                                    >
+                                        <button
+                                            type="submit"
+                                            title="Delete application"
+                                            class="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 text-slate-400 transition hover:border-rose-200 hover:bg-rose-50 hover:text-rose-600"
+                                        >
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    </form>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
             </div>
-        </article>
-        {% endfor %}
+
+        </div>
+
+        {% endif %}
     </div>
 </section>
 {% endblock %}
