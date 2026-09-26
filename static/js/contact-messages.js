@@ -12,6 +12,7 @@
     const toolbar = document.getElementById("bulkMessageActions");
     const count = document.getElementById("selectedMessageCount");
     const form = document.getElementById("bulkDeleteMessagesForm");
+    const submitButton = document.getElementById("bulkDeleteMessagesButton");
 
     if (selectAll) {
       selectAll.checked = all.length > 0 && selected.length === all.length;
@@ -22,15 +23,10 @@
       toolbar.classList.toggle("flex", selected.length > 0);
     }
     if (count) count.textContent = selected.length;
+    if (submitButton) submitButton.disabled = selected.length === 0;
     if (form) {
-      form.querySelectorAll("input[name='ids']").forEach((input) => input.remove());
-      selected.forEach((checkbox) => {
-        const input = document.createElement("input");
-        input.type = "hidden";
-        input.name = "ids";
-        input.value = checkbox.value;
-        form.appendChild(input);
-      });
+      const noun = selected.length === 1 ? "enquiry" : "enquiries";
+      form.dataset.confirm = `Delete ${selected.length} selected ${noun} permanently? This cannot be undone.`;
     }
   };
 

@@ -1,8 +1,11 @@
+use std::collections::HashSet;
+
 use axum::{
     extract::{Form, Path, Query, State},
     http::{HeaderMap, StatusCode},
     response::{IntoResponse, Redirect},
 };
+use axum_extra::extract::Form as HtmlForm;
 use chrono::{DateTime, Utc};
 use serde::Deserialize;
 use uuid::Uuid;
@@ -1038,13 +1041,21 @@ pub async fn dashboard_contact_message_delete(
 
 #[derive(Debug, Deserialize)]
 pub struct BulkDeleteMessagesForm {
+    #[serde(default)]
     pub ids: Vec<Uuid>,
+}
+
+fn dedupe_bulk_delete_ids(ids: &mut Vec<Uuid>) {
+    let mut seen = HashSet::with_capacity(ids.len());
+    ids.retain(|id| seen.insert(*id));
 }
 
 pub async fn dashboard_contact_message_bulk_delete(
     State(state): State<AppState>,
-    Form(form): Form<BulkDeleteMessagesForm>,
+    HtmlForm(mut form): HtmlForm<BulkDeleteMessagesForm>,
 ) -> impl IntoResponse {
+    dedupe_bulk_delete_ids(&mut form.ids);
+
     if !form.ids.is_empty() {
         if let Err(error) = sqlx::query("DELETE FROM contact_messages WHERE id = ANY($1)")
             .bind(&form.ids)
@@ -1056,6 +1067,64 @@ pub async fn dashboard_contact_message_bulk_delete(
     }
 
     Redirect::to("/dashboard/contact-messages")
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn parse_bulk_delete_form(
+        input: &str,
+    ) -> Result<BulkDeleteMessagesForm, serde_html_form::de::Error> {
+        serde_html_form::from_str(input)
+    }
+
+    #[test]
+    fn bulk_delete_form_parses_one_uuid() {
+        let id = Uuid::parse_str("464fcaef-5c93-4dd4-854d-b5e98715a36a").unwrap();
+
+        let form = parse_bulk_delete_form("ids=464fcaef-5c93-4dd4-854d-b5e98715a36a").unwrap();
+
+        assert_eq!(form.ids, vec![id]);
+    }
+
+    #[test]
+    fn bulk_delete_form_parses_multiple_uuids() {
+        let first = Uuid::parse_str("464fcaef-5c93-4dd4-854d-b5e98715a36a").unwrap();
+        let second = Uuid::parse_str("9c3d6c55-d78c-43c9-9e55-2784ef184b0d").unwrap();
+
+        let form = parse_bulk_delete_form(
+            "ids=464fcaef-5c93-4dd4-854d-b5e98715a36a&ids=9c3d6c55-d78c-43c9-9e55-2784ef184b0d",
+        )
+        .unwrap();
+
+        assert_eq!(form.ids, vec![first, second]);
+    }
+
+    #[test]
+    fn bulk_delete_form_defaults_to_empty_when_no_ids_submitted() {
+        let form = parse_bulk_delete_form("").unwrap();
+
+        assert!(form.ids.is_empty());
+    }
+
+    #[test]
+    fn bulk_delete_form_rejects_malformed_uuid() {
+        let error = parse_bulk_delete_form("ids=not-a-uuid").unwrap_err();
+
+        assert!(error.to_string().contains("UUID"));
+    }
+
+    #[test]
+    fn bulk_delete_dedupes_repeated_ids() {
+        let first = Uuid::parse_str("464fcaef-5c93-4dd4-854d-b5e98715a36a").unwrap();
+        let second = Uuid::parse_str("9c3d6c55-d78c-43c9-9e55-2784ef184b0d").unwrap();
+        let mut ids = vec![first, second, first];
+
+        dedupe_bulk_delete_ids(&mut ids);
+
+        assert_eq!(ids, vec![first, second]);
+    }
 }
 
 pub async fn dashboard_contact_message_block_sender(
